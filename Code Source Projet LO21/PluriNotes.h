@@ -83,7 +83,7 @@ public:
     Multimedia& setDescription(const std::string& d);
     Multimedia& setTypeMultimedia(const TypeMultimedia t);
     
-    Multimedia(const std::string& titre, FILE image, const std::string Description="", TypeMultimedia T=TypeMultimedia::image);
+    Multimedia(const std::string& titre, const std::string adressefichierimage, const std::string Description="", TypeMultimedia T=TypeMultimedia::image);
 };
 
 
