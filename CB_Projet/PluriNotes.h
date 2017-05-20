@@ -14,11 +14,11 @@ enum TypeMultimedia{ image, video, audio };
 class Note{
 private:
     int ID;
-    std::string Titre;
-    TIME::Date DateCrea;
-    TIME::Date DateModif;
-    NoteEtat Etat;
-    bool Actuel;
+    std::string titre;
+    TIME::Date dateCrea;
+    TIME::Date dateModif;
+    NoteEtat etat;
+    bool actuel;
     virtual void estAbstraite()=0;
 public:
     Note(const std::string&);
@@ -37,7 +37,7 @@ public:
 
 class Article: public Note{
 private:
-    std::string Texte;
+    std::string texte;
     virtual void estAbstraite(){};
 
 public:
@@ -50,16 +50,16 @@ public:
 
 class Tache: public Note{
 private:
-    std::string Action;
-    TacheStatut Statut;
-    int Priorite;
-    TIME::Date Echeance;
+    std::string action;
+    TacheStatut statut;
+    int priorite;
+    TIME::Date echeance;
     virtual void estAbstraite(){};
 
 public:
-    std::string getAction() const {return Action;};
-    int getPriorite() const {return Priorite;};
-    TIME::Date getEcheance() const {return Echeance;};
+    std::string getAction() const {return action;};
+    int getPriorite() const {return priorite;};
+    TIME::Date getEcheance() const {return echeance;};
     Tache& setAction(const std::string& s);
     Tache& setPriorite(int p);
     Tache& setEcheance(const TIME::Date& d);
@@ -70,15 +70,15 @@ public:
 
 class Multimedia: public Note{
 private:
-    std::string AdresseFichierImage;
-    std::string Description;
-    TypeMultimedia Type;
+    std::string adresseFichierImage;
+    std::string description;
+    TypeMultimedia type;
     virtual void estAbstraite(){};
 
 public:
-    std::string getAdresseFichierImage() const {return AdresseFichierImage;}
-    std::string getDescription() const {return Description;};
-    TypeMultimedia getTypeMultimedia() const {return Type;};
+    std::string getAdresseFichierImage() const {return adresseFichierImage;}
+    std::string getDescription() const {return description;};
+    TypeMultimedia getTypeMultimedia() const {return type;};
     Multimedia& setAdresseFichierImage(const std::string& f);
     Multimedia& setDescription(const std::string& d);
     Multimedia& setTypeMultimedia(const TypeMultimedia t);

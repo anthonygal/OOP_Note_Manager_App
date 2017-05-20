@@ -1,10 +1,9 @@
-#include <iomanip>
 #include "timing.h"
 #include <ctime>
 
 using namespace TIME;
 
-std::ostream& operator<<(std::ostream& f, const Date& x){ x.afficher(f); return f;} 
+std::ostream& operator<<(std::ostream& f, const Date& x){ x.afficher(f); return f;}
 std::ostream& operator<<(std::ostream& f, const Duree & d){ d.afficher(f); return f; }
 std::ostream& operator<<(std::ostream& f, const Horaire & h){ h.afficher(f); return f; }
 std::ostream& operator<<(std::ostream& f, const Periode & p){ p.afficher(f); return f; }
@@ -79,7 +78,7 @@ bool Horaire::operator<(const Horaire& h) const{
 	return true;
 }
 
-Periode::Periode(unsigned int j, unsigned int m, unsigned int a): 
+Periode::Periode(unsigned int j, unsigned int m, unsigned int a):
 		   nb_jours(j), nb_mois(m), nb_annees(a) {
 	if (j>364) throw TimeException("erreur: initialisation periode invalide");
 	if (m>11) throw TimeException("erreur: initialisation periode invalide");
