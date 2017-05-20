@@ -21,7 +21,7 @@ private:
     bool actuel;
     virtual void estAbstraite()=0;
 public:
-    Note(const std::string&);
+    Note(const std::string& s): titre(s), dateCrea();
     virtual ~Note();
 };
 
@@ -30,7 +30,7 @@ public:
     -Pour la gestion des type dates horaire etc... on reprendra les fichiers timing.h et timing.cpp donnés en ressources lors du TD7
     -Les accesseurs en edition créeent la nouvelle version de la note prenant les modifications souhaitées en compte et renvoyeent l'addresse de la nouvelle version de la note créer
     -La seule utilité de la methode virtuelle pure estAbstraite() est de rendre la classe Note abstraite. Son comportement (ne fait rien du tout) est défini dans les sous classe afin de rendre ces sous classes concrètes. Cette fonction pourra ne sera plus necessaire si une methode virtuelle pure utile vient à etre implementée plus tard
-
+    - Une classe: Ordre des méthodes: 1/ Constructeur 2/ get  3/ set (Pas sûr qu'on en utilise)=> sera gérer par le manager  4/ Autres fonctions
 
 
  */
@@ -41,10 +41,13 @@ private:
     virtual void estAbstraite(){};
 
 public:
+    Article(const std::string& titre, const std::string& texte="")
+
+
     std::string getTexte() const;
     Article& setTexte(const std::string& t);
 
-    Article(const std::string& titre, const std::string& texte="");
+    Article();
 };
 
 
