@@ -10,19 +10,30 @@ enum NoteEtat{ active, archivee, corbeille };
 enum TacheStatut{ attente, encours, terminee };
 enum TypeMultimedia{ image, video, audio };
 
+namespace TIME {
 
 class Note{
 private:
     int ID;
     std::string titre;
     TIME::Date dateCrea;
-    TIME::Date dateModif;
+     TIME::Date dateModif;
+    TIME::Horaire horaireCrea;
+    TIME::Horaire horaireModif;
     NoteEtat etat;
     bool actuel;
-    virtual void estAbstraite()=0;
+    //virtual void estAbstraite()=0;
 public:
-    Note(const std::string& s): titre(s), dateCrea();
-    virtual ~Note();
+    Note(const std::string& s =" "): titre(s), etat(active), actuel(true){    };//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
+    const std::string gettitre() const {return titre; }
+    const Date& getdateCrea() const {return dateCrea;}
+    const Date& getdateModif() const {return dateModif;} //Laisser ou enlever le const? La date de modif est ammenée à être modifié, mais on créera alors une nouvelle notes
+    const Horaire& gethoraireCrea() const {return horaireCrea;}
+    const Horaire& gethoraireModif() const {return horaireModif;}
+    NoteEtat getetat() const {return etat;} //0 pour active, 1 pour archivee et 2 pour corbeille
+    bool getactuel () const {return actuel;}
+
+   // virtual ~Note();
 };
 
 /*
@@ -41,7 +52,7 @@ private:
     virtual void estAbstraite(){};
 
 public:
-    Article(const std::string& titre, const std::string& texte="")
+    Article(const std::string& titre, const std::string& texte="");
 
 
     std::string getTexte() const;
@@ -91,7 +102,7 @@ public:
 
 
 
-
+}
 
 
 

@@ -101,8 +101,8 @@ namespace TIME {
 		Horaire() {
             time_t now = time(0);
             tm *ltm = localtime(&now);
-            heure= 1 + ltm->tm_hour ;
-            minute= 1 + ltm->tm_min ;
+            heure= ltm->tm_hour ;
+            minute= ltm->tm_min ;
             };
 
 		void setHoraire(unsigned short int h, unsigned short int m) { if (h>23||m>59) throw TimeException("erreur: initialisation horaire invalide"); heure=h; minute=m; }
