@@ -15,6 +15,7 @@ int main(int argc, const char * argv[])
    Note n("soucis");
    std::cout<<n.getdateModif()<<" "<<n.getdateCrea()<<"\n"<<n.gethoraireCrea()<<" "<<n.gethoraireModif()<<" "<<n.getactuel()<<" "<<n.gettitre();
 
+   std::cout << "Test branch" << endl;
 
     return 0;
 }
