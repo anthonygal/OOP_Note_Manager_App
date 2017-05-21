@@ -1,37 +1,35 @@
 #ifndef PluriNotes_h
 #define PluriNotes_h
 
-#include <iostream>
 #include <string>
 #include "timing.h"
 
+using namespace TIME;
 
 enum NoteEtat{ active, archivee, corbeille };
 enum TacheStatut{ attente, encours, terminee };
 enum TypeMultimedia{ image, video, audio };
-
-namespace TIME {
 
 class Note{
 private:
     int ID;
     std::string titre;
     TIME::Date dateCrea;
-     TIME::Date dateModif;
+    TIME::Date dateModif;
     TIME::Horaire horaireCrea;
     TIME::Horaire horaireModif;
     NoteEtat etat;
     bool actuel;
     //virtual void estAbstraite()=0;
 public:
-    Note(const std::string& s =" "): titre(s), etat(active), actuel(true){    };//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
-    Note (const Note & n){
-        titre = n.titre;
-        dateCrea= n.dateCrea;
-        horaireCrea=n.horaireCrea;
-        actuel=n.actuel;
-        n.setactuel(false);
-    }
+    Note(const std::string& s): titre(s), dateCrea(dateNow()), dateModif(dateNow()), horaireCrea(horaireNow()), horaireModif(horaireNow()), etat(active), actuel(true){};//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
+//    Note(const Note& n){
+//        titre = n.titre;
+//        dateCrea= n.dateCrea;
+//        horaireCrea=n.horaireCrea;
+//        actuel=n.actuel;
+//        n.setactuel(false);
+//    }
     const std::string gettitre() const {return titre; }
     const Date& getdateCrea() const {return dateCrea;}
     const Date& getdateModif() const {return dateModif;} //Laisser ou enlever le const? La date de modif est ammenée à être modifié, mais on créera alors une nouvelle notes
@@ -107,10 +105,6 @@ public:
 
     Multimedia(const std::string& titre, const std::string adressefichierimage, const std::string Description="", TypeMultimedia T=image);
 };
-
-
-
-}
 
 
 

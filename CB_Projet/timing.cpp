@@ -70,12 +70,31 @@ Date Date::operator+(unsigned int nb_jours) const{
 	return d;
 }
 
+Date TIME::dateNow(){
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    unsigned int annee = 1900 + ltm->tm_year;
+    unsigned short int mois = 1 + ltm->tm_mon;
+    unsigned short int jour =ltm->tm_mday;
+    Date d(jour,mois,annee);
+    return d;
+}
+
 bool Horaire::operator<(const Horaire& h) const{
 	if (heure<h.heure) return true;
 	if (heure>h.heure) return false;
 	if (minute<h.minute) return true;
 	if (minute>h.minute) return false;
 	return true;
+}
+
+Horaire TIME::horaireNow(){
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    unsigned short int heure= ltm->tm_hour;
+    unsigned short int minute= ltm->tm_min;
+    Horaire h(heure,minute);
+    return h;
 }
 
 Periode::Periode(unsigned int j, unsigned int m, unsigned int a):
