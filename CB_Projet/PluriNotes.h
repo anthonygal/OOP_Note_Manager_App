@@ -1,10 +1,7 @@
 #ifndef PluriNotes_h
 #define PluriNotes_h
 
-<<<<<<< HEAD
 
-=======
->>>>>>> ba1c68fe2b527a29aa34c53c8d98a2e79d54f8b4
 #include <string>
 #include "timing.h"
 
@@ -26,8 +23,8 @@ private:
     bool actuel;
     //virtual void estAbstraite()=0;
 public:
-<<<<<<< HEAD
-    Note(const std::string& s ): titre(s), etat(active), actuel(true){    };//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
+
+Note(const std::string& s): titre(s), dateCrea(dateNow()), dateModif(dateNow()), horaireCrea(horaireNow()), horaireModif(horaireNow()), etat(active), actuel(true){};//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
 
     Note (Note& n){
         titre = n.titre;
@@ -39,16 +36,8 @@ public:
         horaireModif = TIME::Horaire::horaireNow();
 
     }
-=======
-    Note(const std::string& s): titre(s), dateCrea(dateNow()), dateModif(dateNow()), horaireCrea(horaireNow()), horaireModif(horaireNow()), etat(active), actuel(true){};//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
-//    Note(const Note& n){
-//        titre = n.titre;
-//        dateCrea= n.dateCrea;
-//        horaireCrea=n.horaireCrea;
-//        actuel=n.actuel;
-//        n.setactuel(false);
-//    }
->>>>>>> ba1c68fe2b527a29aa34c53c8d98a2e79d54f8b4
+
+
     const std::string gettitre() const {return titre; }
     const Date& getdateCrea() const {return dateCrea;}
     const Date& getdateModif() const {return dateModif;} //Laisser ou enlever le const? La date de modif est ammenée à être modifié, mais on créera alors une nouvelle notes
