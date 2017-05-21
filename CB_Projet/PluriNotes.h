@@ -25,6 +25,13 @@ private:
     //virtual void estAbstraite()=0;
 public:
     Note(const std::string& s =" "): titre(s), etat(active), actuel(true){    };//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
+    Note (const Note & n){
+        titre = n.titre;
+        dateCrea= n.dateCrea;
+        horaireCrea=n.horaireCrea;
+        actuel=n.actuel;
+        n.setactuel(false);
+    }
     const std::string gettitre() const {return titre; }
     const Date& getdateCrea() const {return dateCrea;}
     const Date& getdateModif() const {return dateModif;} //Laisser ou enlever le const? La date de modif est ammenée à être modifié, mais on créera alors une nouvelle notes
@@ -32,6 +39,7 @@ public:
     const Horaire& gethoraireModif() const {return horaireModif;}
     NoteEtat getetat() const {return etat;} //0 pour active, 1 pour archivee et 2 pour corbeille
     bool getactuel () const {return actuel;}
+    void setactuel (bool f){actuel=f; }
 
    // virtual ~Note();
 };
