@@ -15,30 +15,34 @@ private:
     int ID;
     std::string titre;
     TIME::Date dateCrea;
-    TIME::Date dateModif;
     TIME::Horaire horaireCrea;
+    TIME::Date dateModif;
     TIME::Horaire horaireModif;
     NoteEtat etat;
     bool actuel;
     //virtual void estAbstraite()=0;
 public:
-    Note(const std::string& s): titre(s), dateCrea(dateNow()), dateModif(dateNow()), horaireCrea(horaireNow()), horaireModif(horaireNow()), etat(active), actuel(true){};//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
-//    Note(const Note& n){
-//        titre = n.titre;
-//        dateCrea= n.dateCrea;
-//        horaireCrea=n.horaireCrea;
-//        actuel=n.actuel;
-//        n.setactuel(false);
-//    }
-    const std::string gettitre() const {return titre; }
-    const Date& getdateCrea() const {return dateCrea;}
-    const Date& getdateModif() const {return dateModif;} //Laisser ou enlever le const? La date de modif est ammenée à être modifié, mais on créera alors une nouvelle notes
-    const Horaire& gethoraireCrea() const {return horaireCrea;}
-    const Horaire& gethoraireModif() const {return horaireModif;}
-    NoteEtat getetat() const {return etat;} //0 pour active, 1 pour archivee et 2 pour corbeille
-    bool getactuel () const {return actuel;}
-    void setactuel (bool f){actuel=f; }
+    Note(const std::string& s): titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){};//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
+    Note(Note& n){
+        ID = n.ID;
+        titre = n.titre;
+        dateCrea = n.dateCrea;
+        horaireCrea = n.horaireCrea;
+        dateModif = dateNow();
+        horaireCrea = horaireNow();
+        actuel = n.actuel;
+        n.setActuel(false);
+    }
+    const std::string getTitre() const { return titre; }
+    const Date& getDateCrea() const { return dateCrea; }
+    const Date& getDateModif() const { return dateModif; } //Laisser ou enlever le const? La date de modif est ammenée à être modifié, mais on créera alors une nouvelle notes
+    const Horaire& getHoraireCrea() const { return horaireCrea; }
+    const Horaire& getHoraireModif() const { return horaireModif; }
+    NoteEtat getEtat() const { return etat; } //0 pour active, 1 pour archivee et 2 pour corbeille
+    bool getActuel() const { return actuel; }
+    void setActuel(bool f){ actuel=f; }
 
+    virtual void afficher() const;
    // virtual ~Note();
 };
 
@@ -65,6 +69,7 @@ public:
     Article& setTexte(const std::string& t);
 
     Article();
+    void afficher(std::ostream& f = std::cout) const;
 };
 
 
@@ -85,6 +90,7 @@ public:
     Tache& setEcheance(const TIME::Date& d);
 
     Tache(const std::string& titre, const std::string& action, int priority=0);
+    void afficher(std::ostream& f = std::cout) const;
 };
 
 
@@ -104,6 +110,7 @@ public:
     Multimedia& setTypeMultimedia(const TypeMultimedia t);
 
     Multimedia(const std::string& titre, const std::string adressefichierimage, const std::string Description="", TypeMultimedia T=image);
+    void afficher(std::ostream& f = std::cout) const;
 };
 
 

@@ -13,9 +13,10 @@ int main(int argc, const char * argv[])
    h.afficher();
 
    Note n("soucis");
-   std::cout<<n.getdateModif()<<" "<<n.getdateCrea()<<"\n"<<n.gethoraireCrea()<<" "<<n.gethoraireModif()<<" "<<n.getactuel()<<" "<<n.gettitre();
 
-   std::cout << "Test branch" << endl;
+   n.afficher();
+
+   std::cout << "\nBranch Pierre\n";
 
     return 0;
 }
