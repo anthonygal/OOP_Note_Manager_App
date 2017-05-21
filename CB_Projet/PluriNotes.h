@@ -26,16 +26,7 @@ public:
 
 Note(const std::string& s): titre(s), dateCrea(dateNow()), dateModif(dateNow()), horaireCrea(horaireNow()), horaireModif(horaireNow()), etat(active), actuel(true){};//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
 
-    Note (Note& n){
-        titre = n.titre;
-        dateCrea= n.dateCrea;
-        horaireCrea=n.horaireCrea;
-        actuel=n.actuel;
-        n.setactuel(false);
-        dateModif = TIME::Date::dateNow();
-        horaireModif = TIME::Horaire::horaireNow();
-
-    }
+    Note (Note& n);
 
 
     const std::string gettitre() const {return titre; }
@@ -48,8 +39,8 @@ Note(const std::string& s): titre(s), dateCrea(dateNow()), dateModif(dateNow()),
     void setactuel (bool f){actuel=f; }
     void setetat (NoteEtat e){etat=e;}
 
-    virtual Note* clone()const;
-    virtual ~Note();
+  //  virtual Note* clone();
+    //virtual ~Note();
 };
 
 /*
@@ -67,9 +58,9 @@ private:
 
 public:
     Article(const std::string& titre, const std::string& te =""): Note(titre), texte(te){};
-    Article* clone() const;
+    Article* clone();
     std::string getTexte() const{return texte;};
-    Article& setTexte(const std::string& t){texte=t;};
+    void setTexte(const std::string& t){texte=t;};
 
     Article();
 };
@@ -91,7 +82,7 @@ public:
     Tache& setPriorite(int p);
     Tache& setEcheance(const TIME::Date& d);
 
-    Tache* clone() const;
+    Tache* clone() ;
     Tache(const std::string& titre, const std::string& action, int priority=0);
 };
 
@@ -110,7 +101,7 @@ public:
     Multimedia& setAdresseFichierImage(const std::string& f);
     Multimedia& setDescription(const std::string& d);
     Multimedia& setTypeMultimedia(const TypeMultimedia t);
-    Multimedia* clone() const;
+    Multimedia* clone() ;
 
     Multimedia(const std::string& titre, const std::string adressefichierimage, const std::string Description="", TypeMultimedia T=image);
 };
