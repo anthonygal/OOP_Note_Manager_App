@@ -22,7 +22,7 @@ void Date::setDate(unsigned short int j, unsigned short int m, unsigned int a){
 
 void Date::afficher(std::ostream& f) const{
 	// affiche le date sous le format JJ/MM/AAAA
-	f<<std::setfill('0')<<std::setw(2)<<jour<<"/"<<std::setw(2)<<mois<<"/"<<annee<<std::setfill(' ');
+	f<<std::setfill('0')<<std::setw(2)<<jour<<"/"<<std::setw(2)<<mois<<"/"<<annee<<std::setfill(' ')<<"\n";
 }
 
 bool Date::operator==(const Date& d) const{
@@ -163,3 +163,19 @@ std::istream& operator>>(std::istream& flot, TIME::Duree& duree){
 	if (ok) duree=Duree(h,m); else flot.clear(std::ios::failbit);
 	return flot;
 }
+
+/*
+TIME::Date TIME::Date::dateActuelle(){
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    annee= 1900 + ltm->tm_year;
+    mois= 1 + ltm->tm_mon;
+    jour=ltm->tm_mday;}
+
+TIME::Horaire TIME::Horaire::horaireActuelle(){
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    heure= 1 + ltm->tm_hour ;
+    minute= 1 + ltm->tm_min ;
+};
+*/
