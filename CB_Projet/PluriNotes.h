@@ -1,7 +1,7 @@
 #ifndef PluriNotes_h
 #define PluriNotes_h
 
-#include <iostream>
+
 #include <string>
 #include "timing.h"
 
@@ -24,13 +24,17 @@ private:
     bool actuel;
     //virtual void estAbstraite()=0;
 public:
-    Note(const std::string& s =" "): titre(s), etat(active), actuel(true){    };//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
-    Note (const Note & n){
+    Note(const std::string& s ): titre(s), etat(active), actuel(true){    };//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
+
+    Note (Note& n){
         titre = n.titre;
         dateCrea= n.dateCrea;
         horaireCrea=n.horaireCrea;
         actuel=n.actuel;
         n.setactuel(false);
+        dateModif = TIME::Date::dateNow();
+        horaireModif = TIME::Horaire::horaireNow();
+
     }
     const std::string gettitre() const {return titre; }
     const Date& getdateCrea() const {return dateCrea;}
@@ -40,8 +44,10 @@ public:
     NoteEtat getetat() const {return etat;} //0 pour active, 1 pour archivee et 2 pour corbeille
     bool getactuel () const {return actuel;}
     void setactuel (bool f){actuel=f; }
+    void setetat (NoteEtat e){etat=e;}
 
-   // virtual ~Note();
+    virtual Note* clone()const;
+    virtual ~Note();
 };
 
 /*
@@ -50,21 +56,18 @@ public:
     -Les accesseurs en edition créeent la nouvelle version de la note prenant les modifications souhaitées en compte et renvoyeent l'addresse de la nouvelle version de la note créer
     -La seule utilité de la methode virtuelle pure estAbstraite() est de rendre la classe Note abstraite. Son comportement (ne fait rien du tout) est défini dans les sous classe afin de rendre ces sous classes concrètes. Cette fonction pourra ne sera plus necessaire si une methode virtuelle pure utile vient à etre implementée plus tard
     - Une classe: Ordre des méthodes: 1/ Constructeur 2/ get  3/ set (Pas sûr qu'on en utilise)=> sera gérer par le manager  4/ Autres fonctions
-
-
  */
 
 class Article: public Note{
 private:
     std::string texte;
-    virtual void estAbstraite(){};
+    //virtual void estAbstraite(){};
 
 public:
-    Article(const std::string& titre, const std::string& texte="");
-
-
-    std::string getTexte() const;
-    Article& setTexte(const std::string& t);
+    Article(const std::string& titre, const std::string& te =""): Note(titre), texte(te){};
+    Article* clone() const;
+    std::string getTexte() const{return texte;};
+    Article& setTexte(const std::string& t){texte=t;};
 
     Article();
 };
@@ -86,6 +89,7 @@ public:
     Tache& setPriorite(int p);
     Tache& setEcheance(const TIME::Date& d);
 
+    Tache* clone() const;
     Tache(const std::string& titre, const std::string& action, int priority=0);
 };
 
@@ -104,6 +108,7 @@ public:
     Multimedia& setAdresseFichierImage(const std::string& f);
     Multimedia& setDescription(const std::string& d);
     Multimedia& setTypeMultimedia(const TypeMultimedia t);
+    Multimedia* clone() const;
 
     Multimedia(const std::string& titre, const std::string adressefichierimage, const std::string Description="", TypeMultimedia T=image);
 };

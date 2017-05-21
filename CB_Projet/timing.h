@@ -42,6 +42,7 @@ namespace TIME {
 		    else {setDate(j,m,a);} }
 
 
+
 		// méthodes
 		unsigned short int  getJour() const { return jour; } //<! Retourne le jour de la date
 		unsigned short int  getMois() const { return mois; } //<! Retourne le mois de la date
@@ -53,6 +54,7 @@ namespace TIME {
 		int operator-(const Date& d) const; //<! Retourne le nombre de jours séparant les deux dates
 		Date demain() const; //<! Retourne la date du lendemain
 		Date operator+(unsigned int nb) const; //<!Retourne la date de dans nb jours
+
 
 	private:
 		// attributs
