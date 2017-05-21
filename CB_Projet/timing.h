@@ -1,8 +1,8 @@
 #if !defined(CTIME)
 #define CTIME
 
-#include<iostream>
-#include<iomanip>
+#include <iostream>
+#include <iomanip>
 #include <ctime>
 
 namespace TIME {
@@ -30,17 +30,8 @@ namespace TIME {
 			\param m mois avec 1<=m<=12
 			\param a année avec a>=0
 			*/
-		//Constructeur changé: On peut créer une date en donnant des arguments, sinon, donne automatiquement a jour, mois, annee la date actuelle
-		Date(unsigned int short j=1, unsigned int short m=1, unsigned int a=0):jour(j),mois(m),annee(a){
-		    if (jour==1&&mois==1&&annee==0){
-                time_t now = time(0);
-                tm *ltm = localtime(&now);
-                annee= 1900 + ltm->tm_year;
-                mois= 1 + ltm->tm_mon;
-                jour=ltm->tm_mday;
-                }
-		    else {setDate(j,m,a);} }
 
+		Date(unsigned int short j=1, unsigned int short m=1, unsigned int a=0):jour(1),mois(1),annee(0){ setDate(j,m,a); }
 
 
 		// méthodes
@@ -62,6 +53,8 @@ namespace TIME {
 		unsigned short int mois; // mois entre 1 et 12
 		unsigned int annee;
 	};
+
+    Date dateNow();
 
 	/*! \class Duree
 			\brief Classe permettant de manipuler des durees
@@ -99,13 +92,6 @@ namespace TIME {
 			\param m minute avec 0<=m<=59
 			*/
 		Horaire(unsigned short int  h, unsigned short int  m):heure(h),minute(m) {if (h>23||m>59) throw TimeException("erreur: initialisation horaire invalide");}
-		//Constructeur sans argument qui donne l'horaire actuelle
-		Horaire() {
-            time_t now = time(0);
-            tm *ltm = localtime(&now);
-            heure= ltm->tm_hour ;
-            minute= ltm->tm_min ;
-            };
 
 		void setHoraire(unsigned short int h, unsigned short int m) { if (h>23||m>59) throw TimeException("erreur: initialisation horaire invalide"); heure=h; minute=m; }
 		void afficher(std::ostream& f=std::cout) const { f<<std::setfill('0')<<std::setw(2)<<heure<<"H"<<std::setfill('0')<<std::setw(2)<<minute<<std::setfill(' ')<<"\n"; } //<!Affiche l'horaire sous le format hhHmm
@@ -118,6 +104,8 @@ namespace TIME {
 		unsigned short int  heure;
 		unsigned short int  minute;
 	};
+
+	Horaire horaireNow();
 
 	/*! \class Periode
 			\brief Classe permettant de manipuler des periodes exprimées en jours/mois/années
