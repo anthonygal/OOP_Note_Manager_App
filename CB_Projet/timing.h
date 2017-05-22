@@ -91,7 +91,7 @@ namespace TIME {
 			*/
 		Horaire(unsigned short int  h=0, unsigned short int  m=0):heure(h),minute(m) {if (h>23||m>59) throw TimeException("erreur: initialisation horaire invalide");}
 		void setHoraire(unsigned short int h, unsigned short int m) { if (h>23||m>59) throw TimeException("erreur: initialisation horaire invalide"); heure=h; minute=m; }
-		void afficher(std::ostream& f=std::cout) const { f<<std::setfill('0')<<std::setw(2)<<heure<<"H"<<std::setfill('0')<<std::setw(2)<<minute<<std::setfill(' '); } //<!Affiche l'horaire sous le format hhHmm
+		void afficher(std::ostream& f=std::cout) const { f<<std::setfill('0')<<std::setw(2)<<heure<<"H"<<std::setfill('0')<<std::setw(2)<<minute; } //<!Affiche l'horaire sous le format hhHmm
 		unsigned short int getHeure() const { return heure; } //<!Retourne l'heure de l'horaire
 		unsigned short int getMinute() const { return minute; } //<!Retourne les minutes de l'horaire
 		bool operator<(const Horaire& h) const; //<! h1<h2 retourne true si h1 est avant h2 dans le temps

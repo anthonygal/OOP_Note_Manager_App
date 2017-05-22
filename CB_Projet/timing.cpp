@@ -8,7 +8,6 @@ std::ostream& operator<<(std::ostream& f, const Duree & d){ d.afficher(f); retur
 std::ostream& operator<<(std::ostream& f, const Horaire & h){ h.afficher(f); return f; }
 std::ostream& operator<<(std::ostream& f, const Periode & p){ p.afficher(f); return f; }
 
-
 void Date::setDate(unsigned short int j, unsigned short int m, unsigned int a){
 	// initialisation de la date, renvoie vrai si la date est valide
 	if (a>=0&&a<=3000) annee=a; else throw TimeException("erreur: annee invalide");
@@ -22,7 +21,7 @@ void Date::setDate(unsigned short int j, unsigned short int m, unsigned int a){
 
 void Date::afficher(std::ostream& f) const{
 	// affiche le date sous le format JJ/MM/AAAA
-	f<<std::setfill('0')<<std::setw(2)<<jour<<"/"<<std::setw(2)<<mois<<"/"<<annee<<std::setfill(' ');
+	f<<std::setfill('0')<<std::setw(2)<<jour<<"/"<<std::setw(2)<<mois<<"/"<<annee;
 }
 
 bool Date::operator==(const Date& d) const{

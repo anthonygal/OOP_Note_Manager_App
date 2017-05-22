@@ -1,16 +1,15 @@
 #ifndef PluriNotes_h
 #define PluriNotes_h
 
-
-#include <string>
 #include "timing.h"
+#include <string>
+#include <typeinfo>
 
 using namespace TIME;
 
 enum NoteEtat{ active, archivee, corbeille };
 enum TacheStatut{ attente, encours, terminee };
 enum TypeMultimedia{ image, video, audio };
-
 
 class Note{
 private:
@@ -22,12 +21,11 @@ private:
     TIME::Horaire horaireModif;
     NoteEtat etat;
     bool actuel;
-    //virtual void estAbstraite()=0;
 
 public:
-    Note(const unsigned int i, const std::string& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(archivee), actuel(true){}//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
+    Note(const unsigned int i, const std::string& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
     Note(Note& n);
-    virtual Note* clone()const; //Comprend pas ca ^^
+    //virtual Note* clone()const; //Comprend pas ca + BUG ^^
 
     std::string getTitre() const { return titre; }
     const Date& getDateCrea() const { return dateCrea; } //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
@@ -39,7 +37,8 @@ public:
     void setEtat(NoteEtat e){ etat=e; }
     void setActuel(){ actuel=false; }
 
-    virtual void afficher() const;
+    void afficher(std::ostream& f = std::cout) const;
+    virtual void affichageSpecifique(std::ostream& f) const = 0;
     //virtual ~Note();
 };
 
@@ -54,16 +53,15 @@ public:
 class Article: public Note{
 private:
     std::string texte;
-    //virtual void estAbstraite(){};
 
 public:
     Article(const unsigned int i, const std::string& ti, const std::string& te=""):Note(i,ti),texte(te){}
-    Article* clone(); // Je vois pas a quoi ca sert Antoine?
+    //Article* clone(); // Je vois pas a quoi ca sert Antoine?
 
     std::string getTexte() const{ return texte; }
     void setTexte(const std::string& t){ texte=t; }
 
-    void afficher(std::ostream& f = std::cout) const;
+    void affichageSpecifique(std::ostream& f) const;
 };
 
 
@@ -77,7 +75,7 @@ private:
 
 public:
     Tache(const unsigned int i, const std::string& ti, const std::string& act):Note(i,ti),action(act),statut(encours){}
-    Tache* clone(); // Je vois pas a quoi ca sert Antoine?
+    //Tache* clone(); // Je vois pas a quoi ca sert Antoine?
 
     std::string getAction() const { return action; }
     TacheStatut getStatut() const { return statut; }
@@ -88,7 +86,7 @@ public:
     void setPriorite(int p){ priorite = p; }
     void setEcheance(const TIME::Date& d){ echeance = d; }
 
-    void afficher(std::ostream& f = std::cout) const;
+    void affichageSpecifique(std::ostream& f) const;
 };
 
 
@@ -97,11 +95,10 @@ private:
     std::string adresseFichier;
     std::string description;
     TypeMultimedia type;
-    //virtual void estAbstraite(){};
 
 public:
     Multimedia(const unsigned int i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image):Note(i,ti),adresseFichier(adr),description(desc),type(ty){}
-    Multimedia* clone(); // Je vois pas a quoi ca sert Antoine?
+    //Multimedia* clone(); // Je vois pas a quoi ca sert Antoine?
 
     std::string getAdresseFichier() const { return adresseFichier; }
     std::string getDescription() const { return description; }
@@ -110,7 +107,7 @@ public:
     void setDescription(const std::string& desc){ description = desc; }
     void setType(const TypeMultimedia ty){ type = ty; }
 
-    void afficher(std::ostream& f = std::cout) const;
+    void affichageSpecifique(std::ostream& f) const;
 };
 
 

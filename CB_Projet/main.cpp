@@ -7,11 +7,13 @@ int main(int argc, const char * argv[])
 {
     // insert code here... modification test
 
-   Note n(3,"soucis");
-   Note n2(n);
+    Article a(3,"soucis");
+    Article a2(5,"soucis2","trop de problemes");
 
-   n.afficher();
-   n2.afficher();
+    a.afficher();
+    a2.afficher();
+
+    std::cout<<"\ntype de a : "<<typeid(a).name()<<"\n"; //Ca affiche un chiffre devant la classe mais je n'arrive pas à l'enlever...
 
     return 0;
 }
