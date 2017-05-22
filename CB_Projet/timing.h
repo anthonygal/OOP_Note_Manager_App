@@ -44,7 +44,7 @@ namespace TIME {
 		bool operator<(const Date& d) const; //<! Compare deux dates dans le temps : d1<d2 retourne true si d1 est avant d2
 		int operator-(const Date& d) const; //<! Retourne le nombre de jours séparant les deux dates
 		Date demain() const; //<! Retourne la date du lendemain
-		Date operator+(unsigned int nb) const; //<!Retourne la date de dans nb jours
+		Date operator+(unsigned int nb) const; //<!Retourne la date dans nb jours
 
 
 	private:
@@ -53,8 +53,6 @@ namespace TIME {
 		unsigned short int mois; // mois entre 1 et 12
 		unsigned int annee;
 	};
-
-    Date dateNow();
 
 	/*! \class Duree
 			\brief Classe permettant de manipuler des durees
@@ -91,21 +89,18 @@ namespace TIME {
 		/*! \param h heure avec 0<=h<=23
 			\param m minute avec 0<=m<=59
 			*/
-		Horaire(unsigned short int  h, unsigned short int  m):heure(h),minute(m) {if (h>23||m>59) throw TimeException("erreur: initialisation horaire invalide");}
+		Horaire(unsigned short int  h = 0, unsigned short int  m = 0):heure(h),minute(m) {if (h>23||m>59) throw TimeException("erreur: initialisation horaire invalide");}
 
 		void setHoraire(unsigned short int h, unsigned short int m) { if (h>23||m>59) throw TimeException("erreur: initialisation horaire invalide"); heure=h; minute=m; }
-		void afficher(std::ostream& f=std::cout) const { f<<std::setfill('0')<<std::setw(2)<<heure<<"H"<<std::setfill('0')<<std::setw(2)<<minute<<std::setfill(' ')<<"\n"; } //<!Affiche l'horaire sous le format hhHmm
+		void afficher(std::ostream& f=std::cout) const { f<<std::setfill('0')<<std::setw(2)<<heure<<"H"<<std::setfill('0')<<std::setw(2)<<minute<<std::setfill(' '); } //<!Affiche l'horaire sous le format hhHmm
 		unsigned short int getHeure() const { return heure; } //<!Retourne l'heure de l'horaire
 		unsigned short int getMinute() const { return minute; } //<!Retourne les minutes de l'horaire
 		bool operator<(const Horaire& h) const; //<! h1<h2 retourne true si h1 est avant h2 dans le temps
-
 
 	private:
 		unsigned short int  heure;
 		unsigned short int  minute;
 	};
-
-	Horaire horaireNow();
 
 	/*! \class Periode
 			\brief Classe permettant de manipuler des periodes exprimées en jours/mois/années
@@ -149,6 +144,9 @@ namespace TIME {
 		Date debut;
 		Date fin;
 	};
+
+    Date dateNow();
+    Horaire horaireNow();
 
 }
 

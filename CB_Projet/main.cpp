@@ -7,14 +7,11 @@ int main(int argc, const char * argv[])
 {
     // insert code here... modification test
 
-   Date d(dateNow());
-   d.afficher();
-   Horaire h(horaireNow());
-   h.afficher();
+   Note n(3,"soucis");
+   Note n2(n);
 
-   Note n("soucis");
-   std::cout<<n.getdateModif()<<" "<<n.getdateCrea()<<"\n"<<n.gethoraireCrea()<<" "<<n.gethoraireModif()<<" "<<n.getactuel()<<" "<<n.gettitre();
-
+   n.afficher();
+   n2.afficher();
 
     return 0;
 }
