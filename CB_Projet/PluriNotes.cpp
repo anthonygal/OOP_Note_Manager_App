@@ -14,6 +14,18 @@ Note::Note(Note& n){
     n.setActuel();
 }
 
+Note::Note(const Note& n){
+    ID = n.ID;
+    titre = n.titre;
+    dateCrea = n.dateCrea;
+    horaireCrea = n.horaireCrea;
+    dateModif = n.dateModif;
+    horaireModif = n.horaireModif;
+    etat = n.etat;
+    actuel = n.actuel;
+}
+
+
 void Note::afficher(std::ostream& f) const {
     f<<"\n------ "<<typeid(*this).name()<<" "<<ID<<(actuel?" (Version Actuelle)":" (Ancienne Version)")<<" ------\n";
     f<<"\nTitre : "<<titre;
@@ -33,15 +45,45 @@ void Article::affichageSpecifique(std::ostream& f) const {
     f<<"\nTexte : "<<texte;
 }
 
-//Appel des constructeur par recopie => sera utilisé lors du design Pattern Factory method plus tard
-/*Article* Article::clone(){
-    return new Article(*this);
+
+void Manager::Affichertout()const{
+for(Manager::IteratorNotes it=begin();it!=Manager::end();++it ){
+    std::cout<<*it;
+}
 }
 
-Tache* Tache::clone(){
+
+std::ostream& operator<<(std::ostream& f, const Note& n) {
+        n.afficher(f);
+        return f;}
+
+
+ Manager& Manager::operator<<(Note& n){
+    if (Manager::nbNotes==Manager::nbNotesMax){
+        Note** newtab= new Note* [Manager::nbNotesMax+5];
+        for(int i=0; i=Manager::nbNotes;i++){
+            newtab[i]=Manager::notes[i];
+        }
+    Note** oldtab= Manager::notes;
+    notes=newtab;
+    delete [] oldtab;
+    }
+    Manager::notes[Manager::nbNotes+1]=n.clone();
+    Manager::nbNotes=Manager::nbNotes+1;
+    return *this;
+    };
+
+//Appel des constructeur par recopie => sera utilisé lors du design Pattern Factory method plus tard
+Article* Article::clone()const{
+ Article* a=new Article(*this);
+    return a;
+}
+
+/*
+Tache* Tache::clone()const{
     return new Tache(*this);
 }
 
-Multimedia* Multimedia::clone(){
+Multimedia* Multimedia::clone()const{
     return new Multimedia(*this);
 }*/

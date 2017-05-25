@@ -25,7 +25,8 @@ private:
 public:
     Note(const unsigned int i, const std::string& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
     Note(Note& n);
-    //virtual Note* clone()const; //Comprend pas ca + BUG ^^
+    Note (const Note& n);
+    virtual Note* clone()const=0; //Comprend pas ca + BUG ^^
 
     std::string getTitre() const { return titre; }
     const Date& getDateCrea() const { return dateCrea; } //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
@@ -56,7 +57,7 @@ private:
 
 public:
     Article(const unsigned int i, const std::string& ti, const std::string& te=""):Note(i,ti),texte(te){}
-    //Article* clone(); // Je vois pas a quoi ca sert Antoine?
+    Article* clone()const; // Je vois pas a quoi ca sert Antoine?
 
     std::string getTexte() const{ return texte; }
     void setTexte(const std::string& t){ texte=t; }
@@ -118,8 +119,32 @@ private:
     Note** notes;
 public:
 
+   class IteratorNotes {
+   private:
+        friend class Manager;
+        int nb;
+        Note** courant;
+        IteratorNotes (Note** t, int n): courant(t), nb(n){}
+   public:
+       bool operator!=(const IteratorNotes& it) {return courant!=it.courant;}
+       const Note& operator*() {return **courant;}
+       IteratorNotes& operator++() {courant++; return *this;}
+       IteratorNotes& operator--() {courant--; return *this;}
+   } ;
+    IteratorNotes begin()const{return IteratorNotes(notes, nbNotes);}
+    IteratorNotes end()const{return IteratorNotes(notes+nbNotes,0);}
+    IteratorNotes begin1()const{return IteratorNotes(notes-1,nbNotes);}
+    IteratorNotes end1() const{return IteratorNotes(notes+nbNotes-1,0);}
+
+    void Affichertout() const;
+
+    Manager& operator<<(Note& n);
+
 
 };
+
+std::ostream& operator<<(std::ostream& f , const Note& n);
+
 
 
 #endif /* PluriNotes_h */
