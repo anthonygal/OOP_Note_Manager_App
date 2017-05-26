@@ -54,6 +54,7 @@ namespace TIME {
 		unsigned int annee;
 	};
 
+
 	/*! \class Duree
 			\brief Classe permettant de manipuler des durees
 			L'utilisation de cette classe nécessite des dates valides au sens commun du terme.

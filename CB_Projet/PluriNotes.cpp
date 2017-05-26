@@ -45,12 +45,35 @@ void Article::affichageSpecifique(std::ostream& f) const {
     f<<"\nTexte : "<<texte;
 }
 
+void Tache::affichageSpecifique(std::ostream& f) const {
+    f<<"\nAction : "<<action;
+    f<<"\nStatut : ";
+    switch(statut){
+        case 0: f<<"Attente"; break;
+        case 1: f<<"En cours"; break;
+        case 2: f<<"Terminée"; break;}
+    if (priorite!=0){
+    f<<"\nPriorite : "<<priorite;
+    }
+    if (echeance.getAnnee()!=0 || echeance.getMois()!=1 ||echeance.getJour()!=1  ){
+    f<<"\nEcheance : "<<echeance;
+    }
+
+}
+
+
 
 void Manager::Affichertout()const{
+   // for (unsigned int i=0; i<Manager::nbNotes-1; i++)
+   // {
+      // Manager::notes[i]->afficher(f);
+    //}
 for(Manager::IteratorNotes it=begin();it!=Manager::end();++it ){
-    std::cout<<*it;
+    std::cout<<*it<<std::endl;
 }
 }
+
+
 
 
 std::ostream& operator<<(std::ostream& f, const Note& n) {
@@ -61,29 +84,43 @@ std::ostream& operator<<(std::ostream& f, const Note& n) {
  Manager& Manager::operator<<(Note& n){
     if (Manager::nbNotes==Manager::nbNotesMax){
         Note** newtab= new Note* [Manager::nbNotesMax+5];
-        for(int i=0; i=Manager::nbNotes;i++){
+        for(int i=0; i<Manager::nbNotes;i++){
             newtab[i]=Manager::notes[i];
         }
+    nbNotesMax=nbNotesMax+5;
     Note** oldtab= Manager::notes;
     notes=newtab;
     delete [] oldtab;
     }
-    Manager::notes[Manager::nbNotes+1]=n.clone();
+    Manager::notes[Manager::nbNotes]=n.clone();
     Manager::nbNotes=Manager::nbNotes+1;
     return *this;
     };
 
-//Appel des constructeur par recopie => sera utilisé lors du design Pattern Factory method plus tard
+
 Article* Article::clone()const{
  Article* a=new Article(*this);
     return a;
 }
 
-/*
-Tache* Tache::clone()const{
-    return new Tache(*this);
-}
 
+Tache* Tache::clone()const{
+    Tache* t=new Tache(*this);
+    return t;}
+
+
+
+/*
 Multimedia* Multimedia::clone()const{
     return new Multimedia(*this);
 }*/
+
+
+Manager::~Manager(){
+
+for(unsigned int i; i<nbNotes-1;i++){
+    delete notes[i];
+}
+delete [] notes;
+}
+

@@ -75,8 +75,8 @@ private:
     //virtual void estAbstraite(){};
 
 public:
-    Tache(const unsigned int i, const std::string& ti, const std::string& act):Note(i,ti),action(act),statut(encours){}
-    //Tache* clone(); // Je vois pas a quoi ca sert Antoine?
+    Tache(const unsigned int i, const std::string& ti, const std::string& act, int prio =0, Date d =Date (1,1,0)):Note(i,ti),action(act),statut(encours), priorite(prio), echeance(d){}
+    Tache* clone() const;
 
     std::string getAction() const { return action; }
     TacheStatut getStatut() const { return statut; }
@@ -118,7 +118,7 @@ private:
     unsigned int nbNotesMax;
     Note** notes;
 public:
-
+    Manager(): nbNotes(0), nbNotesMax (5), notes (new Note*[nbNotesMax]){};
    class IteratorNotes {
    private:
         friend class Manager;
@@ -135,10 +135,12 @@ public:
     IteratorNotes end()const{return IteratorNotes(notes+nbNotes,0);}
     IteratorNotes begin1()const{return IteratorNotes(notes-1,nbNotes);}
     IteratorNotes end1() const{return IteratorNotes(notes+nbNotes-1,0);}
+    int getnbNotes()const {return nbNotes;}
 
     void Affichertout() const;
 
     Manager& operator<<(Note& n);
+    ~Manager();
 
 
 };

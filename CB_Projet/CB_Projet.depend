@@ -1,43 +1,22 @@
 # depslib dependency file v1.0
-1495496190 source:d:\git\lo21proj\projetlo21\cb_projet\main.cpp
+1495727153 source:c:\users\antoine\lo21\cb_projet\timing.cpp
 	"timing.h"
-	"PluriNotes.h"
+	<ctime>
 
-1495495771 source:d:\git\lo21proj\projetlo21\cb_projet\plurinotes.cpp
-	"PluriNotes.h"
-
-1495495813 d:\git\lo21proj\projetlo21\cb_projet\plurinotes.h
-	"timing.h"
-	<string>
-	<typeinfo>
-
-1495496131 d:\git\lo21proj\projetlo21\cb_projet\timing.h
+1495727496 c:\users\antoine\lo21\cb_projet\timing.h
 	<iostream>
 	<iomanip>
 	<ctime>
 
-1495496141 source:d:\git\lo21proj\projetlo21\cb_projet\timing.cpp
-	"timing.h"
-	<ctime>
-
-1495647559 source:c:\users\antoine\lo21\cb_projet\main.cpp
+1495793892 source:c:\users\antoine\lo21\cb_projet\main.cpp
 	"timing.h"
 	"PluriNotes.h"
 
-1495648357 source:c:\users\antoine\lo21\cb_projet\plurinotes.cpp
-	"PluriNotes.h"
-
-1495718076 c:\users\antoine\lo21\cb_projet\plurinotes.h
+1495793862 c:\users\antoine\lo21\cb_projet\plurinotes.h
 	"timing.h"
 	<string>
 	<typeinfo>
 
-1495636549 c:\users\antoine\lo21\cb_projet\timing.h
-	<iostream>
-	<iomanip>
-	<ctime>
-
-1495636549 source:c:\users\antoine\lo21\cb_projet\timing.cpp
-	"timing.h"
-	<ctime>
+1495793862 source:c:\users\antoine\lo21\cb_projet\plurinotes.cpp
+	"PluriNotes.h"
 
