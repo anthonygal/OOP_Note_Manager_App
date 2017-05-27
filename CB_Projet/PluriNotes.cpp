@@ -11,7 +11,7 @@ Note::Note(Note& n){
     horaireModif = horaireNow();
     etat = n.etat;
     actuel = true;
-    n.setActuel();
+    n.setActuel(true);
 }
 
 Note::Note(const Note& n){
@@ -28,6 +28,7 @@ Note::Note(const Note& n){
 
 void Note::afficher(std::ostream& f) const {
     f<<"\n------ "<<typeid(*this).name()<<" "<<ID<<(actuel?" (Version Actuelle)":" (Ancienne Version)")<<" ------\n";
+    f<<"\n ID : "<<ID;
     f<<"\nTitre : "<<titre;
     f<<"\nCree le : "<<dateCrea<<" a "<<horaireCrea;
     f<<"\nModifie le "<<dateModif<<" a "<<horaireModif;
@@ -51,7 +52,7 @@ void Tache::affichageSpecifique(std::ostream& f) const {
     switch(statut){
         case 0: f<<"Attente"; break;
         case 1: f<<"En cours"; break;
-        case 2: f<<"Terminée"; break;}
+        case 2: f<<"Terminee"; break;}
     if (priorite!=0){
     f<<"\nPriorite : "<<priorite;
     }
@@ -61,6 +62,8 @@ void Tache::affichageSpecifique(std::ostream& f) const {
 
 }
 
+
+void Multimedia::affichageSpecifique(std::ostream& f) const {}
 
 
 void Manager::Affichertout()const{
@@ -99,7 +102,7 @@ std::ostream& operator<<(std::ostream& f, const Note& n) {
 
 
 Article* Article::clone()const{
- Article* a=new Article(*this);
+    Article* a=new Article(*this);
     return a;
 }
 
@@ -109,18 +112,85 @@ Tache* Tache::clone()const{
     return t;}
 
 
-
-/*
-Multimedia* Multimedia::clone()const{
-    return new Multimedia(*this);
-}*/
+Multimedia* Multimedia::clone() const {
+    Multimedia* m=new Multimedia(*this);
+    return m;
+};
 
 
 Manager::~Manager(){
+    
+    for(unsigned int i; i<nbNotes-1;i++){
+        delete notes[i];
+    }
+    delete [] notes;
+}
 
-for(unsigned int i; i<nbNotes-1;i++){
-    delete notes[i];
+
+//EDITEURS DE NOTES DE LA CLASSE MANAGER CREANT UNE NOUVELLE VERSION DE LA NOTES ET L AJOUTANT AU TABLEAU notes DU MANAGER (PARTIE 1.2 DU SUJET DE PROJET):
+
+
+Article& Manager::editTexteArticle(Article& A, const std::string& s) {
+    Article* a= new Article(A);
+    a->setTexte(s);
+    a->setModif();
+    a->setActuel(true);
+    A.setActuel(false);
+    *this<<*a;
+    return *a;
 }
-delete [] notes;
-}
+
+Tache& Manager::editActionTache(Tache& T, const std::string& s){
+    Tache* t= new Tache(T);
+    t->setAction(s);
+    t->setModif();
+    t->setActuel(true);
+    T.setActuel(false);
+    *this<<*t;
+    return *t;
+};
+
+Tache& Manager::editStatutTache(Tache& T, TacheStatut s){
+    Tache* t= new Tache(T);
+    t->setStatut(s);
+    t->setModif();
+    t->setActuel(true);
+    T.setActuel(false);
+    *this<<*t;
+    return *t;
+};
+
+Tache& Manager::editPrioriteTache(Tache& T, int p){
+    Tache* t= new Tache(T);
+    t->setPriorite(p);
+    t->setModif();
+    t->setActuel(true);
+    T.setActuel(false);
+    *this<<*t;
+    return *t;};
+
+Tache& Manager::editEcheanceTache(Tache& T, TIME::Date d){
+    Tache* t= new Tache(T);
+    t->setEcheance(d);
+    t->setModif();
+    t->setActuel(true);
+    T.setActuel(false);
+    *this<<*t;
+    return *t;
+};
+
+Multimedia& Manager::editFichierMultimedia(Multimedia& M, const std::string s){
+    Multimedia* m= new Multimedia(M);
+    m->setAdresseFichier(s);
+    m->setModif();
+    m->setActuel(true);
+    M.setActuel(false);
+    *this<<*m;
+    return *m;
+};
+
+
+
+
+
 

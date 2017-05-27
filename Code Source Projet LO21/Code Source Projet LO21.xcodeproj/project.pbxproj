@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E97457171ECC494500EB0EB8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E97457161ECC494500EB0EB8 /* main.cpp */; };
-		E9EFF7D81ECC4B7100749343 /* PluriNotes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9EFF7D71ECC4B7100749343 /* PluriNotes.cpp */; };
+		E914D1F41ED958DC00C65CBA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E914D1EF1ED958DC00C65CBA /* main.cpp */; };
+		E914D1F51ED958DC00C65CBA /* PluriNotes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E914D1F01ED958DC00C65CBA /* PluriNotes.cpp */; };
+		E914D1F61ED958DC00C65CBA /* timing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E914D1F21ED958DC00C65CBA /* timing.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,10 +25,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E914D1EF1ED958DC00C65CBA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../CB_Projet/main.cpp; sourceTree = "<group>"; };
+		E914D1F01ED958DC00C65CBA /* PluriNotes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluriNotes.cpp; path = ../CB_Projet/PluriNotes.cpp; sourceTree = "<group>"; };
+		E914D1F11ED958DC00C65CBA /* PluriNotes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluriNotes.h; path = ../CB_Projet/PluriNotes.h; sourceTree = "<group>"; };
+		E914D1F21ED958DC00C65CBA /* timing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timing.cpp; path = ../CB_Projet/timing.cpp; sourceTree = "<group>"; };
+		E914D1F31ED958DC00C65CBA /* timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timing.h; path = ../CB_Projet/timing.h; sourceTree = "<group>"; };
 		E97457131ECC494500EB0EB8 /* Code Source Projet LO21 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Code Source Projet LO21"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E97457161ECC494500EB0EB8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		E9EFF7D71ECC4B7100749343 /* PluriNotes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PluriNotes.cpp; sourceTree = SOURCE_ROOT; };
-		E9EFF7D91ECC4BA900749343 /* PluriNotes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluriNotes.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +47,11 @@
 		E974570A1ECC494500EB0EB8 = {
 			isa = PBXGroup;
 			children = (
+				E914D1F21ED958DC00C65CBA /* timing.cpp */,
+				E914D1F31ED958DC00C65CBA /* timing.h */,
+				E914D1EF1ED958DC00C65CBA /* main.cpp */,
+				E914D1F01ED958DC00C65CBA /* PluriNotes.cpp */,
+				E914D1F11ED958DC00C65CBA /* PluriNotes.h */,
 				E97457151ECC494500EB0EB8 /* Code Source Projet LO21 */,
 				E97457141ECC494500EB0EB8 /* Products */,
 			);
@@ -60,9 +68,6 @@
 		E97457151ECC494500EB0EB8 /* Code Source Projet LO21 */ = {
 			isa = PBXGroup;
 			children = (
-				E9EFF7D91ECC4BA900749343 /* PluriNotes.h */,
-				E9EFF7D71ECC4B7100749343 /* PluriNotes.cpp */,
-				E97457161ECC494500EB0EB8 /* main.cpp */,
 			);
 			path = "Code Source Projet LO21";
 			sourceTree = "<group>";
@@ -124,8 +129,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E97457171ECC494500EB0EB8 /* main.cpp in Sources */,
-				E9EFF7D81ECC4B7100749343 /* PluriNotes.cpp in Sources */,
+				E914D1F51ED958DC00C65CBA /* PluriNotes.cpp in Sources */,
+				E914D1F61ED958DC00C65CBA /* timing.cpp in Sources */,
+				E914D1F41ED958DC00C65CBA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

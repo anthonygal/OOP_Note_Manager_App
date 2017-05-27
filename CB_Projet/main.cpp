@@ -22,11 +22,21 @@ int main()
     //std::cout << a2;std::cout << a3;std::cout << a4;std::cout << a5;
     a.afficher();
    Manager m;
+    
+    Multimedia multimed(1,"unmultimedia","C:/fausseAdresse/test/velo.jpg", "description dun velo", image);
 
-   m<<a<<a2<<a3<<a4<<a5<<a6<<t<<t2;
+   m<<a<<a2<<a3<<a4<<a5<<a6<<t<<t2<<multimed;
+    
+    m.editTexteArticle(a6, "Edtion texte a6");
+    
+    m.editFichierMultimedia(multimed, "Desktop/etc/kabul.jpg");
+    
      std::cout<<m.getnbNotes();
 
    m.Affichertout();
+    
+    if (multimed.getActuel()==true) {std::cout<< "multimed actuel=true \n\n";} else {std::cout<<"multimed actuel=false  \n\n";};
+    
 
 
     //std::cout<<"\ntype de a : "<<typeid(a).name()<<"\n"; //Ca affiche un chiffre devant la classe mais je n'arrive pas à l'enlever...

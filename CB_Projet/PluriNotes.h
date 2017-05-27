@@ -27,7 +27,8 @@ public:
     Note(Note& n);
     Note (const Note& n);
     virtual Note* clone()const=0; //Comprend pas ca + BUG ^^
-
+    
+    int getID() const {return ID;}
     std::string getTitre() const { return titre; }
     const Date& getDateCrea() const { return dateCrea; } //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
     const Date& getDateModif() const { return dateModif; } //Laisser ou enlever le const? La date de modif est ammenée à être modifié, mais on créera alors une nouvelle notes
@@ -36,7 +37,8 @@ public:
     NoteEtat getEtat() const { return etat; } //0 pour active, 1 pour archivee et 2 pour corbeille
     bool getActuel() const { return actuel; }
     void setEtat(NoteEtat e){ etat=e; }
-    void setActuel(){ actuel=false; }
+    void setActuel(bool b){actuel=b;}
+    void setModif(){dateModif=dateNow(); horaireModif=horaireNow();};
 
     void afficher(std::ostream& f = std::cout) const;
     virtual void affichageSpecifique(std::ostream& f) const = 0;
@@ -57,12 +59,14 @@ private:
 
 public:
     Article(const unsigned int i, const std::string& ti, const std::string& te=""):Note(i,ti),texte(te){}
+    Article(const Article& a):Note(a.getID(),a.getTitre()),texte(a.texte){};
     Article* clone()const; // Je vois pas a quoi ca sert Antoine?
 
     std::string getTexte() const{ return texte; }
     void setTexte(const std::string& t){ texte=t; }
 
     void affichageSpecifique(std::ostream& f) const;
+
 };
 
 
@@ -99,7 +103,7 @@ private:
 
 public:
     Multimedia(const unsigned int i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image):Note(i,ti),adresseFichier(adr),description(desc),type(ty){}
-    //Multimedia* clone(); // Je vois pas a quoi ca sert Antoine?
+    Multimedia* clone() const; // Je vois pas a quoi ca sert Antoine?
 
     std::string getAdresseFichier() const { return adresseFichier; }
     std::string getDescription() const { return description; }
@@ -138,7 +142,15 @@ public:
     int getnbNotes()const {return nbNotes;}
 
     void Affichertout() const;
-
+    
+    
+    Article& editTexteArticle(Article& A, const std::string& s);
+    Tache& editActionTache(Tache& T, const std::string& s);
+    Tache& editStatutTache(Tache& T, TacheStatut s);
+    Tache& editPrioriteTache(Tache& T, int p);
+    Tache& editEcheanceTache(Tache& T, TIME::Date d);
+    Multimedia& editFichierMultimedia(Multimedia& M, const std::string s);
+    
     Manager& operator<<(Note& n);
     ~Manager();
 
