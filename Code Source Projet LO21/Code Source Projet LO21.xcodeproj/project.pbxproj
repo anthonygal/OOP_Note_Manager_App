@@ -10,6 +10,7 @@
 		E914D1F41ED958DC00C65CBA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E914D1EF1ED958DC00C65CBA /* main.cpp */; };
 		E914D1F51ED958DC00C65CBA /* PluriNotes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E914D1F01ED958DC00C65CBA /* PluriNotes.cpp */; };
 		E914D1F61ED958DC00C65CBA /* timing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E914D1F21ED958DC00C65CBA /* timing.cpp */; };
+		E914D1FC1ED983EA00C65CBA /* Relations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E914D1FA1ED983EA00C65CBA /* Relations.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,6 +31,8 @@
 		E914D1F11ED958DC00C65CBA /* PluriNotes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluriNotes.h; path = ../CB_Projet/PluriNotes.h; sourceTree = "<group>"; };
 		E914D1F21ED958DC00C65CBA /* timing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timing.cpp; path = ../CB_Projet/timing.cpp; sourceTree = "<group>"; };
 		E914D1F31ED958DC00C65CBA /* timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timing.h; path = ../CB_Projet/timing.h; sourceTree = "<group>"; };
+		E914D1FA1ED983EA00C65CBA /* Relations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Relations.cpp; sourceTree = "<group>"; };
+		E914D1FB1ED983EA00C65CBA /* Relations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Relations.h; sourceTree = "<group>"; };
 		E97457131ECC494500EB0EB8 /* Code Source Projet LO21 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Code Source Projet LO21"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -47,6 +50,8 @@
 		E974570A1ECC494500EB0EB8 = {
 			isa = PBXGroup;
 			children = (
+				E914D1FA1ED983EA00C65CBA /* Relations.cpp */,
+				E914D1FB1ED983EA00C65CBA /* Relations.h */,
 				E914D1F21ED958DC00C65CBA /* timing.cpp */,
 				E914D1F31ED958DC00C65CBA /* timing.h */,
 				E914D1EF1ED958DC00C65CBA /* main.cpp */,
@@ -132,6 +137,7 @@
 				E914D1F51ED958DC00C65CBA /* PluriNotes.cpp in Sources */,
 				E914D1F61ED958DC00C65CBA /* timing.cpp in Sources */,
 				E914D1F41ED958DC00C65CBA /* main.cpp in Sources */,
+				E914D1FC1ED983EA00C65CBA /* Relations.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
