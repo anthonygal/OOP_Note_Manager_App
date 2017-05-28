@@ -50,13 +50,13 @@
 		E974570A1ECC494500EB0EB8 = {
 			isa = PBXGroup;
 			children = (
-				E914D1FA1ED983EA00C65CBA /* Relations.cpp */,
-				E914D1FB1ED983EA00C65CBA /* Relations.h */,
-				E914D1F21ED958DC00C65CBA /* timing.cpp */,
 				E914D1F31ED958DC00C65CBA /* timing.h */,
+				E914D1F21ED958DC00C65CBA /* timing.cpp */,
 				E914D1EF1ED958DC00C65CBA /* main.cpp */,
-				E914D1F01ED958DC00C65CBA /* PluriNotes.cpp */,
 				E914D1F11ED958DC00C65CBA /* PluriNotes.h */,
+				E914D1F01ED958DC00C65CBA /* PluriNotes.cpp */,
+				E914D1FB1ED983EA00C65CBA /* Relations.h */,
+				E914D1FA1ED983EA00C65CBA /* Relations.cpp */,
 				E97457151ECC494500EB0EB8 /* Code Source Projet LO21 */,
 				E97457141ECC494500EB0EB8 /* Products */,
 			);

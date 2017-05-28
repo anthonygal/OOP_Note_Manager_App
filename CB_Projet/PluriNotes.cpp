@@ -1,4 +1,5 @@
 #include "PluriNotes.h"
+#include "Relations.h"
 
 using namespace TIME;
 
@@ -117,13 +118,36 @@ Multimedia* Multimedia::clone() const {
     return m;
 };
 
+void Manager::addRelation(Relation& r){
+    if (nbRelations==nbRelationsMax){
+        Relation** newtab= new Relation* [nbRelationsMax+100];
+        for(int i=0; i<nbRelations;i++){
+            newtab[i]=relations[i];
+        }
+        nbRelationsMax=nbRelationsMax+100;
+        Relation** oldtab= relations;
+        relations=newtab;
+        delete [] oldtab;
+    }
+    relations[nbRelations]=&r;
+    nbRelations++;
+}
+
+void addCoupleRelation(Relation& r, Couple& c) {
+    r.addCouple(c);
+}
 
 Manager::~Manager(){
     
-    for(unsigned int i; i<nbNotes-1;i++){
+    for(unsigned int i = 0; i<nbNotes;i++){
         delete notes[i];
     }
     delete [] notes;
+    
+    for(unsigned int i = 0; i<nbRelations;i++){
+        delete relations[i];
+    }
+    delete [] relations;
 }
 
 
@@ -188,6 +212,7 @@ Multimedia& Manager::editFichierMultimedia(Multimedia& M, const std::string s){
     *this<<*m;
     return *m;
 };
+
 
 
 

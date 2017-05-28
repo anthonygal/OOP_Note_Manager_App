@@ -5,11 +5,16 @@
 #include <string>
 #include <typeinfo>
 
+
 using namespace TIME;
 
 enum NoteEtat{ active, archivee, corbeille };
 enum TacheStatut{ attente, encours, terminee };
 enum TypeMultimedia{ image, video, audio };
+
+class Relation;
+class Couple;
+class Reference;
 
 class Note{
 private:
@@ -116,11 +121,17 @@ public:
 };
 
 
+
 class Manager{
 private:
     unsigned int nbNotes;
     unsigned int nbNotesMax;
     Note** notes;
+    
+    unsigned int nbRelations;
+    unsigned int nbRelationsMax;
+    Relation** relations;
+    
 public:
     Manager(): nbNotes(0), nbNotesMax (5), notes (new Note*[nbNotesMax]){};
    class IteratorNotes {
@@ -152,12 +163,19 @@ public:
     Multimedia& editFichierMultimedia(Multimedia& M, const std::string s);
     
     Manager& operator<<(Note& n);
+    
+    void addRelation(Relation& r);
+    void addCoupleRelation(Relation& r, Couple& c);
+    
+    
+    
     ~Manager();
 
 
 };
 
 std::ostream& operator<<(std::ostream& f , const Note& n);
+
 
 
 
