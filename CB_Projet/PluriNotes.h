@@ -132,8 +132,18 @@ private:
     unsigned int nbRelationsMax;
     Relation** relations;
     
+    static Manager* InstanceUnique;
+    
+    Manager(): nbNotes(0), nbNotesMax (5), notes (new Note*[nbNotesMax]), relations (new Relation*[100]){};
+    Manager(const Manager&);
+    void operator=(const Manager&);
+    virtual ~Manager();
+    
 public:
-    Manager(): nbNotes(0), nbNotesMax (5), notes (new Note*[nbNotesMax]){};
+    
+    static Manager& donneInstance();
+    static void libereInstance();
+    
    class IteratorNotes {
    private:
         friend class Manager;
@@ -166,13 +176,8 @@ public:
     
     void addRelation(Relation& r);
     void addCoupleRelation(Relation& r, Couple& c);
-    
-    
-    
-    ~Manager();
-
-
 };
+
 
 std::ostream& operator<<(std::ostream& f , const Note& n);
 

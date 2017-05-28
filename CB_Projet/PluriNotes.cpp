@@ -140,7 +140,7 @@ void addCoupleRelation(Relation& r, Couple& c) {
 Manager::~Manager(){
     
     for(unsigned int i = 0; i<nbNotes;i++){
-        delete notes[i];
+        delete notes[i]; //un destructeur virtuel pour Note à definir à 'mment donné il me semble
     }
     delete [] notes;
     
@@ -214,8 +214,20 @@ Multimedia& Manager::editFichierMultimedia(Multimedia& M, const std::string s){
 };
 
 
+//Singleton pour classe Manager
 
+Manager* Manager::InstanceUnique=0;
 
+Manager& Manager::donneInstance(){
+    if (InstanceUnique==0) InstanceUnique= new Manager;
+    return *InstanceUnique;
+}
+
+void Manager::libereInstance(){
+    if (InstanceUnique!=0)
+        delete InstanceUnique;
+    InstanceUnique=0;
+}
 
 
 
