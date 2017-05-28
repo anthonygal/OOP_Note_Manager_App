@@ -22,7 +22,7 @@ int main()
     //std::cout << a;
     //std::cout << a2;std::cout << a3;std::cout << a4;std::cout << a5;
     a.afficher();
-   Manager m;
+    Manager& m=Manager::donneInstance();
     
     Multimedia multimed(1,"unmultimedia","C:/fausseAdresse/test/velo.jpg", "description dun velo", image);
 
