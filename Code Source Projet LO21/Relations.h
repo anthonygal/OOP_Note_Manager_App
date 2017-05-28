@@ -57,7 +57,7 @@ class Reference: public Relation {
  };
  
 
-bool findRef(const std::string s);
+unsigned long findRefID(const std::string& s);
 
 
 #endif /* Relations_h */

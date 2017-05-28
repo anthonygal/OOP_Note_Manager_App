@@ -18,7 +18,7 @@ class Reference;
 
 class Note{
 private:
-    int ID;
+    unsigned long ID;
     std::string titre;
     TIME::Date dateCrea;
     TIME::Horaire horaireCrea;
@@ -28,12 +28,12 @@ private:
     bool actuel;
 
 public:
-    Note(const unsigned int i, const std::string& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
+    Note(const unsigned long i, const std::string& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
     Note(Note& n);
     Note (const Note& n);
     virtual Note* clone()const=0; //Comprend pas ca + BUG ^^
     
-    int getID() const {return ID;}
+    unsigned long getID() const {return ID;}
     std::string getTitre() const { return titre; }
     const Date& getDateCrea() const { return dateCrea; } //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
     const Date& getDateModif() const { return dateModif; } //Laisser ou enlever le const? La date de modif est ammenée à être modifié, mais on créera alors une nouvelle notes
@@ -63,7 +63,7 @@ private:
     std::string texte;
 
 public:
-    Article(const unsigned int i, const std::string& ti, const std::string& te=""):Note(i,ti),texte(te){}
+    Article(const unsigned long i, const std::string& ti, const std::string& te=""):Note(i,ti),texte(te){}
     Article(const Article& a):Note(a.getID(),a.getTitre()),texte(a.texte){};
     Article* clone()const; // Je vois pas a quoi ca sert Antoine?
 
@@ -84,7 +84,7 @@ private:
     //virtual void estAbstraite(){};
 
 public:
-    Tache(const unsigned int i, const std::string& ti, const std::string& act, int prio =0, Date d =Date (1,1,0)):Note(i,ti),action(act),statut(encours), priorite(prio), echeance(d){}
+    Tache(const unsigned long i, const std::string& ti, const std::string& act, int prio =0, Date d =Date (1,1,0)):Note(i,ti),action(act),statut(encours), priorite(prio), echeance(d){}
     Tache* clone() const;
 
     std::string getAction() const { return action; }
@@ -107,7 +107,7 @@ private:
     TypeMultimedia type;
 
 public:
-    Multimedia(const unsigned int i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image):Note(i,ti),adresseFichier(adr),description(desc),type(ty){}
+    Multimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image):Note(i,ti),adresseFichier(adr),description(desc),type(ty){}
     Multimedia* clone() const; // Je vois pas a quoi ca sert Antoine?
 
     std::string getAdresseFichier() const { return adresseFichier; }
