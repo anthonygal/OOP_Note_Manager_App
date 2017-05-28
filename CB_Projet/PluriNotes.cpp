@@ -214,20 +214,29 @@ Multimedia& Manager::editFichierMultimedia(Multimedia& M, const std::string s){
 };
 
 
+
+
+
 //Singleton pour classe Manager
 
-Manager* Manager::InstanceUnique=0;
+Manager* Manager::InstanceUnique=nullptr;
 
 Manager& Manager::donneInstance(){
-    if (InstanceUnique==0) InstanceUnique= new Manager;
+    if (InstanceUnique==nullptr) InstanceUnique= new Manager;
     return *InstanceUnique;
 }
 
 void Manager::libereInstance(){
-    if (InstanceUnique!=0)
+    if (InstanceUnique!=nullptr)
         delete InstanceUnique;
-    InstanceUnique=0;
+    InstanceUnique=nullptr;
 }
 
+//Ajouter un couple à la relation reference
+
+void addCoupleReference(Couple& c){
+    Reference& R=Reference::donneInstance();
+    R.addCouple(c);
+}
 
 

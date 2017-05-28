@@ -176,6 +176,10 @@ public:
     
     void addRelation(Relation& r);
     void addCoupleRelation(Relation& r, Couple& c);
+    
+    void addCoupleReference(Couple& c);
+    
+    
 };
 
 

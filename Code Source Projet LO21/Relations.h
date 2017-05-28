@@ -50,10 +50,16 @@ class Relation{
  };
  
 class Reference: public Relation {
- 
+private:
+    static Reference* instanceUnique;
+    Reference():Relation("Reference","Note1 fait reference à Note2", true){};
+    Reference(const Reference& R);
+    void operator=(const Reference& R);
+    virtual ~Reference();
  public:
- Reference(const std::string& t, const std::string& d):Relation(t,d, true){};
- ~Reference();
+    static Reference& donneInstance();
+    static void libereInstance();
+ 
  };
  
 

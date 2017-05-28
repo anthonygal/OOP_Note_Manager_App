@@ -13,7 +13,8 @@ Relation::Relation(const std::string& t, const std::string& d, bool o){
 Relation::~Relation(){
     for(unsigned int i = 0; i<nbCouples;i++){
         delete couples[i];}
-    delete[] couples;}
+    delete[] couples;
+}
 
 void Relation::addCouple(Couple& c){
     if (nbCouples==nbMaxCouples){
@@ -33,10 +34,10 @@ void Relation::addCouple(Couple& c){
 // Fonction qui trouve dans tout string si il y a une reference, dans ce cas, renvoie son ID, sinon, renvoie 0
 unsigned long findRefID(const std::string& s){
     
-    unsigned long i=s.find("ref{", 0);
+    unsigned long i=s.find("\ref{", 0);
     if (i==0) return 0;
     else {
-        i+=4;
+        i+=5;
         char c=s[i];
         if (!isdigit(c)) {return 0;}
         else{
@@ -52,4 +53,20 @@ unsigned long findRefID(const std::string& s){
             else return 0;
         }
     }
+}
+
+Reference::~Reference(){
+    this->Relation::~Relation();
+}
+
+//Singleton de la classe REFERENCE
+
+Reference* Reference::instanceUnique=nullptr;
+Reference& Reference::donneInstance(){
+    if (instanceUnique==nullptr) instanceUnique= new Reference();
+    return *instanceUnique;
+}
+void Reference::libereInstance(){
+    if (instanceUnique!=0) delete instanceUnique;
+    instanceUnique=nullptr;
 }
