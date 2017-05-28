@@ -30,4 +30,26 @@ void Relation::addCouple(Couple& c){
     nbCouples++;
 }
 
-
+// Fonction qui trouve dans tout string si il y a une reference, dans ce cas, renvoie son ID, sinon, renvoie 0
+int findRefID(const std::string& s){
+    
+    unsigned long i=s.find("ref{", 0);
+    if (i==0) return 0;
+    else {
+        i+=4;
+        char c=s[i];
+        if (!isdigit(c)) {return 0;}
+        else{
+            std::stringstream t;
+            while (isdigit(c)){
+                t<<c;
+                i++;
+                c=s[i];
+            }
+            unsigned int id;
+            t>>id;
+            if (c=='}') return id;
+            else return 0;
+        }
+    }
+}

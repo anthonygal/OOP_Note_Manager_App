@@ -6,6 +6,7 @@
 #include "PluriNotes.h"
 #include <string>
 #include <typeinfo>
+#include <sstream>
 
 using namespace TIME;
 
@@ -56,6 +57,7 @@ class Reference: public Relation {
  };
  
 
+bool findRef(const std::string s);
 
 
 #endif /* Relations_h */
