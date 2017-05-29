@@ -15,6 +15,7 @@ enum TypeMultimedia{ image, video, audio };
 class Relation;
 class Couple;
 class Reference;
+class Manager;
 
 class Note{
 private:
@@ -47,6 +48,8 @@ public:
 
     void afficher(std::ostream& f = std::cout) const;
     virtual void affichageSpecifique(std::ostream& f) const = 0;
+    virtual void AddRefs(Manager& m);
+    virtual void AddRefsSpecifique(Manager& m)=0;
     //virtual ~Note();
 };
 
@@ -71,7 +74,8 @@ public:
     void setTexte(const std::string& t){ texte=t; }
 
     void affichageSpecifique(std::ostream& f) const;
-
+    
+    void AddRefsSpecifique(Manager& m);
 };
 
 
@@ -97,6 +101,8 @@ public:
     void setEcheance(const TIME::Date& d){ echeance = d; }
 
     void affichageSpecifique(std::ostream& f) const;
+    
+    void AddRefsSpecifique(Manager& m);
 };
 
 
@@ -118,6 +124,8 @@ public:
     void setType(const TypeMultimedia ty){ type = ty; }
 
     void affichageSpecifique(std::ostream& f) const;
+    
+    void AddRefsSpecifique(Manager& m);
 };
 
 
@@ -178,13 +186,8 @@ public:
     
     void addRelation(Relation& r);
     void addCoupleRelation(Relation& r, Couple& c);
-    
     void addCoupleReference(Couple& c);
-    
-    void addRefsFromString(const std::string& s); //fonction qui trouve toute les ref dans un chaps de texte (string) et les ajoute à la relation reference en utilisant les fonction findRefID et addCoupleReference -- A IMPLEMENTER      Cette fonction requiert aussi une methode de recherche de note à partir de l'ID
-    
-    
-    
+    void AddRefsFromNote(Note& N);
 };
 
 
@@ -192,5 +195,14 @@ std::ostream& operator<<(std::ostream& f , const Note& n);
 
 
 
+//Classe d'Exception
+
+class NoteException{
+private:
+    std::string info;
+public:
+    NoteException(const std::string& s): info(s){}
+    std::string getInfo() const {return info;}
+};
 
 #endif /* PluriNotes_h */

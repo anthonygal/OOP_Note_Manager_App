@@ -64,6 +64,6 @@ private:
  
 
 unsigned long findRefID(const std::string& s, int p);
-
+int getPosition(const std::string s, int p);
 
 #endif /* Relations_h */

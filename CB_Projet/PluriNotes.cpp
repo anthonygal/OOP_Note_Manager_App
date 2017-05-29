@@ -253,4 +253,69 @@ void addCoupleReference(Couple& c){
     R.addCouple(c);
 }
 
+// Ajout de toutes les references contenues dans les champs de texte d'une notes avec Template Method
 
+void Note::AddRefs(Manager& m){
+    unsigned long ID=findRefID(this->getTitre(), 0);
+    int pos=0;
+    while (ID!=0){
+        Note* N=m.SearchID(ID);
+        if (N!=nullptr) {
+            Couple* C=new Couple(this,N,"");
+            addCoupleReference(*C);
+        }
+        else throw NoteException("l'ID ne correspond a aucune Note");
+        pos+=getPosition(this->getTitre(), pos);
+    }
+    AddRefsSpecifique(m);
+}
+
+//AddrefsSpeacifique(Manager& m) Specifique a chaque sous class de Note
+
+void Tache::AddRefsSpecifique(Manager& m){
+    unsigned long ID=findRefID(this->getAction(), 0);
+    int pos=0;
+    while (ID!=0){
+        Note* N=m.SearchID(ID);
+        if (N!=nullptr) {
+            Couple* C=new Couple(this,N,"");
+            addCoupleReference(*C);
+        }
+        else throw NoteException("l'ID ne correspond a aucune Note");
+        pos+=getPosition(this->getAction(), pos);
+    }
+}
+
+void Article::AddRefsSpecifique(Manager& m){
+    unsigned long ID=findRefID(this->getTexte(), 0);
+    int pos=0;
+    while (ID!=0){
+        Note* N=m.SearchID(ID);
+        if (N!=nullptr) {
+            Couple* C=new Couple(this,N,"");
+            addCoupleReference(*C);
+        }
+        else throw NoteException("l'ID ne correspond a aucune Note");
+        pos+=getPosition(this->getTexte(), pos);
+    }
+}
+
+void Multimedia::AddRefsSpecifique(Manager& m){
+    unsigned long ID=findRefID(this->getDescription(), 0);
+    int pos=0;
+    while (ID!=0){
+        Note* N=m.SearchID(ID);
+        if (N!=nullptr) {
+            Couple* C=new Couple(this,N,"");
+            addCoupleReference(*C);
+        }
+        else throw NoteException("l'ID ne correspond a aucune Note");
+        pos+=getPosition(this->getDescription(), pos);
+    }
+}
+
+//AddRefsFromNote du Manager qui permet d'ajouter toute les references contenues dans tous les champs de texte d'une Note
+
+void Manager::AddRefsFromNote(Note& N){
+    N.AddRefs(*this);
+}
