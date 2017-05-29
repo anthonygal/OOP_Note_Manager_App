@@ -5,15 +5,21 @@
 #include <string>
 #include <typeinfo>
 
+
 using namespace TIME;
 
 enum NoteEtat{ active, archivee, corbeille };
 enum TacheStatut{ attente, encours, terminee };
 enum TypeMultimedia{ image, video, audio };
 
+class Relation;
+class Couple;
+class Reference;
+class Manager;
+
 class Note{
 private:
-    int ID;
+    unsigned long ID;
     std::string titre;
     TIME::Date dateCrea;
     TIME::Horaire horaireCrea;
@@ -23,11 +29,12 @@ private:
     bool actuel;
 
 public:
-    Note(const unsigned int i, const std::string& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
+    Note(const unsigned long i, const std::string& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
     Note(Note& n);
     Note (const Note& n);
     virtual Note* clone()const=0; //Comprend pas ca + BUG ^^
 
+    unsigned long getID() const {return ID;}
     std::string getTitre() const { return titre; }
     const int getID() const {return ID;}
     const Date& getDateCrea() const { return dateCrea; } //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
@@ -37,10 +44,13 @@ public:
     NoteEtat getEtat() const { return etat; } //0 pour active, 1 pour archivee et 2 pour corbeille
     bool getActuel() const { return actuel; }
     void setEtat(NoteEtat e){ etat=e; }
-    void setActuel(){ actuel=false; }
+    void setActuel(bool b){actuel=b;}
+    void setModif(){dateModif=dateNow(); horaireModif=horaireNow();};
 
     void afficher(std::ostream& f = std::cout) const;
     virtual void affichageSpecifique(std::ostream& f) const = 0;
+    virtual void AddRefs(Manager& m);
+    virtual void AddRefsSpecifique(Manager& m)=0;
     //virtual ~Note();
 };
 
@@ -57,13 +67,16 @@ private:
     std::string texte;
 
 public:
-    Article(const unsigned int i, const std::string& ti, const std::string& te=""):Note(i,ti),texte(te){}
+    Article(const unsigned long i, const std::string& ti, const std::string& te=""):Note(i,ti),texte(te){}
+    Article(const Article& a):Note(a.getID(),a.getTitre()),texte(a.texte){};
     Article* clone()const; // Je vois pas a quoi ca sert Antoine?
 
     std::string getTexte() const{ return texte; }
     void setTexte(const std::string& t){ texte=t; }
 
     void affichageSpecifique(std::ostream& f) const;
+
+    void AddRefsSpecifique(Manager& m);
 };
 
 
@@ -76,7 +89,7 @@ private:
     //virtual void estAbstraite(){};
 
 public:
-    Tache(const unsigned int i, const std::string& ti, const std::string& act, int prio =0, Date d =Date (1,1,0)):Note(i,ti),action(act),statut(encours), priorite(prio), echeance(d){}
+    Tache(const unsigned long i, const std::string& ti, const std::string& act, int prio =0, Date d =Date (1,1,0)):Note(i,ti),action(act),statut(encours), priorite(prio), echeance(d){}
     Tache* clone() const;
 
     std::string getAction() const { return action; }
@@ -89,6 +102,8 @@ public:
     void setEcheance(const TIME::Date& d){ echeance = d; }
 
     void affichageSpecifique(std::ostream& f) const;
+
+    void AddRefsSpecifique(Manager& m);
 };
 
 
@@ -99,8 +114,8 @@ private:
     TypeMultimedia type;
 
 public:
-    Multimedia(const unsigned int i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image):Note(i,ti),adresseFichier(adr),description(desc),type(ty){}
-    //Multimedia* clone(); // Je vois pas a quoi ca sert Antoine?
+    Multimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image):Note(i,ti),adresseFichier(adr),description(desc),type(ty){}
+    Multimedia* clone() const; // Je vois pas a quoi ca sert Antoine?
 
     std::string getAdresseFichier() const { return adresseFichier; }
     std::string getDescription() const { return description; }
@@ -110,7 +125,10 @@ public:
     void setType(const TypeMultimedia ty){ type = ty; }
 
     void affichageSpecifique(std::ostream& f) const;
+
+    void AddRefsSpecifique(Manager& m);
 };
+
 
 
 class Manager{
@@ -118,8 +136,23 @@ private:
     unsigned int nbNotes;
     unsigned int nbNotesMax;
     Note** notes;
+
+    unsigned int nbRelations;
+    unsigned int nbRelationsMax;
+    Relation** relations;
+
+    static Manager* InstanceUnique;
+
+    Manager(): nbNotes(0), nbNotesMax (5), notes (new Note*[nbNotesMax]), relations (new Relation*[100]){};
+    Manager(const Manager&);
+    void operator=(const Manager&);
+    virtual ~Manager();
+
 public:
-    Manager(): nbNotes(0), nbNotesMax (5), notes (new Note*[nbNotesMax]){};
+
+    static Manager& donneInstance();
+    static void libereInstance();
+
    class IteratorNotes {
    private:
         friend class Manager;
@@ -128,7 +161,7 @@ public:
         IteratorNotes (Note** t, int n): courant(t), nb(n){}
    public:
        bool operator!=(const IteratorNotes& it) {return courant!=it.courant;}
-       const Note& operator*() {return **courant;}
+       Note& operator*() {return **courant;}
        IteratorNotes& operator++() {courant++; return *this;}
        IteratorNotes& operator--() {courant--; return *this;}
    } ;
@@ -138,19 +171,42 @@ public:
     IteratorNotes end1() const{return IteratorNotes(notes+nbNotes-1,0);}
     int getnbNotes()const {return nbNotes;}
 
+    Note* SearchID(unsigned long id);
+
     void Affichertout() const;
 
-    void addNote (Note* n);
+
+
+
+
+
+    Article& editTexteArticle(Article& A, const std::string& s);
+    Tache& editActionTache(Tache& T, const std::string& s);
+    Tache& editStatutTache(Tache& T, TacheStatut s);
+    Tache& editPrioriteTache(Tache& T, int p);
+    Tache& editEcheanceTache(Tache& T, TIME::Date d);
+    Multimedia& editFichierMultimedia(Multimedia& M, const std::string s);
+
     Manager& operator<<(Note& n);
 
+    void addRelation(Relation& r);
+    void addCoupleRelation(Relation& r, Couple& c);
+    void addCoupleReference(Couple& c);
+    void AddRefsFromNote(Note& N);
 
-    ~Manager();
-
-
-};
 
 std::ostream& operator<<(std::ostream& f , const Note& n);
 
 
+
+//Classe d'Exception
+
+class NoteException{
+private:
+    std::string info;
+public:
+    NoteException(const std::string& s): info(s){}
+    std::string getInfo() const {return info;}
+};
 
 #endif /* PluriNotes_h */
