@@ -29,6 +29,7 @@ public:
     virtual Note* clone()const=0; //Comprend pas ca + BUG ^^
 
     std::string getTitre() const { return titre; }
+    const int getID() const {return ID;}
     const Date& getDateCrea() const { return dateCrea; } //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
     const Date& getDateModif() const { return dateModif; } //Laisser ou enlever le const? La date de modif est ammenée à être modifié, mais on créera alors une nouvelle notes
     const Horaire& getHoraireCrea() const { return horaireCrea; }
@@ -139,7 +140,10 @@ public:
 
     void Affichertout() const;
 
+    void addNote (Note* n);
     Manager& operator<<(Note& n);
+
+
     ~Manager();
 
 
