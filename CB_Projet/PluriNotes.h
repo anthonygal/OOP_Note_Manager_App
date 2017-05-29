@@ -179,6 +179,9 @@ public:
     
     void addCoupleReference(Couple& c);
     
+    void addRefsFromString(const std::string& s); //fonction qui trouve toute les ref dans un chaps de texte (string) et les ajoute à la relation reference en utilisant les fonction findRefID et addCoupleReference -- A IMPLEMENTER      Cette fonction requiert aussi une methode de recherche de note à partir de l'ID
+    
+    
     
 };
 

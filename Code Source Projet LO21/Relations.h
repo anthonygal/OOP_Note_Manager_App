@@ -63,7 +63,7 @@ private:
  };
  
 
-unsigned long findRefID(const std::string& s);
+unsigned long findRefID(const std::string& s, int p);
 
 
 #endif /* Relations_h */
