@@ -152,7 +152,7 @@ public:
         IteratorNotes (Note** t, int n): courant(t), nb(n){}
    public:
        bool operator!=(const IteratorNotes& it) {return courant!=it.courant;}
-       const Note& operator*() {return **courant;}
+       Note& operator*() {return **courant;}
        IteratorNotes& operator++() {courant++; return *this;}
        IteratorNotes& operator--() {courant--; return *this;}
    } ;
@@ -161,6 +161,8 @@ public:
     IteratorNotes begin1()const{return IteratorNotes(notes-1,nbNotes);}
     IteratorNotes end1() const{return IteratorNotes(notes+nbNotes-1,0);}
     int getnbNotes()const {return nbNotes;}
+    
+    Note* SearchID(unsigned long id);
 
     void Affichertout() const;
     

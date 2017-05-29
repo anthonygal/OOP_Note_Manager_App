@@ -151,6 +151,20 @@ Manager::~Manager(){
 }
 
 
+//Recherche de notes à partir d'un ID
+Note* Manager::SearchID(unsigned long id){
+    IteratorNotes it=begin();
+    Note& n=*it;
+    int i=0;
+    while (n.getID()!=id && i<nbNotes) {
+        ++it;
+        n=*it;
+        if (n.getActuel()) return &n;
+        }
+    return nullptr;
+}
+
+
 //EDITEURS DE NOTES DE LA CLASSE MANAGER CREANT UNE NOUVELLE VERSION DE LA NOTES ET L AJOUTANT AU TABLEAU notes DU MANAGER (PARTIE 1.2 DU SUJET DE PROJET):
 
 
