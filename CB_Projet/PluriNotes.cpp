@@ -118,6 +118,24 @@ Multimedia* Multimedia::clone() const {
     return m;
 };
 
+Article& Manager::NewArticle(const unsigned long i, const std::string& ti, const std::string& te){
+    Article* a=new Article(i,ti,te);
+    this->operator<<(*a);
+    return *a;
+}
+
+Tache& Manager::NewTache(const unsigned long i, const std::string& ti, const std::string& act, int prio, Date d){
+    Tache* a=new Tache(i,ti,act,prio,d);
+    this->operator<<(*a);
+    return *a;
+}
+
+Multimedia& Manager::NewMultimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc, TypeMultimedia ty){
+    Multimedia* a=new Multimedia(i,ti,adr,desc,ty);
+    this->operator<<(*a);
+    return *a;
+}
+
 void Manager::addRelation(Relation& r){
     if (nbRelations==nbRelationsMax){
         Relation** newtab= new Relation* [nbRelationsMax+5];

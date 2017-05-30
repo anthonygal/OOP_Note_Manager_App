@@ -174,6 +174,9 @@ public:
 
     void Affichertout() const;
     
+    Article& NewArticle(const unsigned long i, const std::string& ti, const std::string& te="");
+    Tache& NewTache(const unsigned long i, const std::string& ti, const std::string& act, int prio =0, Date d =Date (1,1,0));
+    Multimedia& NewMultimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image);
     
     Article& editTexteArticle(Article& A, const std::string& s);
     Tache& editActionTache(Tache& T, const std::string& s);
