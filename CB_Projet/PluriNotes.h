@@ -6,6 +6,7 @@
 #include <typeinfo>
 
 
+
 using namespace TIME;
 
 enum NoteEtat{ active, archivee, corbeille };
@@ -33,7 +34,7 @@ public:
     Note(Note& n);
     Note (const Note& n);
     virtual Note* clone()const=0; //Comprend pas ca + BUG ^^
-    
+
     unsigned long getID() const {return ID;}
     std::string getTitre() const { return titre; }
     const Date& getDateCrea() const { return dateCrea; } //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
@@ -74,7 +75,7 @@ public:
     void setTexte(const std::string& t){ texte=t; }
 
     void affichageSpecifique(std::ostream& f) const;
-    
+
     void AddRefsSpecifique(Manager& m);
 };
 
@@ -101,7 +102,7 @@ public:
     void setEcheance(const TIME::Date& d){ echeance = d; }
 
     void affichageSpecifique(std::ostream& f) const;
-    
+
     void AddRefsSpecifique(Manager& m);
 };
 
@@ -124,7 +125,7 @@ public:
     void setType(const TypeMultimedia ty){ type = ty; }
 
     void affichageSpecifique(std::ostream& f) const;
-    
+
     void AddRefsSpecifique(Manager& m);
 };
 
@@ -135,23 +136,23 @@ private:
     unsigned int nbNotes;
     unsigned int nbNotesMax;
     Note** notes;
-    
+
     unsigned int nbRelations;
     unsigned int nbRelationsMax;
     Relation** relations;
-    
+
     static Manager* InstanceUnique;
-    
+
     Manager(): nbNotes(0), nbNotesMax (5), notes (new Note*[nbNotesMax]), relations (new Relation*[100]){};
     Manager(const Manager&);
     void operator=(const Manager&);
     virtual ~Manager();
-    
+
 public:
-    
+
     static Manager& donneInstance();
     static void libereInstance();
-    
+
    class IteratorNotes {
    private:
         friend class Manager;
@@ -169,21 +170,21 @@ public:
     IteratorNotes begin1()const{return IteratorNotes(notes-1,nbNotes);}
     IteratorNotes end1() const{return IteratorNotes(notes+nbNotes-1,0);}
     int getnbNotes()const {return nbNotes;}
-    
+
     Note* SearchID(unsigned long id);
 
     void Affichertout() const;
-    
-    
+
+
     Article& editTexteArticle(Article& A, const std::string& s);
     Tache& editActionTache(Tache& T, const std::string& s);
     Tache& editStatutTache(Tache& T, TacheStatut s);
     Tache& editPrioriteTache(Tache& T, int p);
     Tache& editEcheanceTache(Tache& T, TIME::Date d);
     Multimedia& editFichierMultimedia(Multimedia& M, const std::string s);
-    
+
     Manager& operator<<(Note& n);
-    
+
     void addRelation(Relation& r);
     void addCoupleRelation(Relation& r, Couple& c);
     void addCoupleReference(Couple& c);

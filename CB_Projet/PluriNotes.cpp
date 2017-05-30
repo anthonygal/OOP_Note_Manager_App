@@ -1,18 +1,18 @@
 #include "PluriNotes.h"
-#include "Relations.h"
+#include "..\Code Source Projet LO21\Relations.h"
 
 using namespace TIME;
 
-Note::Note(Note& n){
+Note::Note(Note& n){    // Voir si on le supprime ou non, lors du débuggage (peut être qu'il est nécessaire car on a aussi le constructeur de recopie avec const
     ID = n.ID;
     titre = n.titre;
     dateCrea = n.dateCrea;
     horaireCrea = n.horaireCrea;
-    dateModif = dateNow();
-    horaireModif = horaireNow();
-    etat = n.etat;
-    actuel = true;
-    n.setActuel(true);
+    //dateModif = dateNow();
+    //horaireModif = horaireNow();
+    //etat = n.etat;
+   // actuel = true;
+    //n.setActuel(true); Répétitions avec  les fonctions edit
 }
 
 Note::Note(const Note& n){
@@ -138,12 +138,12 @@ void addCoupleRelation(Relation& r, Couple& c) {
 }
 
 Manager::~Manager(){
-    
+
     for(unsigned int i = 0; i<nbNotes;i++){
         delete notes[i]; //un destructeur virtuel pour Note à definir à 'mment donné il me semble
     }
     delete [] notes;
-    
+
     for(unsigned int i = 0; i<nbRelations;i++){
         delete relations[i];
     }

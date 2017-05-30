@@ -22,7 +22,7 @@ void Relation::addCouple(Couple& c){
         for(int i=0; i<nbCouples;i++){
             newtab[i]=couples[i];
         }
-        nbCouples=nbCouples+100;
+        nbMaxCouples=nbMaxCouples+100;
         Couple** oldtab= couples;
         couples=newtab;
         delete [] oldtab;
@@ -32,8 +32,8 @@ void Relation::addCouple(Couple& c){
 }
 
 // Fonction qui trouve dans tout string en partant de la position p si il y a une reference, dans ce cas, renvoie son ID, sinon, renvoie 0
-unsigned long findRefID(const std::string& s, int p=0){
-    
+unsigned long findRefID(const std::string& s, int p){
+
     unsigned long i=s.find("\ref{", p);
     if (i==p) return 0;
     else {
@@ -72,7 +72,7 @@ int getPosition(const std::string s, int p){
             else return 0;
         }
     }
-    
+
 }
 
 
