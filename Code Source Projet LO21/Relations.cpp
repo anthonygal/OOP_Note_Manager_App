@@ -36,10 +36,10 @@ void Relation::addCouple(Couple& c){
 // Fonction qui trouve dans tout string en partant de la position p si il y a une reference, dans ce cas, renvoie son ID, sinon, renvoie 0
 unsigned long findRefID(const std::string& s, int p=0){
     
-    unsigned long i=s.find("\ref{", p);
+    unsigned long i=s.find("ref{", p);
     if (i==p) return 0;
     else {
-        i+=5;
+        i+=4;
         char c=s[i];
         if (!isdigit(c)) {return 0;}
         else{
@@ -59,10 +59,10 @@ unsigned long findRefID(const std::string& s, int p=0){
 
 //Fonction qui renvoie la position du "}" fermant la reference à partir de la position p passé en argument si une reference existe dans le string s, sinon renvoie 0
 int getPosition(const std::string s, int p){
-    int i=s.find("\ref{", p);
+    int i=s.find("ref{", p);
     if (i==p) return 0;
     else {
-        i+=5;
+        i+=4;
         char c=s[i];
         if (!isdigit(c)) {return 0;}
         else{

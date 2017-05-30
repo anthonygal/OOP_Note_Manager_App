@@ -11,8 +11,8 @@ int main()
     Manager& m=Manager::donneInstance();
     
     
-    Article& a=m.NewArticle(3,"soucis");
-    Article& a2=m.NewArticle(5,"soucis2","trop de problemes\ref{3}hjh");
+    Article& a=m.NewArticle(3,"soucis","yooo");
+    Article& a2=m.NewArticle(5,"soucis2","trop de problemes ref{3}hjh");
     Article& a3=m.NewArticle(6,"soucis3","trop de problemes");
     Article& a4=m.NewArticle(7,"soucis4","trop de problemes");
     Article& a5=m.NewArticle(8,"soucis5","trop de problemes");
@@ -46,13 +46,21 @@ int main()
     //m.addCoupleReference(c);
     
     Reference& R=m.getReference();
-    Reference& R2=m.getReference();
+    std::cout<<findRefID(a2.getTexte(), 0)<<"\n";
+
     
     
-    std::cout<<m.getnbNotes()<<"\n";
-    std::cout<<m.getnbRelations()<<"\n";
+    Note* n=m.SearchID(3);
+    std::cout<<n->getTitre()<<" : titre \n";
     
     
+    std::cout<<m.getnbNotes()<<": nbNotes \n";
+    
+     m.AddRefsFromNote(a2);
+    
+    std::cout<<m.getnbRelations()<<"nb Relations \n";
+    
+    m.AddRefsFromNote(a2);
     
 
     //std::cout<<"\ntype de a : "<<typeid(a).name()<<"\n"; //Ca affiche un chiffre devant la classe mais je n'arrive pas à l'enlever...

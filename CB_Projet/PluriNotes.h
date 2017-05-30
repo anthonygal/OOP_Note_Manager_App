@@ -50,7 +50,7 @@ public:
     virtual void affichageSpecifique(std::ostream& f) const = 0;
     virtual void AddRefs(Manager& m);
     virtual void AddRefsSpecifique(Manager& m)=0;
-    //virtual ~Note();
+    virtual ~Note(){};
 };
 
 /*

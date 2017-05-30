@@ -175,17 +175,15 @@ Reference& Manager::getReference() {
 
 //Recherche de notes à partir d'un ID
 Note* Manager::SearchID(unsigned long id){
-    IteratorNotes it=begin();
-    Note& n=*it;
-    int i=0;
-    while (n.getID()!=id && i<nbNotes) {
-        ++it;
-        n=*it;
-        if (n.getActuel()) return &n;
+    for (unsigned int i=0; i<nbNotes;i++){
+        if (notes[i]->getID()==id){
+            if (notes[i]->getActuel()) {
+                return notes[i];
+            }
         }
-    return nullptr;
+    }
+return nullptr;
 }
-
 
 //EDITEURS DE NOTES DE LA CLASSE MANAGER CREANT UNE NOUVELLE VERSION DE LA NOTES ET L AJOUTANT AU TABLEAU notes DU MANAGER (PARTIE 1.2 DU SUJET DE PROJET):
 
@@ -305,6 +303,7 @@ void Tache::AddRefsSpecifique(Manager& m){
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getAction(), pos);
+        ID=findRefID(this->getAction(), pos);
     }
 }
 
@@ -319,13 +318,14 @@ void Article::AddRefsSpecifique(Manager& m){
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getTexte(), pos);
+        ID=findRefID(this->getTexte(), pos);
     }
 }
 
 void Multimedia::AddRefsSpecifique(Manager& m){
     unsigned long ID=findRefID(this->getDescription(), 0);
     int pos=0;
-    while (ID!=0){
+    while (pos!=0){
         Note* N=m.SearchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
@@ -333,6 +333,7 @@ void Multimedia::AddRefsSpecifique(Manager& m){
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getDescription(), pos);
+        ID=findRefID(this->getDescription(), pos);
     }
 }
 
