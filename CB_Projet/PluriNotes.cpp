@@ -325,7 +325,7 @@ void Article::AddRefsSpecifique(Manager& m){
 void Multimedia::AddRefsSpecifique(Manager& m){
     unsigned long ID=findRefID(this->getDescription(), 0);
     int pos=0;
-    while (pos!=0){
+    while (ID!=0){
         Note* N=m.SearchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");

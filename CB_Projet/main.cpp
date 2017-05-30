@@ -14,7 +14,7 @@ int main()
     Article& a=m.NewArticle(3,"soucis","yooo");
     Article& a2=m.NewArticle(5,"soucis2","trop de problemes ref{3}hjh");
     Article& a3=m.NewArticle(6,"soucis3","trop de problemes");
-    Article& a4=m.NewArticle(7,"soucis4","trop de problemes");
+    Article& a4=m.NewArticle(12,"soucis4","trop de problemes");
     Article& a5=m.NewArticle(8,"soucis5","trop de problemes");
     
     Tache& t=m.NewTache(7, "Commit vite!", "Il faut commit des choses intelligentes");
@@ -24,7 +24,7 @@ int main()
     a2.afficher();
     
     
-    Multimedia& multimed=m.NewMultimedia(1,"unmultimedia","C:/fausseAdresse/test/velo.jpg", "description dun velo", image);
+    Multimedia& multimed=m.NewMultimedia(1,"unmultimedia","C:/fausseAdresse/test/velo.jpg", "description dun velo ref{3}h", image);
 
  
     
@@ -56,11 +56,17 @@ int main()
     
     std::cout<<m.getnbNotes()<<": nbNotes \n";
     
-     m.AddRefsFromNote(a2);
+     //m.AddRefsFromNote(a2);
     
     std::cout<<m.getnbRelations()<<"nb Relations \n";
+    Couple* coum=new Couple(&multimed, &a2, "");
+    m.addCoupleReference(*coum);
+    m.AddRefsFromNote(multimed);
+    std::cout<<findRefID(multimed.getDescription(),0)<<"\n";
+    std::cout<<getPosition(multimed.getDescription(),0)<<"\n";
+    std::cout<<multimed.getDescription()<<"\n";
+    std::cout<<R.getnbCouples()<<"\n";
     
-    m.AddRefsFromNote(a2);
     
 
     //std::cout<<"\ntype de a : "<<typeid(a).name()<<"\n"; //Ca affiche un chiffre devant la classe mais je n'arrive pas à l'enlever...

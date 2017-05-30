@@ -15,6 +15,7 @@ using namespace TIME;
 
 class Note;
 class Manager;
+class NoteException;
 
 class Couple {
  private:
@@ -43,6 +44,10 @@ class Relation{
  int nbMaxCouples;
  
  public:
+ int getnbCouples() const {return nbCouples;}
+ Couple** getCouples() const {return couples;};
+ std::string getTitre() const {return titre;}
+ std::string getDescription() const {return description;}
  bool getOrientation() const {return orientation;}
  void setOrientation(bool b){orientation=b;}
  void addCouple(Couple& c);
