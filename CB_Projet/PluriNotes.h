@@ -175,7 +175,6 @@ public:
 
     void Affichertout() const;
 
-
     Article& editTexteArticle(Article& A, const std::string& s);
     Tache& editActionTache(Tache& T, const std::string& s);
     Tache& editStatutTache(Tache& T, TacheStatut s);

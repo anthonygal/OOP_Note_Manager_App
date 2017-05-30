@@ -68,21 +68,18 @@ void Multimedia::affichageSpecifique(std::ostream& f) const {}
 
 
 void Manager::Affichertout()const{
-   // for (unsigned int i=0; i<Manager::nbNotes-1; i++)
-   // {
-      // Manager::notes[i]->afficher(f);
-    //}
+
 for(Manager::IteratorNotes it=begin();it!=Manager::end();++it ){
     std::cout<<*it<<std::endl;
 }
 }
 
 
-
-
 std::ostream& operator<<(std::ostream& f, const Note& n) {
         n.afficher(f);
         return f;}
+
+
 
 
  Manager& Manager::operator<<(Note& n){
