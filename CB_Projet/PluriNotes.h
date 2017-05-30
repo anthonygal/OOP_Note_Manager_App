@@ -142,7 +142,7 @@ private:
     
     static Manager* InstanceUnique;
     
-    Manager(): nbNotes(0), nbNotesMax (5), notes (new Note*[nbNotesMax]), relations (new Relation*[100]){};
+    Manager(): nbNotes(0), nbNotesMax (5), nbRelations(0), nbRelationsMax(5), notes (new Note*[nbNotesMax]), relations (new Relation*[100]){};
     Manager(const Manager&);
     void operator=(const Manager&);
     virtual ~Manager();

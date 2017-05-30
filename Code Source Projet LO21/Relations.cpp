@@ -7,7 +7,9 @@ Relation::Relation(const std::string& t, const std::string& d, bool o){
     titre=t;
     description=d;
     orientation=o;
-    couples=new Couple*[100];
+    couples=new Couple*[5];
+    nbCouples=0;
+    nbMaxCouples=5;
 };
 
 Relation::~Relation(){
@@ -18,11 +20,11 @@ Relation::~Relation(){
 
 void Relation::addCouple(Couple& c){
     if (nbCouples==nbMaxCouples){
-        Couple** newtab= new Couple* [nbMaxCouples+100];
+        Couple** newtab= new Couple* [nbMaxCouples+5];
         for(int i=0; i<nbCouples;i++){
             newtab[i]=couples[i];
         }
-        nbCouples=nbCouples+100;
+        nbCouples=nbCouples+5;
         Couple** oldtab= couples;
         couples=newtab;
         delete [] oldtab;

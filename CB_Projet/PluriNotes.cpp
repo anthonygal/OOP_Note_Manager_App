@@ -120,11 +120,11 @@ Multimedia* Multimedia::clone() const {
 
 void Manager::addRelation(Relation& r){
     if (nbRelations==nbRelationsMax){
-        Relation** newtab= new Relation* [nbRelationsMax+100];
+        Relation** newtab= new Relation* [nbRelationsMax+5];
         for(int i=0; i<nbRelations;i++){
             newtab[i]=relations[i];
         }
-        nbRelationsMax=nbRelationsMax+100;
+        nbRelationsMax=nbRelationsMax+5;
         Relation** oldtab= relations;
         relations=newtab;
         delete [] oldtab;
@@ -133,7 +133,7 @@ void Manager::addRelation(Relation& r){
     nbRelations++;
 }
 
-void addCoupleRelation(Relation& r, Couple& c) {
+void Manager::addCoupleRelation(Relation& r, Couple& c) {
     r.addCouple(c);
 }
 

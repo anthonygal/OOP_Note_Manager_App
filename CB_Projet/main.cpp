@@ -38,7 +38,13 @@ int main()
     
     if (multimed.getActuel()==true) {std::cout<< "multimed actuel=true \n\n";} else {std::cout<<"multimed actuel=false  \n\n";};
     
-
+    
+    Couple c= Couple::Couple(&a2, &a3, "lelabel");
+    Relation* r= new Relation::Relation("tesrel","tedescri",true);
+    m.addRelation(*r);
+    m.addCoupleRelation(*r, c);
+    
+    
 
     //std::cout<<"\ntype de a : "<<typeid(a).name()<<"\n"; //Ca affiche un chiffre devant la classe mais je n'arrive pas à l'enlever...
 
