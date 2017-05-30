@@ -7,7 +7,9 @@ Relation::Relation(const std::string& t, const std::string& d, bool o){
     titre=t;
     description=d;
     orientation=o;
-    couples=new Couple*[100];
+    couples=new Couple*[5];
+    nbCouples=0;
+    nbMaxCouples=5;
 };
 
 Relation::~Relation(){
@@ -18,11 +20,14 @@ Relation::~Relation(){
 
 void Relation::addCouple(Couple& c){
     if (nbCouples==nbMaxCouples){
-        Couple** newtab= new Couple* [nbMaxCouples+100];
+        Couple** newtab= new Couple* [nbMaxCouples+5];
         for(int i=0; i<nbCouples;i++){
             newtab[i]=couples[i];
         }
-        nbMaxCouples=nbMaxCouples+100;
+
+        //nbMaxCouples=nbMaxCouples+100; //Changement Antoine
+        nbCouples=nbCouples+5; //Changement Antho
+
         Couple** oldtab= couples;
         couples=newtab;
         delete [] oldtab;
@@ -31,13 +36,16 @@ void Relation::addCouple(Couple& c){
     nbCouples++;
 }
 
+
 // Fonction qui trouve dans tout string en partant de la position p si il y a une reference, dans ce cas, renvoie son ID, sinon, renvoie 0
+
 unsigned long findRefID(const std::string& s, int p){
 
-    unsigned long i=s.find("\ref{", p);
+    unsigned long i=s.find("ref{", p);
+
     if (i==p) return 0;
     else {
-        i+=5;
+        i+=4;
         char c=s[i];
         if (!isdigit(c)) {return 0;}
         else{
@@ -57,10 +65,10 @@ unsigned long findRefID(const std::string& s, int p){
 
 //Fonction qui renvoie la position du "}" fermant la reference à partir de la position p passé en argument si une reference existe dans le string s, sinon renvoie 0
 int getPosition(const std::string s, int p){
-    int i=s.find("\ref{", p);
+    int i=s.find("ref{", p);
     if (i==p) return 0;
     else {
-        i+=5;
+        i+=4;
         char c=s[i];
         if (!isdigit(c)) {return 0;}
         else{
@@ -74,6 +82,7 @@ int getPosition(const std::string s, int p){
     }
 
 }
+
 
 
 

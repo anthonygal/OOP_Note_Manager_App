@@ -51,7 +51,7 @@ public:
     virtual void affichageSpecifique(std::ostream& f) const = 0;
     virtual void AddRefs(Manager& m);
     virtual void AddRefsSpecifique(Manager& m)=0;
-    //virtual ~Note();
+    virtual ~Note(){};
 };
 
 /*
@@ -143,7 +143,7 @@ private:
 
     static Manager* InstanceUnique;
 
-    Manager(): nbNotes(0), nbNotesMax (5), notes (new Note*[nbNotesMax]), relations (new Relation*[100]){};
+    Manager(): nbNotes(0), nbNotesMax (5), nbRelations(0), nbRelationsMax(5), notes (new Note*[nbNotesMax]), relations (new Relation*[100]){};
     Manager(const Manager&);
     void operator=(const Manager&);
     virtual ~Manager();
@@ -170,10 +170,15 @@ public:
     IteratorNotes begin1()const{return IteratorNotes(notes-1,nbNotes);}
     IteratorNotes end1() const{return IteratorNotes(notes+nbNotes-1,0);}
     int getnbNotes()const {return nbNotes;}
-
+    int getnbRelations() const {return nbRelations;}
+    Reference& getReference();
     Note* SearchID(unsigned long id);
 
     void Affichertout() const;
+
+    Article& NewArticle(const unsigned long i, const std::string& ti, const std::string& te="");
+    Tache& NewTache(const unsigned long i, const std::string& ti, const std::string& act, int prio =0, Date d =Date (1,1,0));
+    Multimedia& NewMultimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image);
 
     Article& editTexteArticle(Article& A, const std::string& s);
     Tache& editActionTache(Tache& T, const std::string& s);

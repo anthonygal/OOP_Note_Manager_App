@@ -115,13 +115,31 @@ Multimedia* Multimedia::clone() const {
     return m;
 };
 
+Article& Manager::NewArticle(const unsigned long i, const std::string& ti, const std::string& te){
+    Article* a=new Article(i,ti,te);
+    this->operator<<(*a);
+    return *a;
+}
+
+Tache& Manager::NewTache(const unsigned long i, const std::string& ti, const std::string& act, int prio, Date d){
+    Tache* a=new Tache(i,ti,act,prio,d);
+    this->operator<<(*a);
+    return *a;
+}
+
+Multimedia& Manager::NewMultimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc, TypeMultimedia ty){
+    Multimedia* a=new Multimedia(i,ti,adr,desc,ty);
+    this->operator<<(*a);
+    return *a;
+}
+
 void Manager::addRelation(Relation& r){
     if (nbRelations==nbRelationsMax){
-        Relation** newtab= new Relation* [nbRelationsMax+100];
+        Relation** newtab= new Relation* [nbRelationsMax+5];
         for(int i=0; i<nbRelations;i++){
             newtab[i]=relations[i];
         }
-        nbRelationsMax=nbRelationsMax+100;
+        nbRelationsMax=nbRelationsMax+5;
         Relation** oldtab= relations;
         relations=newtab;
         delete [] oldtab;
@@ -130,7 +148,7 @@ void Manager::addRelation(Relation& r){
     nbRelations++;
 }
 
-void addCoupleRelation(Relation& r, Couple& c) {
+void Manager::addCoupleRelation(Relation& r, Couple& c) {
     r.addCouple(c);
 }
 
@@ -147,20 +165,22 @@ Manager::~Manager(){
     delete [] relations;
 }
 
+Reference& Manager::getReference() {
+    Reference& R=Reference::donneInstance();
+    return R;
+}
 
 //Recherche de notes à partir d'un ID
 Note* Manager::SearchID(unsigned long id){
-    IteratorNotes it=begin();
-    Note& n=*it;
-    int i=0;
-    while (n.getID()!=id && i<nbNotes) {
-        ++it;
-        n=*it;
-        if (n.getActuel()) return &n;
+    for (unsigned int i=0; i<nbNotes;i++){
+        if (notes[i]->getID()==id){
+            if (notes[i]->getActuel()) {
+                return notes[i];
+            }
         }
-    return nullptr;
+    }
+return nullptr;
 }
-
 
 //EDITEURS DE NOTES DE LA CLASSE MANAGER CREANT UNE NOUVELLE VERSION DE LA NOTES ET L AJOUTANT AU TABLEAU notes DU MANAGER (PARTIE 1.2 DU SUJET DE PROJET):
 
@@ -245,8 +265,8 @@ void Manager::libereInstance(){
 
 //Ajouter un couple à la relation reference
 
-void addCoupleReference(Couple& c){
-    Reference& R=Reference::donneInstance();
+void Manager::addCoupleReference(Couple& c){
+    Reference& R=this->getReference();
     R.addCouple(c);
 }
 
@@ -259,7 +279,7 @@ void Note::AddRefs(Manager& m){
         Note* N=m.SearchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
-            addCoupleReference(*C);
+            m.addCoupleReference(*C);
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getTitre(), pos);
@@ -276,10 +296,11 @@ void Tache::AddRefsSpecifique(Manager& m){
         Note* N=m.SearchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
-            addCoupleReference(*C);
+            m.addCoupleReference(*C);
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getAction(), pos);
+        ID=findRefID(this->getAction(), pos);
     }
 }
 
@@ -290,10 +311,11 @@ void Article::AddRefsSpecifique(Manager& m){
         Note* N=m.SearchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
-            addCoupleReference(*C);
+            m.addCoupleReference(*C);
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getTexte(), pos);
+        ID=findRefID(this->getTexte(), pos);
     }
 }
 
@@ -304,10 +326,11 @@ void Multimedia::AddRefsSpecifique(Manager& m){
         Note* N=m.SearchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
-            addCoupleReference(*C);
+            m.addCoupleReference(*C);
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getDescription(), pos);
+        ID=findRefID(this->getDescription(), pos);
     }
 }
 
