@@ -169,7 +169,8 @@ public:
     IteratorNotes begin1()const{return IteratorNotes(notes-1,nbNotes);}
     IteratorNotes end1() const{return IteratorNotes(notes+nbNotes-1,0);}
     int getnbNotes()const {return nbNotes;}
-    
+    int getnbRelations() const {return nbRelations;}
+    Reference& getReference();
     Note* SearchID(unsigned long id);
 
     void Affichertout() const;

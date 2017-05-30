@@ -168,6 +168,10 @@ Manager::~Manager(){
     delete [] relations;
 }
 
+Reference& Manager::getReference() {
+    Reference& R=Reference::donneInstance();
+    return R;
+}
 
 //Recherche de notes à partir d'un ID
 Note* Manager::SearchID(unsigned long id){
@@ -266,8 +270,8 @@ void Manager::libereInstance(){
 
 //Ajouter un couple à la relation reference
 
-void addCoupleReference(Couple& c){
-    Reference& R=Reference::donneInstance();
+void Manager::addCoupleReference(Couple& c){
+    Reference& R=this->getReference();
     R.addCouple(c);
 }
 
@@ -280,7 +284,7 @@ void Note::AddRefs(Manager& m){
         Note* N=m.SearchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
-            addCoupleReference(*C);
+            m.addCoupleReference(*C);
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getTitre(), pos);
@@ -297,7 +301,7 @@ void Tache::AddRefsSpecifique(Manager& m){
         Note* N=m.SearchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
-            addCoupleReference(*C);
+            m.addCoupleReference(*C);
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getAction(), pos);
@@ -311,7 +315,7 @@ void Article::AddRefsSpecifique(Manager& m){
         Note* N=m.SearchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
-            addCoupleReference(*C);
+            m.addCoupleReference(*C);
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getTexte(), pos);
@@ -325,7 +329,7 @@ void Multimedia::AddRefsSpecifique(Manager& m){
         Note* N=m.SearchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
-            addCoupleReference(*C);
+            m.addCoupleReference(*C);
         }
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getDescription(), pos);

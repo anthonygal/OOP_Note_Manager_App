@@ -14,6 +14,7 @@ using namespace TIME;
  // RELATIONS ENTRE NOTES
 
 class Note;
+class Manager;
 
 class Couple {
  private:
