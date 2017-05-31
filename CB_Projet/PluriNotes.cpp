@@ -1,5 +1,5 @@
 #include "PluriNotes.h"
-#include "..\Code Source Projet LO21\Relations.h"
+#include "Relations.h"
 
 using namespace TIME;
 
@@ -8,28 +8,16 @@ Note::Note(Note& n){    // Voir si on le supprime ou non, lors du débuggage (pe
     titre = n.titre;
     dateCrea = n.dateCrea;
     horaireCrea = n.horaireCrea;
-    //dateModif = dateNow();
-    //horaireModif = horaireNow();
-    //etat = n.etat;
-   // actuel = true;
-    //n.setActuel(true); Répétitions avec  les fonctions edit
-}
-
-Note::Note(const Note& n){
-    ID = n.ID;
-    titre = n.titre;
-    dateCrea = n.dateCrea;
-    horaireCrea = n.horaireCrea;
-    dateModif = n.dateModif;
-    horaireModif = n.horaireModif;
+    dateModif = dateNow();
+    horaireModif = horaireNow();
     etat = n.etat;
-    actuel = n.actuel;
+    actuel = true;
+    n.setAncienne();
 }
-
 
 void Note::afficher(std::ostream& f) const {
     f<<"\n------ "<<typeid(*this).name()<<" "<<ID<<(actuel?" (Version Actuelle)":" (Ancienne Version)")<<" ------\n";
-    f<<"\n ID : "<<ID;
+    f<<"\nID : "<<ID;
     f<<"\nTitre : "<<titre;
     f<<"\nCree le : "<<dateCrea<<" a "<<horaireCrea;
     f<<"\nModifie le "<<dateModif<<" a "<<horaireModif;
@@ -39,15 +27,15 @@ void Note::afficher(std::ostream& f) const {
         case 1: f<<"Archivee"; break;
         case 2: f<<"Dans la corbeille"; break;
     }
-    affichageSpecifique(f);
+    afficherSpecifique(f);
     f<<"\n\n-------\n";
 }
 
-void Article::affichageSpecifique(std::ostream& f) const {
+void Article::afficherSpecifique(std::ostream& f) const {
     f<<"\nTexte : "<<texte;
 }
 
-void Tache::affichageSpecifique(std::ostream& f) const {
+void Tache::afficherSpecifique(std::ostream& f) const {
     f<<"\nAction : "<<action;
     f<<"\nStatut : ";
     switch(statut){
@@ -63,15 +51,12 @@ void Tache::affichageSpecifique(std::ostream& f) const {
 
 }
 
-
-void Multimedia::affichageSpecifique(std::ostream& f) const {}
-
+void Multimedia::afficherSpecifique(std::ostream& f) const {}
 
 void Manager::Affichertout()const{
-
-for(Manager::IteratorNotes it=begin();it!=Manager::end();++it ){
-    std::cout<<*it<<std::endl;
-}
+    for(Manager::IteratorNotes it=begin();it!=Manager::end();++it ){
+        std::cout<<*it<<std::endl;
+    }
 }
 
 
@@ -80,40 +65,19 @@ std::ostream& operator<<(std::ostream& f, const Note& n) {
         return f;}
 
 
-
-
  Manager& Manager::operator<<(Note& n){
-    if (Manager::nbNotes==Manager::nbNotesMax){
-        Note** newtab= new Note* [Manager::nbNotesMax+5];
-        for(int i=0; i<Manager::nbNotes;i++){
-            newtab[i]=Manager::notes[i];
-        }
-    nbNotesMax=nbNotesMax+5;
-    Note** oldtab= Manager::notes;
-    notes=newtab;
-    delete [] oldtab;
+    if(nbNotes == nbNotesMax){
+        Note** newtab = new Note* [Manager::nbNotesMax+5];
+        for(unsigned int i=0;i<nbNotes;i++) newtab[i] = notes[i];
+        nbNotesMax += 5;
+        Note** oldtab = notes;
+        notes = newtab;
+        delete[] oldtab;
     }
-    Manager::notes[Manager::nbNotes]=n.clone();
-    Manager::nbNotes=Manager::nbNotes+1;
+    notes[nbNotes++] = &n;
     return *this;
-    };
-
-
-Article* Article::clone()const{
-    Article* a=new Article(*this);
-    return a;
-}
-
-
-Tache* Tache::clone()const{
-    Tache* t=new Tache(*this);
-    return t;}
-
-
-Multimedia* Multimedia::clone() const {
-    Multimedia* m=new Multimedia(*this);
-    return m;
 };
+
 
 Article& Manager::NewArticle(const unsigned long i, const std::string& ti, const std::string& te){
     Article* a=new Article(i,ti,te);
@@ -179,7 +143,7 @@ Note* Manager::SearchID(unsigned long id){
             }
         }
     }
-return nullptr;
+    return nullptr;
 }
 
 //EDITEURS DE NOTES DE LA CLASSE MANAGER CREANT UNE NOUVELLE VERSION DE LA NOTES ET L AJOUTANT AU TABLEAU notes DU MANAGER (PARTIE 1.2 DU SUJET DE PROJET):
@@ -188,9 +152,8 @@ return nullptr;
 Article& Manager::editTexteArticle(Article& A, const std::string& s) {
     Article* a= new Article(A);
     a->setTexte(s);
-    a->setModif();
-    a->setActuel(true);
-    A.setActuel(false);
+    a->setActuel();
+    A.setAncienne();
     *this<<*a;
     return *a;
 }
@@ -198,9 +161,8 @@ Article& Manager::editTexteArticle(Article& A, const std::string& s) {
 Tache& Manager::editActionTache(Tache& T, const std::string& s){
     Tache* t= new Tache(T);
     t->setAction(s);
-    t->setModif();
-    t->setActuel(true);
-    T.setActuel(false);
+    t->setActuel();
+    T.setAncienne();
     *this<<*t;
     return *t;
 };
@@ -208,9 +170,8 @@ Tache& Manager::editActionTache(Tache& T, const std::string& s){
 Tache& Manager::editStatutTache(Tache& T, TacheStatut s){
     Tache* t= new Tache(T);
     t->setStatut(s);
-    t->setModif();
-    t->setActuel(true);
-    T.setActuel(false);
+    t->setActuel();
+    T.setAncienne();
     *this<<*t;
     return *t;
 };
@@ -218,18 +179,16 @@ Tache& Manager::editStatutTache(Tache& T, TacheStatut s){
 Tache& Manager::editPrioriteTache(Tache& T, int p){
     Tache* t= new Tache(T);
     t->setPriorite(p);
-    t->setModif();
-    t->setActuel(true);
-    T.setActuel(false);
+    t->setActuel();
+    T.setAncienne();
     *this<<*t;
     return *t;};
 
 Tache& Manager::editEcheanceTache(Tache& T, TIME::Date d){
     Tache* t= new Tache(T);
     t->setEcheance(d);
-    t->setModif();
-    t->setActuel(true);
-    T.setActuel(false);
+    t->setActuel();
+    T.setAncienne();
     *this<<*t;
     return *t;
 };
@@ -237,9 +196,8 @@ Tache& Manager::editEcheanceTache(Tache& T, TIME::Date d){
 Multimedia& Manager::editFichierMultimedia(Multimedia& M, const std::string s){
     Multimedia* m= new Multimedia(M);
     m->setAdresseFichier(s);
-    m->setModif();
-    m->setActuel(true);
-    M.setActuel(false);
+    m->setActuel();
+    M.setAncienne();
     *this<<*m;
     return *m;
 };

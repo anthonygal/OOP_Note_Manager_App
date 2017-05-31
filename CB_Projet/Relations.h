@@ -9,10 +9,9 @@ using namespace TIME;
 
  // RELATIONS ENTRE NOTES
 
-//class Note;
-//class Manager;
-//class NoteException;
-//Je ne pense pas qu'il y ait besoin des 3 lignes precedentes
+class Note;
+class Manager;
+class NoteException;
 
 class Couple {
  private:

@@ -2,6 +2,7 @@
 #define PluriNotes_h
 
 #include "timing.h"
+#include "Relations.h"
 #include <string>
 #include <typeinfo>
 
@@ -32,8 +33,6 @@ private:
 public:
     Note(const unsigned long i, const std::string& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
     Note(Note& n);
-    Note (const Note& n);
-    virtual Note* clone()const=0; //Comprend pas ca + BUG ^^
 
     unsigned long getID() const {return ID;}
     std::string getTitre() const { return titre; }
@@ -44,12 +43,12 @@ public:
     NoteEtat getEtat() const { return etat; } //0 pour active, 1 pour archivee et 2 pour corbeille
     bool getActuel() const { return actuel; }
     void setEtat(NoteEtat e){ etat=e; }
-    void setActuel(bool b){actuel=b;}
-    void setModif(){dateModif=dateNow(); horaireModif=horaireNow();};
+    void setActuel(){ actuel=true; }
+    void setAncienne(){ actuel=false; }
 
     void afficher(std::ostream& f = std::cout) const;
-    virtual void affichageSpecifique(std::ostream& f) const = 0;
-    virtual void AddRefs(Manager& m);
+    virtual void afficherSpecifique(std::ostream& f) const = 0;
+    void AddRefs(Manager& m);
     virtual void AddRefsSpecifique(Manager& m)=0;
     virtual ~Note(){};
 };
@@ -68,13 +67,12 @@ private:
 
 public:
     Article(const unsigned long i, const std::string& ti, const std::string& te=""):Note(i,ti),texte(te){}
-    Article(const Article& a):Note(a.getID(),a.getTitre()),texte(a.texte){};
-    Article* clone()const; // Je vois pas a quoi ca sert Antoine?
+    Article(Article& a):Note(a),texte(a.texte){};
 
     std::string getTexte() const{ return texte; }
     void setTexte(const std::string& t){ texte=t; }
 
-    void affichageSpecifique(std::ostream& f) const;
+    void afficherSpecifique(std::ostream& f) const;
 
     void AddRefsSpecifique(Manager& m);
 };
@@ -101,7 +99,7 @@ public:
     void setPriorite(int p){ priorite = p; }
     void setEcheance(const TIME::Date& d){ echeance = d; }
 
-    void affichageSpecifique(std::ostream& f) const;
+    void afficherSpecifique(std::ostream& f) const;
 
     void AddRefsSpecifique(Manager& m);
 };
@@ -124,7 +122,7 @@ public:
     void setDescription(const std::string& desc){ description = desc; }
     void setType(const TypeMultimedia ty){ type = ty; }
 
-    void affichageSpecifique(std::ostream& f) const;
+    void afficherSpecifique(std::ostream& f) const;
 
     void AddRefsSpecifique(Manager& m);
 };

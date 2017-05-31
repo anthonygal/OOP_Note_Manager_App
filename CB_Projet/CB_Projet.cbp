@@ -34,10 +34,10 @@
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="../Code Source Projet LO21/Relations.cpp" />
-		<Unit filename="../Code Source Projet LO21/Relations.h" />
 		<Unit filename="PluriNotes.cpp" />
 		<Unit filename="PluriNotes.h" />
+		<Unit filename="Relations.cpp" />
+		<Unit filename="Relations.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="timing.cpp" />
 		<Unit filename="timing.h" />
