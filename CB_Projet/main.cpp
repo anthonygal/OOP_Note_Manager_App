@@ -1,6 +1,6 @@
 #include "timing.h"
 #include "PluriNotes.h"
-#include "..\Code Source Projet LO21\Relations.h"
+#include "Relations.h"
 
 using namespace TIME;
 
@@ -71,7 +71,7 @@ int main()
 //
 //
 //
-//    //std::cout<<"\ntype de a : "<<typeid(a).name()<<"\n"; //Ca affiche un chiffre devant la classe mais je n'arrive pas à l'enlever...
+//    //std::cout<<"\ntype de a : "<<typeid(a).name()<<"\n"; //Ca affiche un chiffre devant la classe mais je n'arrive pas ï¿½ l'enlever...
 
     return 0;
 }

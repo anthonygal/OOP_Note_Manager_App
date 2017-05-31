@@ -54,15 +54,15 @@ void Tache::afficherSpecifique(std::ostream& f) const {
 void Multimedia::afficherSpecifique(std::ostream& f) const {}
 
 void Manager::Affichertout()const{
-    for(Manager::IteratorNotes it=begin();it!=Manager::end();++it ){
+    for(IteratorNotes it=begin();it!=end();++it ){
         std::cout<<*it<<std::endl;
     }
 }
 
-
 std::ostream& operator<<(std::ostream& f, const Note& n) {
         n.afficher(f);
-        return f;}
+        return f;
+}
 
 
  Manager& Manager::operator<<(Note& n){

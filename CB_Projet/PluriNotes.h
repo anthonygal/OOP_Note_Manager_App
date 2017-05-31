@@ -67,16 +67,14 @@ private:
 
 public:
     Article(const unsigned long i, const std::string& ti, const std::string& te=""):Note(i,ti),texte(te){}
-    Article(Article& a):Note(a),texte(a.texte){};
+    Article(Article& a):Note(a),texte(a.texte){}
 
     std::string getTexte() const{ return texte; }
     void setTexte(const std::string& t){ texte=t; }
 
     void afficherSpecifique(std::ostream& f) const;
-
     void AddRefsSpecifique(Manager& m);
 };
-
 
 class Tache: public Note{
 private:
@@ -84,11 +82,10 @@ private:
     TacheStatut statut;
     int priorite;
     TIME::Date echeance;
-    //virtual void estAbstraite(){};
 
 public:
     Tache(const unsigned long i, const std::string& ti, const std::string& act, int prio =0, Date d =Date (1,1,0)):Note(i,ti),action(act),statut(encours), priorite(prio), echeance(d){}
-    Tache* clone() const;
+    Tache(Tache& t):Note(t),action(t.action),statut(t.statut),priorite(t.priorite),echeance(t.echeance){}
 
     std::string getAction() const { return action; }
     TacheStatut getStatut() const { return statut; }
@@ -100,10 +97,8 @@ public:
     void setEcheance(const TIME::Date& d){ echeance = d; }
 
     void afficherSpecifique(std::ostream& f) const;
-
     void AddRefsSpecifique(Manager& m);
 };
-
 
 class Multimedia: public Note{
 private:
@@ -113,7 +108,7 @@ private:
 
 public:
     Multimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image):Note(i,ti),adresseFichier(adr),description(desc),type(ty){}
-    Multimedia* clone() const; // Je vois pas a quoi ca sert Antoine?
+    Multimedia(Multimedia& m):Note(m),adresseFichier(m.adresseFichier),description(m.description),type(m.type){}
 
     std::string getAdresseFichier() const { return adresseFichier; }
     std::string getDescription() const { return description; }
@@ -123,11 +118,10 @@ public:
     void setType(const TypeMultimedia ty){ type = ty; }
 
     void afficherSpecifique(std::ostream& f) const;
-
     void AddRefsSpecifique(Manager& m);
 };
 
-
+//Manager gere tout !
 
 class Manager{
 private:
