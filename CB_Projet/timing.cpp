@@ -1,5 +1,4 @@
 #include "timing.h"
-#include <ctime>
 
 using namespace TIME;
 

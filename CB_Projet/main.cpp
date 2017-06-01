@@ -1,16 +1,27 @@
 #include "timing.h"
 #include "PluriNotes.h"
-#include "Relations.h"
 
 using namespace TIME;
 
 int main()
 {
     // insert code here... modification test
+    Article* a = new Article(4,"test","try");
+    std::cout<<*a;
+    delete a;
 
-    Tache a(3,"soucis","action",1,Date(03,06,2017));
-    Tache a2(a);
-    std::cout<<a<<a2;
+    Manager& m=Manager::donneInstance();
+    m.newTache("soucis","action",1,Date(03,06,2017));
+    m.newArticle("souciss","pluie");
+    for(Manager::IteratorNotes it=m.getIteratorNotes();!it.isDone();it.next()){
+      if(it.current().getTitre()=="souciss") m.editNote(it.current());
+    }
+    for(Manager::ConstIteratorNotes it=m.getConstIteratorNotes();!it.isDone();it.next()){
+      std::cout<<it.current();
+    }
+    m.libereInstance();
+
+
 //
 //    Manager& m=Manager::donneInstance();
 //

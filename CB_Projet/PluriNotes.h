@@ -5,20 +5,29 @@
 #include "Relations.h"
 #include <string>
 #include <typeinfo>
-
-
+#include <sstream>
 
 using namespace TIME;
 
-enum NoteEtat{ active, archivee, corbeille };
-enum TacheStatut{ attente, encours, terminee };
-enum TypeMultimedia{ image, video, audio };
+enum NoteEtat{ active, archivee, corbeille }; /**< Les differents etats d'une Note */
+enum TacheStatut{ attente, encours, terminee }; /**< Les differents statuts d'une Tache */
+enum TypeMultimedia{ image, video, audio }; /**< Les differents types de fichier Multimedia */
 
 class Relation;
 class Couple;
 class Reference;
 class Manager;
 
+/**< CLASSE EXCEPTION */
+class NoteException{
+private:
+    std::string info;
+public:
+    NoteException(const std::string& s): info(s){}
+    std::string getInfo() const {return info;}
+};
+
+/**< CLASSE ABSTRAITE NOTE */
 class Note{
 private:
     unsigned long ID;
@@ -29,133 +38,154 @@ private:
     TIME::Horaire horaireModif;
     NoteEtat etat;
     bool actuel;
-
 public:
-    Note(const unsigned long i, const std::string& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}//Pas besoin d'initialiser horaire et tout, sont initialiser à la construction
+    /**< Constructeurs */
+    Note(const unsigned long i, const std::string& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}
     Note(Note& n);
-
+    /**< Destructeur */
+    virtual ~Note(){};
+    /**< Requetes getAttributs */
     unsigned long getID() const {return ID;}
-    std::string getTitre() const { return titre; }
-    const Date& getDateCrea() const { return dateCrea; } //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
-    const Date& getDateModif() const { return dateModif; } //Laisser ou enlever le const? La date de modif est ammenée à être modifié, mais on créera alors une nouvelle notes
-    const Horaire& getHoraireCrea() const { return horaireCrea; }
-    const Horaire& getHoraireModif() const { return horaireModif; }
-    NoteEtat getEtat() const { return etat; } //0 pour active, 1 pour archivee et 2 pour corbeille
-    bool getActuel() const { return actuel; }
-    void setEtat(NoteEtat e){ etat=e; }
-    void setActuel(){ actuel=true; }
-    void setAncienne(){ actuel=false; }
-
+    std::string getTitre() const {return titre;}
+    const Date& getDateCrea() const {return dateCrea;} //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
+    const Date& getDateModif() const {return dateModif;}
+    const Horaire& getHoraireCrea() const {return horaireCrea;}
+    const Horaire& getHoraireModif() const {return horaireModif;}
+    NoteEtat getEtat() const {return etat;} /**< etat vaut 0 pour active, 1 pour archivee et 2 pour corbeille */
+    bool getActuel() const {return actuel;}
+    /**< Commandes setAttributs */
+    void setTitre(const std::string ti){titre=ti;}
+    void setEtat(NoteEtat e){etat=e;}
+    void setActuel(){actuel=true;}
+    void setAncienne(){actuel=false;}
+    /**< Methode d'edition */
+    virtual Note& edit()=0;
+    /**< Methodes d'affichage */
     void afficher(std::ostream& f = std::cout) const;
     virtual void afficherSpecifique(std::ostream& f) const = 0;
+    /**< Methodes pour ajouter des references */
     void AddRefs(Manager& m);
     virtual void AddRefsSpecifique(Manager& m)=0;
-    virtual ~Note(){};
 };
 
-/*
- COMMENTAIRES A PRENDRE EN COMPTE:
-    -Pour la gestion des type dates horaire etc... on reprendra les fichiers timing.h et timing.cpp donnés en ressources lors du TD7
-    -Les accesseurs en edition créeent la nouvelle version de la note prenant les modifications souhaitées en compte et renvoyeent l'addresse de la nouvelle version de la note créer
-    -La seule utilité de la methode virtuelle pure estAbstraite() est de rendre la classe Note abstraite. Son comportement (ne fait rien du tout) est défini dans les sous classe afin de rendre ces sous classes concrètes. Cette fonction pourra ne sera plus necessaire si une methode virtuelle pure utile vient à etre implementée plus tard
-    - Une classe: Ordre des méthodes: 1/ Constructeur 2/ get  3/ set (Pas sûr qu'on en utilise)=> sera gérer par le manager  4/ Autres fonctions
- */
+/**< Surcharge de l'operateur << pour afficher une note avec ce dernier */
+std::ostream& operator<<(std::ostream& f , const Note& n);
 
+/**< CLASSE ARTICLE FILLE DE NOTE */
 class Article: public Note{
 private:
     std::string texte;
-
 public:
+    /**< Constructeurs d'Article */
     Article(const unsigned long i, const std::string& ti, const std::string& te=""):Note(i,ti),texte(te){}
     Article(Article& a):Note(a),texte(a.texte){}
-
-    std::string getTexte() const{ return texte; }
-    void setTexte(const std::string& t){ texte=t; }
-
+    /**< Destructeur d'Article */
+    ~Article(){}
+    /**< Requetes getAttributs */
+    std::string getTexte() const{return texte;}
+    /**< Commandes setAttributs */
+    void setTexte(const std::string& t){texte=t;}
+    /**< Methode d'edition */
+    Article& edit();
+    /**< Methode d'affichage specifique */
     void afficherSpecifique(std::ostream& f) const;
+    /**< Methode pour ajouter des references specifique */
     void AddRefsSpecifique(Manager& m);
 };
 
+/**< CLASSE TACHE FILLE DE NOTE */
 class Tache: public Note{
 private:
     std::string action;
-    TacheStatut statut;
     int priorite;
     TIME::Date echeance;
-
+    TacheStatut statut;
 public:
-    Tache(const unsigned long i, const std::string& ti, const std::string& act, int prio =0, Date d =Date(1,1,0)):Note(i,ti),action(act),statut(encours), priorite(prio), echeance(d){}
-    Tache(Tache& t):Note(t),action(t.action),statut(t.statut),priorite(t.priorite),echeance(t.echeance){}
-
-    std::string getAction() const { return action; }
-    TacheStatut getStatut() const { return statut; }
-    int getPriorite() const { return priorite; }
-    TIME::Date getEcheance() const { return echeance; }
-    void setAction(const std::string& act){ action = act; }
-    void setStatut(const TacheStatut s){ statut = s; }
-    void setPriorite(int p){ priorite = p; }
-    void setEcheance(const TIME::Date& d){ echeance = d; }
-
+    /**< Constructeurs de Tache */
+    Tache(const unsigned long i, const std::string& ti, const std::string& act, int prio=0, Date d=Date(1,1,0)):Note(i,ti),action(act),priorite(prio),echeance(d),statut(encours){}
+    Tache(Tache& t):Note(t),action(t.action),priorite(t.priorite),echeance(t.echeance),statut(t.statut){}
+    /**< Destructeur de Tache */
+    ~Tache(){}
+    /**< Requetes getAttributs */
+    std::string getAction() const {return action;}
+    TacheStatut getStatut() const {return statut;}
+    int getPriorite() const {return priorite;}
+    TIME::Date getEcheance() const {return echeance;}
+    /**< Commandes setAttributs */
+    void setAction(const std::string& act){action=act;}
+    void setStatut(const TacheStatut s){statut=s;}
+    void setPriorite(int p){priorite=p;}
+    void setEcheance(const TIME::Date& d){echeance=d;}
+    /**< Methode d'edition */
+    Tache& edit();
+    /**< Methode d'affichage specifique */
     void afficherSpecifique(std::ostream& f) const;
+    /**< Methode pour ajouter des references specifique */
     void AddRefsSpecifique(Manager& m);
 };
 
+/**< CLASSE MULTIMEDIA FILLE DE NOTE */
 class Multimedia: public Note{
 private:
     std::string adresseFichier;
     TypeMultimedia type;
     std::string description;
-
 public:
+    /**< Constructeurs de Multimedia */
     Multimedia(const unsigned long i, const std::string& ti, const std::string& adr, TypeMultimedia ty=image, const std::string& desc=""):Note(i,ti),adresseFichier(adr),type(ty),description(desc){}
-    Multimedia(Multimedia& m):Note(m),adresseFichier(m.adresseFichier),description(m.description),type(m.type){}
-
-    std::string getAdresseFichier() const { return adresseFichier; }
-    std::string getDescription() const { return description; }
-    TypeMultimedia getType() const { return type; }
-    void setAdresseFichier(const std::string& adr){ adresseFichier = adr; }
-    void setDescription(const std::string& desc){ description = desc; }
-    void setType(const TypeMultimedia ty){ type = ty; }
-
+    Multimedia(Multimedia& m):Note(m),adresseFichier(m.adresseFichier),type(m.type),description(m.description){}
+    /**< Destructeur de Multimedia */
+    ~Multimedia(){}
+    /**< Requetes getAttributs */
+    std::string getAdresseFichier() const {return adresseFichier;}
+    std::string getDescription() const {return description;}
+    TypeMultimedia getType() const {return type;}
+    /**< Commandes setAttributs */
+    void setAdresseFichier(const std::string& adr){adresseFichier=adr;}
+    void setDescription(const std::string& desc){description=desc;}
+    void setType(const TypeMultimedia ty){type=ty;}
+    /**< Methode d'edition */
+    Multimedia& edit();
+    /**< Methode d'affichage specifique */
     void afficherSpecifique(std::ostream& f) const;
+    /**< Methode pour ajouter des references specifique */
     void AddRefsSpecifique(Manager& m);
 };
 
-//Manager gere tout !
-
+/**< CLASS MANAGER QUI GERE TOUT */
 class Manager{
 private:
-    static Manager* InstanceUnique;
-
-    unsigned int nbNotes;
+    static Manager* InstanceUnique; /**< L'unique Manager : Singleton */
+    static unsigned long nextNoteID; /**< La prochaine note qui sera crée se verra attribuer cet ID */
+    unsigned int nbNotes; /**< Tableau de Notes */
     unsigned int nbNotesMax;
     Note** notes;
-
-    unsigned int nbRelations;
+    unsigned int nbRelations; /**< Tableau de Relations */
     unsigned int nbRelationsMax;
     Relation** relations;
-
-    Manager(): nbNotes(0), nbNotesMax (5), notes(new Note*[nbNotesMax]), nbRelations(0), nbRelationsMax(5), relations(new Relation*[100]){};
-    Manager(const Manager&);
-    void operator=(const Manager&);
-    ~Manager();
-
+    Manager(): nbNotes(0), nbNotesMax(5), notes(new Note*[nbNotesMax]), nbRelations(0), nbRelationsMax(5), relations(new Relation*[100]){} /**< Constructeur de Manager */
+    Manager(const Manager&); /**< Constructeur de recopie de Manager */
+    void operator=(const Manager&); /**< Surcharge de l'operateur = pour affecter un Manager */
+    ~Manager(); /**< Destructeur Manager */
+    void ajouterNote(Note& n); /**< Methode pour ajouter une Note, utilisee dans les methodes de creation et d'edition d'article/tache/multimedia */
 public:
+    /**< Template Method Singleton */
     static Manager& donneInstance();
     static void libereInstance();
-
-   class IteratorNotes{
-   private:
+    /**< Iterateur pour notes */
+    class IteratorNotes{
+    private:
         friend class Manager;
         Note** currentN;
         int remain;
         IteratorNotes(Note** t, int n): currentN(t), remain(n){}
-   public:
+    public:
        bool isDone() const { return !remain; }
        void next();
        Note& current() const;
     };
-
+    IteratorNotes getIteratorNotes() const {return IteratorNotes(notes, nbNotes);}
+    /**< Iterateur constant pour notes  */
     class ConstIteratorNotes{
     private:
         friend class Manager;
@@ -167,50 +197,58 @@ public:
        void next();
        const Note& current() const;
     };
-
-    IteratorNotes begin() const {return IteratorNotes(notes, nbNotes);}
-    IteratorNotes end()const{return IteratorNotes(notes+nbNotes,0);}
-    IteratorNotes begin1()const{return IteratorNotes(notes-1,nbNotes);}
-    IteratorNotes end1() const{return IteratorNotes(notes+nbNotes-1,0);}
-    int getnbNotes()const {return nbNotes;}
-    int getnbRelations() const {return nbRelations;}
+    ConstIteratorNotes getConstIteratorNotes() const {return ConstIteratorNotes(notes, nbNotes);}
+    /**< Iterateur pour relations */
+    class IteratorRelations{
+    private:
+        friend class Manager;
+        Relation** currentR;
+        int remain;
+        IteratorRelations(Relation** t, int n): currentR(t), remain(n){}
+    public:
+        bool isDone() const { return !remain; }
+        void next();
+        Relation& current() const;
+    };
+    IteratorRelations getIteratorRelations() const {return IteratorRelations(relations, nbRelations);}
+    /**< Iterateur constant pour relations  */
+    class ConstIteratorRelations{
+    private:
+        friend class Manager;
+        Relation** currentR;
+        int remain;
+        ConstIteratorRelations(Relation** t, int n): currentR(t), remain(n){}
+    public:
+        bool isDone() const { return !remain; }
+        void next();
+        const Relation& current() const;
+    };
+    ConstIteratorRelations getConstIteratorRelations() const {return ConstIteratorRelations(relations, nbRelations);}
+    /**< Je sais pas quoi ecrire */
+    int getNbNotes()const {return nbNotes;}
+    int getNbRelations() const {return nbRelations;}
     Reference& getReference();
-    Note* SearchID(unsigned long id);
-
-    void Affichertout() const;
-
-    Article& NewArticle(const unsigned long i, const std::string& ti, const std::string& te="");
-    Tache& NewTache(const unsigned long i, const std::string& ti, const std::string& act, int prio =0, Date d =Date (1,1,0));
-    Multimedia& NewMultimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image);
-
+    Note* searchID(unsigned long id);
+    /**< Methode pour afficher toutes les notes */
+    void afficherTout() const;
+    /**< Methodes pour ajouter un Article/Tache/Multimedia au tableau de notes*/
+    void newArticle(const std::string& ti, const std::string& te=""); /**< creation d'un article */
+    void newTache(const std::string& ti, const std::string& act, int prio=0, Date d=Date(1,1,0)); /**< creation d'une tache */
+    void newMultimedia(const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image); /**< creation d'un multimedia */
+    /**< Methode pour editer une note */
+    void editNote(Note& n);
+    /**< Methodes d'edition inutiles pour l'instant mais je prefere garder au cas ou */
     Article& editTexteArticle(Article& A, const std::string& s);
     Tache& editActionTache(Tache& T, const std::string& s);
     Tache& editStatutTache(Tache& T, TacheStatut s);
     Tache& editPrioriteTache(Tache& T, int p);
     Tache& editEcheanceTache(Tache& T, TIME::Date d);
     Multimedia& editFichierMultimedia(Multimedia& M, const std::string s);
-
-    Manager& operator<<(Note& n);
-
+    /**< Methodes d'ajout de Relation/Reference */
     void addRelation(Relation& r);
     void addCoupleRelation(Relation& r, Couple& c);
     void addCoupleReference(Couple& c);
     void AddRefsFromNote(Note& N);
-};
-
-
-std::ostream& operator<<(std::ostream& f , const Note& n);
-
-
-
-//Classe d'Exception
-
-class NoteException{
-private:
-    std::string info;
-public:
-    NoteException(const std::string& s): info(s){}
-    std::string getInfo() const {return info;}
 };
 
 #endif /* PluriNotes_h */

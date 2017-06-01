@@ -1,9 +1,10 @@
 #include "PluriNotes.h"
-#include "Relations.h"
 
 using namespace TIME;
 
-Note::Note(Note& n){    // Voir si on le supprime ou non, lors du débuggage (peut être qu'il est nécessaire car on a aussi le constructeur de recopie avec const
+/**< CONSTRUCTEUR DE RECOPIE DE LA CLASS NOTE */
+
+Note::Note(Note& n){
     ID = n.ID;
     titre = n.titre;
     dateCrea = n.dateCrea;
@@ -14,6 +15,8 @@ Note::Note(Note& n){    // Voir si on le supprime ou non, lors du débuggage (pe
     actuel = true;
     n.setAncienne();
 }
+
+/**< METHODES D'AFFICHAGE DES DIFFERENTES NOTES */
 
 void Note::afficher(std::ostream& f) const {
     f<<"\n------ "<<typeid(*this).name()<<" "<<ID<<(actuel?" (Version Actuelle)":" (Ancienne Version)")<<" ------\n";
@@ -48,7 +51,6 @@ void Tache::afficherSpecifique(std::ostream& f) const {
     if (echeance.getAnnee()!=0 || echeance.getMois()!=1 || echeance.getJour()!=1  ){
     f<<"\nEcheance : "<<echeance;
     }
-
 }
 
 void Multimedia::afficherSpecifique(std::ostream& f) const {
@@ -66,70 +68,192 @@ std::ostream& operator<<(std::ostream& f, const Note& n) {
         return f;
 }
 
+void Manager::afficherTout()const{
+    for(ConstIteratorNotes it=getConstIteratorNotes();!it.isDone();it.next()) std::cout<<it.current()<<std::endl;
+}
+
+/**< TEMPLATE METHOD SINGLETON POUR LA CLASS MANAGER */
+
+Manager* Manager::InstanceUnique=nullptr;
+
+Manager& Manager::donneInstance(){
+    if (InstanceUnique==nullptr) InstanceUnique = new Manager;
+    return *InstanceUnique;
+}
+
+void Manager::libereInstance(){
+    if (InstanceUnique!=nullptr)
+        delete InstanceUnique;
+    InstanceUnique=nullptr;
+}
+
+Manager::~Manager(){
+
+    for(unsigned int i = 0; i<nbNotes;i++){
+        delete notes[i]; //un destructeur virtuel pour Note à definir à 'mment donné il me semble
+    }
+    delete[] notes;
+
+    for(unsigned int i = 0; i<nbRelations;i++){
+        delete relations[i];
+    }
+    delete[] relations;
+}
+
+/**< TEMPLATE METHOD ITERATOR DANS LA CLASSE MANAGER POUR LES NOTES */
+
 void Manager::IteratorNotes::next(){
-    if(isDone()) throw NoteException("\nIteratorNotes isDone !\n");
+    if(isDone()) throw NoteException("\nnext() sur un IteratorNotes fini !\n");
     remain--;
     currentN++;
 }
 
 Note& Manager::IteratorNotes::current() const{
-    if(isDone()) throw NoteException("\nIteratorNotes isDone !\n");
+    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
     return **currentN;
 }
 
 void Manager::ConstIteratorNotes::next(){
-    if(isDone()) throw NoteException("\nIteratorNotes isDone !\n");
+    if(isDone()) throw NoteException("\nnext() sur un ConstIteratorNotes fini !\n");
     remain--;
     currentN++;
 }
 
 const Note& Manager::ConstIteratorNotes::current() const{
-    if(isDone()) throw NoteException("\nIteratorNotes isDone !\n");
+    if(isDone()) throw NoteException("\ncurrent() sur un ConstIteratorNotes fini !\n");
     return **currentN;
 }
 
-void Manager::Affichertout()const{
-    for(IteratorNotes it=begin();it!=end();++it ){
-        std::cout<<*it<<std::endl;
-    }
+/**< TEMPLATE METHOD ITERATOR DANS LA CLASSE MANAGER POUR LES RELATIONS */
+
+void Manager::IteratorRelations::next(){
+    if(isDone()) throw NoteException("\nnext() sur un IteratorRelation fini !\n");
+    remain--;
+    currentR++;
 }
 
-Manager& Manager::operator<<(Note& n){
+Relation& Manager::IteratorRelations::current() const{
+    if(isDone()) throw NoteException("\ncurrent() sur un IteratorRelation fini !\n");
+    return **currentR;
+}
+
+void Manager::ConstIteratorRelations::next(){
+    if(isDone()) throw NoteException("\nnext() sur un ConstIteratorRelation fini !\n");
+    remain--;
+    currentR++;
+}
+
+const Relation& Manager::ConstIteratorRelations::current() const{
+    if(isDone()) throw NoteException("\ncurrent() sur un ConstIteratorRelation fini !\n");
+    return **currentR;
+}
+
+/**< METHODES DE CREATION DES DIFFERENTS NOTES */
+
+unsigned long Manager::nextNoteID = 0;
+
+void Manager::newArticle(const std::string& ti, const std::string& te){
+    Article* a=new Article(nextNoteID++,ti,te);
+    ajouterNote(*a);
+}
+
+void Manager::newTache(const std::string& ti, const std::string& act, int prio, Date d){
+    Tache* a=new Tache(nextNoteID++,ti,act,prio,d);
+    ajouterNote(*a);
+}
+
+void Manager::newMultimedia(const std::string& ti, const std::string& adr, const std::string& desc, TypeMultimedia ty){
+    Multimedia* a=new Multimedia(nextNoteID++,ti,adr,ty,desc);
+    ajouterNote(*a);
+}
+
+void Manager::ajouterNote(Note& n){
     if(nbNotes == nbNotesMax){
         Note** newtab = new Note* [Manager::nbNotesMax+5];
         for(unsigned int i=0;i<nbNotes;i++) newtab[i] = notes[i];
-        nbNotesMax += 5;
         Note** oldtab = notes;
         notes = newtab;
+        nbNotesMax += 5;
         delete[] oldtab;
     }
     notes[nbNotes++] = &n;
-    return *this;
 };
 
+/**< DEMANDES D'EDITION DES DIFFERENTS NOTES */
+/**< MODIFIER LES CIN/COUT LORS DE LA MISE EN PLACE DE QT */
 
-Article& Manager::NewArticle(const unsigned long i, const std::string& ti, const std::string& te){
-    Article* a=new Article(i,ti,te);
-    this->operator<<(*a);
+void Manager::editNote(Note& n){
+    Note& n2=n.edit();
+    ajouterNote(n2);
+}
+
+Article& Article::edit(){
+    std::string newTitle;
+    std::string newText;
+    std::cout<<"\nAncien titre : "<<this->getTitre()<<"\tNouveau titre : ";
+    std::cin>>newTitle;
+    std::cout<<"\nAncien texte : "<<this->getTexte()<<"\tNouveau texte : ";
+    std::cin>>newText;
+    Article* a=new Article(*this);
+    a->setTitre(newTitle);
+    a->setTexte(newText);
     return *a;
 }
 
-Tache& Manager::NewTache(const unsigned long i, const std::string& ti, const std::string& act, int prio, Date d){
-    Tache* a=new Tache(i,ti,act,prio,d);
-    this->operator<<(*a);
-    return *a;
+Tache& Tache::edit(){
+    std::string newTitle;
+    std::string newAction;
+    int newPriorite;
+    TIME::Date newEcheance;
+    std::cout<<"\nAncien titre : "<<this->getTitre()<<"\tNouveau titre : ";
+    std::cin>>newTitle;
+    std::cout<<"\nAncienne action : "<<this->getAction()<<"\tNouvelle action : ";
+    std::cin>>newAction;
+    std::cout<<"\nAncienne priorite : "<<this->getPriorite()<<"\tNouvelle priorite : ";
+    std::cin>>newPriorite;
+    std::cout<<"\nAncienne date d'echeance : "<<this->getEcheance()<<"\tNouvelle date d'echeance : ";
+    std::cin>>newEcheance;
+    Tache* t=new Tache(*this);
+    t->setTitre(newTitle);
+    t->setAction(newAction);
+    t->setPriorite(newPriorite);
+    t->setEcheance(newEcheance);
+    return *t;
 }
 
-Multimedia& Manager::NewMultimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc, TypeMultimedia ty){
-    Multimedia* a=new Multimedia(i,ti,adr,ty,desc);
-    this->operator<<(*a);
-    return *a;
+Multimedia& Multimedia::edit(){
+    std::string newTitle;
+    std::string newAdresseFichier;
+    std::string newTypeString;
+    TypeMultimedia newType;
+    std::string newDescription;
+    std::cout<<"\nAncien titre : "<<this->getTitre()<<"\tNouveau titre : ";
+    std::cin>>newTitle;
+    std::cout<<"\nAncienne adresse fichier : "<<this->getAdresseFichier()<<"\tNouvelle adresse fichier : ";
+    std::cin>>newAdresseFichier;
+    do{
+        std::cout<<"\nAncienne type : "<<this->getType()<<"\tNouveau type (choisir entre image/video/audio) : ";
+        std::cin>>newTypeString;
+    }while(newTypeString!="image" && newTypeString!="video" && newTypeString!="audio");
+    if(newTypeString=="image") newType=image;
+    if(newTypeString=="video") newType=video;
+    if(newTypeString=="audio") newType=audio;
+    std::cout<<"\nAncienne description : "<<this->getDescription()<<"\tNouvelle description : ";
+    std::cin>>newDescription;
+    Multimedia* m=new Multimedia(*this);
+    m->setTitre(newTitle);
+    m->setAdresseFichier(newAdresseFichier);
+    m->setType(newType);
+    m->setDescription(newDescription);
+    return *m;
 }
+
+/**< METHODES D'AJOUT DE RELATIONS */
 
 void Manager::addRelation(Relation& r){
     if (nbRelations==nbRelationsMax){
         Relation** newtab= new Relation* [nbRelationsMax+5];
-        for(int i=0; i<nbRelations;i++){
+        for(unsigned int i=0; i<nbRelations;i++){
             newtab[i]=relations[i];
         }
         nbRelationsMax=nbRelationsMax+5;
@@ -145,26 +269,15 @@ void Manager::addCoupleRelation(Relation& r, Couple& c) {
     r.addCouple(c);
 }
 
-Manager::~Manager(){
-
-    for(unsigned int i = 0; i<nbNotes;i++){
-        delete notes[i]; //un destructeur virtuel pour Note à definir à 'mment donné il me semble
-    }
-    delete [] notes;
-
-    for(unsigned int i = 0; i<nbRelations;i++){
-        delete relations[i];
-    }
-    delete [] relations;
-}
+/**< TEMPLATE METHOD SINGLETON POUR LA CLASS REFERENCE */
 
 Reference& Manager::getReference() {
     Reference& R=Reference::donneInstance();
     return R;
 }
 
-//Recherche de notes à partir d'un ID
-Note* Manager::SearchID(unsigned long id){
+/**< Methode permettant de rechercher une note à partir d'un ID */
+Note* Manager::searchID(unsigned long id){
     for (unsigned int i=0; i<nbNotes;i++){
         if (notes[i]->getID()==id){
             if (notes[i]->getActuel()) {
@@ -175,15 +288,14 @@ Note* Manager::SearchID(unsigned long id){
     return nullptr;
 }
 
-//EDITEURS DE NOTES DE LA CLASSE MANAGER CREANT UNE NOUVELLE VERSION DE LA NOTES ET L AJOUTANT AU TABLEAU notes DU MANAGER (PARTIE 1.2 DU SUJET DE PROJET):
-
+/**< Methodes d'edition inutiles pour l'instant mais je prefere garder au cas ou */
 
 Article& Manager::editTexteArticle(Article& A, const std::string& s) {
     Article* a= new Article(A);
     a->setTexte(s);
     a->setActuel();
     A.setAncienne();
-    *this<<*a;
+    ajouterNote(*a);
     return *a;
 }
 
@@ -192,7 +304,7 @@ Tache& Manager::editActionTache(Tache& T, const std::string& s){
     t->setAction(s);
     t->setActuel();
     T.setAncienne();
-    *this<<*t;
+    ajouterNote(*t);
     return *t;
 };
 
@@ -201,7 +313,7 @@ Tache& Manager::editStatutTache(Tache& T, TacheStatut s){
     t->setStatut(s);
     t->setActuel();
     T.setAncienne();
-    *this<<*t;
+    ajouterNote(*t);
     return *t;
 };
 
@@ -210,7 +322,7 @@ Tache& Manager::editPrioriteTache(Tache& T, int p){
     t->setPriorite(p);
     t->setActuel();
     T.setAncienne();
-    *this<<*t;
+    ajouterNote(*t);
     return *t;};
 
 Tache& Manager::editEcheanceTache(Tache& T, TIME::Date d){
@@ -218,7 +330,7 @@ Tache& Manager::editEcheanceTache(Tache& T, TIME::Date d){
     t->setEcheance(d);
     t->setActuel();
     T.setAncienne();
-    *this<<*t;
+    ajouterNote(*t);
     return *t;
 };
 
@@ -227,28 +339,9 @@ Multimedia& Manager::editFichierMultimedia(Multimedia& M, const std::string s){
     m->setAdresseFichier(s);
     m->setActuel();
     M.setAncienne();
-    *this<<*m;
+    ajouterNote(*m);
     return *m;
 };
-
-
-
-
-
-//Singleton pour classe Manager
-
-Manager* Manager::InstanceUnique=nullptr;
-
-Manager& Manager::donneInstance(){
-    if (InstanceUnique==nullptr) InstanceUnique= new Manager;
-    return *InstanceUnique;
-}
-
-void Manager::libereInstance(){
-    if (InstanceUnique!=nullptr)
-        delete InstanceUnique;
-    InstanceUnique=nullptr;
-}
 
 //Ajouter un couple à la relation reference
 
@@ -263,7 +356,7 @@ void Note::AddRefs(Manager& m){
     unsigned long ID=findRefID(this->getTitre(), 0);
     int pos=0;
     while (ID!=0){
-        Note* N=m.SearchID(ID);
+        Note* N=m.searchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
             m.addCoupleReference(*C);
@@ -280,7 +373,7 @@ void Tache::AddRefsSpecifique(Manager& m){
     unsigned long ID=findRefID(this->getAction(), 0);
     int pos=0;
     while (ID!=0){
-        Note* N=m.SearchID(ID);
+        Note* N=m.searchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
             m.addCoupleReference(*C);
@@ -295,7 +388,7 @@ void Article::AddRefsSpecifique(Manager& m){
     unsigned long ID=findRefID(this->getTexte(), 0);
     int pos=0;
     while (ID!=0){
-        Note* N=m.SearchID(ID);
+        Note* N=m.searchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
             m.addCoupleReference(*C);
@@ -310,7 +403,7 @@ void Multimedia::AddRefsSpecifique(Manager& m){
     unsigned long ID=findRefID(this->getDescription(), 0);
     int pos=0;
     while (ID!=0){
-        Note* N=m.SearchID(ID);
+        Note* N=m.searchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
             m.addCoupleReference(*C);

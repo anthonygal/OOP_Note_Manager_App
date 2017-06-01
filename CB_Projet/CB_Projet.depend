@@ -71,35 +71,31 @@
 	<string>
 	"timing.h"
 
-1496243814 source:d:\git\lo21proj\projetlo21\cb_projet\main.cpp
+1496358306 source:d:\git\lo21proj\projetlo21\cb_projet\main.cpp
 	"timing.h"
 	"PluriNotes.h"
-	"Relations.h"
 
-1496242603 d:\git\lo21proj\projetlo21\cb_projet\timing.h
+1496353325 d:\git\lo21proj\projetlo21\cb_projet\timing.h
 	<iostream>
 	<iomanip>
 	<ctime>
 
-1496243744 d:\git\lo21proj\projetlo21\cb_projet\plurinotes.h
+1496362450 d:\git\lo21proj\projetlo21\cb_projet\plurinotes.h
 	"timing.h"
 	"Relations.h"
 	<string>
 	<typeinfo>
-
-1496243840 source:d:\git\lo21proj\projetlo21\cb_projet\plurinotes.cpp
-	"PluriNotes.h"
-	"Relations.h"
-
-1495496404 source:d:\git\lo21proj\projetlo21\cb_projet\timing.cpp
-	"timing.h"
-	<ctime>
-
-1496181432 d:\git\lo21proj\projetlo21\cb_projet\relations.h
-	"timing.h"
-	"PluriNotes.h"
 	<sstream>
 
-1496176395 source:d:\git\lo21proj\projetlo21\cb_projet\relations.cpp
+1496361290 source:d:\git\lo21proj\projetlo21\cb_projet\plurinotes.cpp
+	"PluriNotes.h"
+
+1496354642 source:d:\git\lo21proj\projetlo21\cb_projet\timing.cpp
+	"timing.h"
+
+1496362328 d:\git\lo21proj\projetlo21\cb_projet\relations.h
+	"PluriNotes.h"
+
+1496358044 source:d:\git\lo21proj\projetlo21\cb_projet\relations.cpp
 	"Relations.h"
 

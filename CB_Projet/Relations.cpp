@@ -2,18 +2,17 @@
 
 // RELATIONS ENTRE NOTES
 
-
 Relation::Relation(const std::string& t, const std::string& d, bool o){
     titre=t;
     description=d;
-    orientation=o;
+    orientee=o;
     couples=new Couple*[5];
     nbCouples=0;
     nbMaxCouples=5;
 };
 
 Relation::~Relation(){
-    for(unsigned int i = 0; i<nbCouples;i++){
+    for(unsigned int i=0; i<nbCouples;i++){
         delete couples[i];}
     delete[] couples;
 }
@@ -21,7 +20,7 @@ Relation::~Relation(){
 void Relation::addCouple(Couple& c){
     if (nbCouples==nbMaxCouples){
         Couple** newtab= new Couple* [nbMaxCouples+5];
-        for(int i=0; i<nbCouples;i++){
+        for(unsigned int i=0; i<nbCouples;i++){
             newtab[i]=couples[i];
         }
 
@@ -43,7 +42,7 @@ unsigned long findRefID(const std::string& s, int p){
 
     unsigned long i=s.find("ref{", p);
 
-    if (i==p) return 0;
+    if(i==p) return 0;
     else {
         i+=4;
         char c=s[i];
