@@ -33,7 +33,6 @@ namespace TIME {
 
 		Date(unsigned int short j=1, unsigned int short m=1, unsigned int a=0):jour(1),mois(1),annee(0){ setDate(j,m,a); }
 
-
 		// méthodes
 		unsigned short int  getJour() const { return jour; } //<! Retourne le jour de la date
 		unsigned short int  getMois() const { return mois; } //<! Retourne le mois de la date

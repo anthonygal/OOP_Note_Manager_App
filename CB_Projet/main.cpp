@@ -8,8 +8,8 @@ int main()
 {
     // insert code here... modification test
 
-    Article a(3,"soucis","yooo");
-    Article a2(a);
+    Tache a(3,"soucis","action",1,Date(03,06,2017));
+    Tache a2(a);
     std::cout<<a<<a2;
 //
 //    Manager& m=Manager::donneInstance();

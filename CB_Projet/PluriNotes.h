@@ -84,7 +84,7 @@ private:
     TIME::Date echeance;
 
 public:
-    Tache(const unsigned long i, const std::string& ti, const std::string& act, int prio =0, Date d =Date (1,1,0)):Note(i,ti),action(act),statut(encours), priorite(prio), echeance(d){}
+    Tache(const unsigned long i, const std::string& ti, const std::string& act, int prio =0, Date d =Date(1,1,0)):Note(i,ti),action(act),statut(encours), priorite(prio), echeance(d){}
     Tache(Tache& t):Note(t),action(t.action),statut(t.statut),priorite(t.priorite),echeance(t.echeance){}
 
     std::string getAction() const { return action; }
@@ -103,11 +103,11 @@ public:
 class Multimedia: public Note{
 private:
     std::string adresseFichier;
-    std::string description;
     TypeMultimedia type;
+    std::string description;
 
 public:
-    Multimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc="", TypeMultimedia ty=image):Note(i,ti),adresseFichier(adr),description(desc),type(ty){}
+    Multimedia(const unsigned long i, const std::string& ti, const std::string& adr, TypeMultimedia ty=image, const std::string& desc=""):Note(i,ti),adresseFichier(adr),type(ty),description(desc){}
     Multimedia(Multimedia& m):Note(m),adresseFichier(m.adresseFichier),description(m.description),type(m.type){}
 
     std::string getAdresseFichier() const { return adresseFichier; }
@@ -125,6 +125,8 @@ public:
 
 class Manager{
 private:
+    static Manager* InstanceUnique;
+
     unsigned int nbNotes;
     unsigned int nbNotesMax;
     Note** notes;
@@ -133,31 +135,40 @@ private:
     unsigned int nbRelationsMax;
     Relation** relations;
 
-    static Manager* InstanceUnique;
-
-    Manager(): nbNotes(0), nbNotesMax (5), nbRelations(0), nbRelationsMax(5), notes (new Note*[nbNotesMax]), relations (new Relation*[100]){};
+    Manager(): nbNotes(0), nbNotesMax (5), notes(new Note*[nbNotesMax]), nbRelations(0), nbRelationsMax(5), relations(new Relation*[100]){};
     Manager(const Manager&);
     void operator=(const Manager&);
-    virtual ~Manager();
+    ~Manager();
 
 public:
-
     static Manager& donneInstance();
     static void libereInstance();
 
-   class IteratorNotes {
+   class IteratorNotes{
    private:
         friend class Manager;
-        int nb;
-        Note** courant;
-        IteratorNotes (Note** t, int n): courant(t), nb(n){}
+        Note** currentN;
+        int remain;
+        IteratorNotes(Note** t, int n): currentN(t), remain(n){}
    public:
-       bool operator!=(const IteratorNotes& it) {return courant!=it.courant;}
-       Note& operator*() {return **courant;}
-       IteratorNotes& operator++() {courant++; return *this;}
-       IteratorNotes& operator--() {courant--; return *this;}
-   } ;
-    IteratorNotes begin()const{return IteratorNotes(notes, nbNotes);}
+       bool isDone() const { return !remain; }
+       void next();
+       Note& current() const;
+    };
+
+    class ConstIteratorNotes{
+    private:
+        friend class Manager;
+        Note** currentN;
+        int remain;
+        ConstIteratorNotes(Note** t, int n): currentN(t), remain(n){}
+    public:
+       bool isDone() const { return !remain; }
+       void next();
+       const Note& current() const;
+    };
+
+    IteratorNotes begin() const {return IteratorNotes(notes, nbNotes);}
     IteratorNotes end()const{return IteratorNotes(notes+nbNotes,0);}
     IteratorNotes begin1()const{return IteratorNotes(notes-1,nbNotes);}
     IteratorNotes end1() const{return IteratorNotes(notes+nbNotes-1,0);}

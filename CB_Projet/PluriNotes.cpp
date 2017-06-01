@@ -45,18 +45,20 @@ void Tache::afficherSpecifique(std::ostream& f) const {
     if (priorite!=0){
     f<<"\nPriorite : "<<priorite;
     }
-    if (echeance.getAnnee()!=0 || echeance.getMois()!=1 ||echeance.getJour()!=1  ){
+    if (echeance.getAnnee()!=0 || echeance.getMois()!=1 || echeance.getJour()!=1  ){
     f<<"\nEcheance : "<<echeance;
     }
 
 }
 
-void Multimedia::afficherSpecifique(std::ostream& f) const {}
-
-void Manager::Affichertout()const{
-    for(IteratorNotes it=begin();it!=end();++it ){
-        std::cout<<*it<<std::endl;
-    }
+void Multimedia::afficherSpecifique(std::ostream& f) const {
+    f<<"\nAdresseFichier : "<<adresseFichier;
+    f<<"\nDescription : "<<description;
+    f<<"\nType : ";
+    switch(type){
+        case 0: f<<"image"; break;
+        case 1: f<<"video"; break;
+        case 2: f<<"audio"; break;}
 }
 
 std::ostream& operator<<(std::ostream& f, const Note& n) {
@@ -64,8 +66,35 @@ std::ostream& operator<<(std::ostream& f, const Note& n) {
         return f;
 }
 
+void Manager::IteratorNotes::next(){
+    if(isDone()) throw NoteException("\nIteratorNotes isDone !\n");
+    remain--;
+    currentN++;
+}
 
- Manager& Manager::operator<<(Note& n){
+Note& Manager::IteratorNotes::current() const{
+    if(isDone()) throw NoteException("\nIteratorNotes isDone !\n");
+    return **currentN;
+}
+
+void Manager::ConstIteratorNotes::next(){
+    if(isDone()) throw NoteException("\nIteratorNotes isDone !\n");
+    remain--;
+    currentN++;
+}
+
+const Note& Manager::ConstIteratorNotes::current() const{
+    if(isDone()) throw NoteException("\nIteratorNotes isDone !\n");
+    return **currentN;
+}
+
+void Manager::Affichertout()const{
+    for(IteratorNotes it=begin();it!=end();++it ){
+        std::cout<<*it<<std::endl;
+    }
+}
+
+Manager& Manager::operator<<(Note& n){
     if(nbNotes == nbNotesMax){
         Note** newtab = new Note* [Manager::nbNotesMax+5];
         for(unsigned int i=0;i<nbNotes;i++) newtab[i] = notes[i];
@@ -92,7 +121,7 @@ Tache& Manager::NewTache(const unsigned long i, const std::string& ti, const std
 }
 
 Multimedia& Manager::NewMultimedia(const unsigned long i, const std::string& ti, const std::string& adr, const std::string& desc, TypeMultimedia ty){
-    Multimedia* a=new Multimedia(i,ti,adr,desc,ty);
+    Multimedia* a=new Multimedia(i,ti,adr,ty,desc);
     this->operator<<(*a);
     return *a;
 }
