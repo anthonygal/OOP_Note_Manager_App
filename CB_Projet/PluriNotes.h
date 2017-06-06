@@ -227,6 +227,7 @@ public:
     /**< Je sais pas quoi ecrire */
     int getNbNotes()const {return nbNotes;}
     int getNbRelations() const {return nbRelations;}
+    Note** getNotes() const {return notes;}
     Reference& getReference();
     Note* searchID(unsigned long id);
     /**< Methode pour afficher toutes les notes */
@@ -249,6 +250,10 @@ public:
     void addCoupleRelation(Relation& r, Couple& c);
     void addCoupleReference(Couple& c);
     void AddRefsFromNote(Note& N);
+    //Methode permettant de savoir si une note est referencee
+    bool isReferenced(const Note& N) const;
+    //Supression ou Archivage de Note
+    void supprimer(Note& N);
 };
 
 #endif /* PluriNotes_h */

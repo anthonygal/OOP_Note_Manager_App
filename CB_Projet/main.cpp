@@ -6,28 +6,28 @@ using namespace TIME;
 int main()
 {
     // insert code here... modification test
-    Article* a = new Article(4,"test","try");
+    Article* a = new Article(4,"test ref{0} ","try ");
     std::cout<<*a;
     delete a;
 
     Manager& m=Manager::donneInstance();
     m.newTache("soucis","action",1,Date(03,06,2017));
-    m.newArticle("souciss","pluie");
+    m.newArticle("souciss","pluie ref{1}");
     for(Manager::IteratorNotes it=m.getIteratorNotes();!it.isDone();it.next()){
       if(it.current().getTitre()=="souciss") m.editNote(it.current());
     }
     for(Manager::ConstIteratorNotes it=m.getConstIteratorNotes();!it.isDone();it.next()){
       std::cout<<it.current();
     }
-    m.libereInstance();
-
+    
+    m.AddRefsFromNote(*a);
+  
+   
 
 //
 //    Manager& m=Manager::donneInstance();
 //
 //
-//    Article& a=m.NewArticle(3,"soucis","yooo");
-//    Article& a2=m.NewArticle(5,"soucis2","trop de problemes ref{3}hjh");
 //    Article& a3=m.NewArticle(6,"soucis3","trop de problemes");
 //    Article& a4=m.NewArticle(12,"soucis4","trop de problemes");
 //    Article& a5=m.NewArticle(8,"soucis5","trop de problemes");
@@ -83,6 +83,8 @@ int main()
 //
 //
 //    //std::cout<<"\ntype de a : "<<typeid(a).name()<<"\n"; //Ca affiche un chiffre devant la classe mais je n'arrive pas � l'enlever...
+    
+    m.libereInstance();
 
     return 0;
 }

@@ -63,6 +63,7 @@ private:
     static Reference& donneInstance();
     static void libereInstance();
 
+
  };
 
 

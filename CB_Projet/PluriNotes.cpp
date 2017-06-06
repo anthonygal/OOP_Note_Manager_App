@@ -419,3 +419,50 @@ void Multimedia::AddRefsSpecifique(Manager& m){
 void Manager::AddRefsFromNote(Note& N){
     N.AddRefs(*this);
 }
+
+//Methode permettant de savoir si une note est referencee
+
+bool Manager::isReferenced(const Note& N) const{
+    Reference& R=Reference::donneInstance();
+    if (R.getnbCouples()==0) return false;
+    Couple* c=*(R.getCouples());
+    Note* a;
+    Note* b;
+    int i=0;
+    while (i<R.getnbCouples()) {
+        a=c->getNote1();
+        b=c->getNote2();
+        if ((a->getID()==N.getID() && a->getActuel()) || (b->getID()==N.getID() && b->getActuel())) return true;
+        i++;
+    }
+    return false;
+}
+
+//Suppression Archivage
+
+void Manager::supprimer(Note& N){
+    if (isReferenced(N)) {
+        N.setEtat(archivee);
+        N.setAncienne();
+        int i=0;
+        while (i<nbNotes){
+            if (notes[i]->getID()==N.getID()){
+                notes[i]->setAncienne();
+                notes[i]->setEtat(archivee);
+            }
+            i++;
+        }
+    }
+    else {
+        
+        N.setEtat(corbeille);
+        int i=0;
+        while (i<nbNotes){
+            if (notes[i]->getID()==N.getID()){
+                notes[i]->setAncienne();
+                notes[i]->setEtat(corbeille);
+            }
+            i++;
+        }
+    }
+}

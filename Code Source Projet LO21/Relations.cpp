@@ -101,3 +101,5 @@ void Reference::libereInstance(){
     if (instanceUnique!=0) delete instanceUnique;
     instanceUnique=nullptr;
 }
+
+
