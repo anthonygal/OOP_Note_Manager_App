@@ -254,6 +254,7 @@ public:
     bool isReferenced(const Note& N) const;
     //Supression ou Archivage de Note
     void supprimer(Note& N);
+    void viderCorbeille();
 };
 
 #endif /* PluriNotes_h */

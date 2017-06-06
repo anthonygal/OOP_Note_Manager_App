@@ -5,10 +5,25 @@ using namespace TIME;
 
 int main()
 {
+    Manager& m=Manager::donneInstance();
+    m.newArticle("leTitre","leTexte");
+    m.newArticle("eltitolo","eltextotolo ref{0}");
+    std::cout<<**m.getNotes();
+    Note** N=m.getNotes();
+    
+    std::cout<<*N[1];
+    
+    m.supprimer(**m.getNotes());
+    std::cout<<**m.getNotes();
+    std::cout<<m.getNbNotes()<<"\n";
+    m.viderCorbeille();
+    std::cout<<m.getNbNotes()<<"\n";
+    std::cout<<**m.getNotes();
+    
     // insert code here... modification test
-    Article* a = new Article(4,"test ref{0} ","try ");
-    std::cout<<*a;
-    delete a;
+   
+  
+   /*
 
     Manager& m=Manager::donneInstance();
     m.newTache("soucis","action",1,Date(03,06,2017));
@@ -18,9 +33,9 @@ int main()
     }
     for(Manager::ConstIteratorNotes it=m.getConstIteratorNotes();!it.isDone();it.next()){
       std::cout<<it.current();
-    }
+    }*/
     
-    m.AddRefsFromNote(*a);
+   // m.AddRefsFromNote(*a);
   
    
 

@@ -466,3 +466,19 @@ void Manager::supprimer(Note& N){
         }
     }
 }
+
+void Manager::viderCorbeille(){
+    int i=0;
+    while (i<nbNotes){
+        if (notes[i]->getEtat()==corbeille){
+            Note* temp=notes[i];
+            for (int j=i; j<nbNotes-1; j++){
+                notes[j]=notes[j+1];
+            }
+            delete temp;
+            nbNotes--;
+        }
+        i++;
+    }
+}
+
