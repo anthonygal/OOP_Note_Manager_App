@@ -70,8 +70,8 @@ public:
    // void afficher(std::ostream& f = std::cout) const;
    // virtual void afficherSpecifique(std::ostream& f) const = 0;
     /**< Methodes pour ajouter des references */
-  //  void AddRefs(Manager& m);
-  //  virtual void AddRefsSpecifique(Manager& m)=0;
+    void AddRefs(Manager& m);
+    virtual void AddRefsSpecifique(Manager& m)=0;
 
     virtual void saveNote(QXmlStreamWriter& stream)const=0;
     QString NoteEtattoQString()const;
@@ -103,7 +103,7 @@ public:
     /**< Methode d'affichage specifique */
    // void afficherSpecifique(std::ostream& f) const;
     /**< Methode pour ajouter des references specifique */
-    //void AddRefsSpecifique(Manager& m);
+    void AddRefsSpecifique(Manager& m);
 
     void saveNote(QXmlStreamWriter& stream)const;
 
@@ -139,7 +139,7 @@ public:
     /**< Methode d'affichage specifique */
     //void afficherSpecifique(std::ostream& f) const;
     /**< Methode pour ajouter des references specifique */
-    //void AddRefsSpecifique(Manager& m);
+    void AddRefsSpecifique(Manager& m);
 
     void saveNote(QXmlStreamWriter& stream)const;
     void loadTache();
@@ -174,7 +174,7 @@ public:
     /**< Methode d'affichage specifique */
    // void afficherSpecifique(std::ostream& f) const;
     /**< Methode pour ajouter des references specifique */
-   // void AddRefsSpecifique(Manager& m);
+    void AddRefsSpecifique(Manager& m);
 
     void saveNote(QXmlStreamWriter& stream)const;
     void loadMultimedia();
@@ -276,10 +276,10 @@ public:
     Tache& editEcheanceTache(Tache& T, TIME::Date d);
     Multimedia& editFichierMultimedia(Multimedia& M, const QString s);
     /**< Methodes d'ajout de Relation/Reference */
-   // void addRelation(Relation& r);
-  //  void addCoupleRelation(Relation& r, Couple& c);
-  //  void addCoupleReference(Couple& c);
-  //  void AddRefsFromNote(Note& N);
+   void addRelation(Relation& r);
+  void addCoupleRelation(Relation& r, Couple& c);
+  void addCoupleReference(Couple& c);
+    void AddRefsFromNote(Note& N);
 
     void save()const;
     void load();

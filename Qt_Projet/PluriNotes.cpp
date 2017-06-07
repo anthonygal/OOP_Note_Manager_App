@@ -685,7 +685,7 @@ bool Note::QStringtoActuel(const QString & str){
 /**< METHODES D'AJOUT DE RELATIONS */
 
 
-/*
+
 void Manager::addRelation(Relation& r){
     if (nbRelations==nbRelationsMax){
         Relation** newtab= new Relation* [nbRelationsMax+5];
@@ -704,7 +704,7 @@ void Manager::addRelation(Relation& r){
 void Manager::addCoupleRelation(Relation& r, Couple& c) {
     r.addCouple(c);
 }
-*/
+
 
 /**< TEMPLATE METHOD SINGLETON POUR LA CLASS REFERENCE */
 
@@ -782,7 +782,7 @@ Multimedia& Manager::editFichierMultimedia(Multimedia& M, const QString s){
 
 //Ajouter un couple à la relation reference
 
-/*
+
 void Manager::addCoupleReference(Couple& c){
     Reference& R=this->getReference();
     R.addCouple(c);
@@ -804,11 +804,11 @@ void Note::AddRefs(Manager& m){
     }
     AddRefsSpecifique(m);
 }
-*/
+
 
 //AddrefsSpeacifique(Manager& m) Specifique a chaque sous class de Note
 
-/*
+
 void Tache::AddRefsSpecifique(Manager& m){
     unsigned long ID=findRefID(this->getAction(), 0);
     int pos=0;
@@ -860,4 +860,4 @@ void Multimedia::AddRefsSpecifique(Manager& m){
 void Manager::AddRefsFromNote(Note& N){
     N.AddRefs(*this);
 }
-*/
+

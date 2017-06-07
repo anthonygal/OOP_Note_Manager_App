@@ -8,11 +8,13 @@ HEADERS += \
     PluriNotes.h \
     Relations.h \
     timing.h \
-    NoteEditeur.h
+    NoteEditeur.h \
+    fenetreprincipale.h
 
 SOURCES += \
     main.cpp \
     PluriNotes.cpp \
     Relations.cpp \
     timing.cpp \
-    NoteEditeur.cpp
+    NoteEditeur.cpp \
+    fenetreprincipale.cpp
