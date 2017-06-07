@@ -793,7 +793,7 @@ void Manager::addCoupleReference(Couple& c){
 void Note::AddRefs(Manager& m){
     unsigned long ID=findRefID(this->getTitre(), 0);
     int pos=0;
-    while (ID!=0){
+    while (ID!=-1){
         Note* N=m.searchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
@@ -812,7 +812,7 @@ void Note::AddRefs(Manager& m){
 void Tache::AddRefsSpecifique(Manager& m){
     unsigned long ID=findRefID(this->getAction(), 0);
     int pos=0;
-    while (ID!=0){
+    while (ID!=-1){
         Note* N=m.searchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
@@ -827,7 +827,7 @@ void Tache::AddRefsSpecifique(Manager& m){
 void Article::AddRefsSpecifique(Manager& m){
     unsigned long ID=findRefID(this->getTexte(), 0);
     int pos=0;
-    while (ID!=0){
+    while (ID!=-1){
         Note* N=m.searchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
@@ -842,7 +842,7 @@ void Article::AddRefsSpecifique(Manager& m){
 void Multimedia::AddRefsSpecifique(Manager& m){
     unsigned long ID=findRefID(this->getDescription(), 0);
     int pos=0;
-    while (ID!=0){
+    while (ID!=-1){
         Note* N=m.searchID(ID);
         if (N!=nullptr) {
             Couple* C=new Couple(this,N,"");
@@ -861,3 +861,62 @@ void Manager::AddRefsFromNote(Note& N){
     N.AddRefs(*this);
 }
 
+bool Manager::isReferenced(const Note& N) const{
+    Reference& R=Reference::donneInstance();
+    if (R.getnbCouples()==0) return false;
+    Couple* c=*(R.getCouples());
+    Note* a;
+    Note* b;
+    int i=0;
+    while (i<R.getnbCouples()) {
+        a=c->getNote1();
+        b=c->getNote2();
+        if ((a->getID()==N.getID() && a->getActuel()) || (b->getID()==N.getID() && b->getActuel())) return true;
+        i++;
+    }
+    return false;
+}
+
+//Suppression Archivage et Vidage de Corbeille
+
+void Manager::supprimer(Note& N){
+    if (isReferenced(N)) {
+        N.setEtat(archivee);
+        N.setAncienne();
+        int i=0;
+        while (i<nbNotes){
+            if (notes[i]->getID()==N.getID()){
+                notes[i]->setAncienne();
+                notes[i]->setEtat(archivee);
+            }
+            i++;
+        }
+    }
+    else {
+        
+        N.setEtat(corbeille);
+        int i=0;
+        while (i<nbNotes){
+            if (notes[i]->getID()==N.getID()){
+                notes[i]->setAncienne();
+                notes[i]->setEtat(corbeille);
+            }
+            i++;
+        }
+    }
+}
+
+void Manager::viderCorbeille(){
+    int i=0;
+    while (i<nbNotes){
+        if (notes[i]->getEtat()==corbeille){
+            Note* temp=notes[i];
+            for (int j=i; j<nbNotes-1; j++){
+                notes[j]=notes[j+1];
+            }
+            delete temp;
+            nbNotes--;
+        }
+        i++;
+    }
+}

@@ -280,6 +280,11 @@ public:
   void addCoupleRelation(Relation& r, Couple& c);
   void addCoupleReference(Couple& c);
     void AddRefsFromNote(Note& N);
+    //Methode permettant de savoir si une note est referencee
+    bool isReferenced(const Note& N) const;
+    //Supression ou Archivage de Note
+    void supprimer(Note& N);
+    void viderCorbeille();
 
     void save()const;
     void load();
