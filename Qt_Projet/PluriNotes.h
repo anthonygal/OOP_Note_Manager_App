@@ -45,8 +45,7 @@ public:
     /**< Constructeurs */
     Note(const unsigned long i, const QString& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}
     Note(const unsigned long i, const QString& s, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e): ID(i), titre(s), dateCrea(dc), horaireCrea(hc),
-        dateModif(dm), horaireModif(hm), actuel(act),etat(e){}
-    
+        dateModif(dm), horaireModif(hm), etat(e), actuel(act){}
     Note(Note& n);
     /**< Destructeur */
     virtual ~Note(){};

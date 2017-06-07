@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notes>
+    <article>
+	 <id>1</id>
+	 <datecrea>12/10/2016</datecrea>
+	 <horairecrea>12/56</horairecrea>
+	 <datemodif>13/10/2016</datemodif>
+	 <horairemodif>11/45</horairemodif>
+	<etat>active</etat>
+	<actuel>true</actuel>
+        <titre>Avant Propos</titre>
+	<texte>aut toujours bien lire un sujet avant de commencer.</texte>
+    </article>
+    <tache>
+	 <id>2</id>
+	 <datecrea>12/09/2005</datecrea>
+	 <horairecrea>9/56</horairecrea>
+	 <datemodif>18/04/2006</datemodif>
+	 <horairemodif>07/45</horairemodif>
+	<etat>active</etat>
+	<actuel>true</actuel>
+        <titre>Avant Propos</titre>
+	<action>Faire a manger</action>
+	<priorite>2</priorite>
+	<echeance>19/05/2008</echeance>
+	<statut>terminee</statut>
+    </tache>
+    <multimedia>
+	 <id>3</id>
+	 <datecrea>08/01/2014</datecrea>
+	 <horairecrea>01/17</horairecrea>
+	 <datemodif>08/01/2014</datemodif>
+	 <horairemodif>01/17</horairemodif>
+	<etat>active</etat>
+	<actuel>true</actuel>
+        <titre>Avant Propos</titre>
+	<adressefichier>a mettre!</adressefichier>
+	<type>image</type>
+	<description>Pierre vacance chez mamie</description>
+    </multimedia>
+</notes>

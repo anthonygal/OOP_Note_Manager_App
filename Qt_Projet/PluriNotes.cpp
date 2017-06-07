@@ -268,7 +268,7 @@ void Manager::save()const{
         stream.setAutoFormatting(true);
         stream.writeStartDocument();
         stream.writeStartElement("notes");
-        for(int i=0; i<nbNotes; i++){
+        for(unsigned int i=0; i<nbNotes; i++){
             notes[i]->saveNote(stream);
         }
         stream.writeEndElement();
@@ -361,8 +361,8 @@ QString Multimedia::TypeMultimediatoQString() const{
 
 QString Note::ActueltoQString()const{
     QString str="";
-    if (actuel==true){str='true';}
-    else{str='false';}
+    if (actuel==true){str="Actuelle";}
+    else{str="Ancienne";}
     return str;
 }
 
@@ -385,7 +385,7 @@ void Manager::load() {
         if(token == QXmlStreamReader::StartDocument) continue;
         // If token is StartElement, we'll see if we can read it.
         if(token == QXmlStreamReader::StartElement) {
-            // If it's named taches, we'll go to the next.
+            // If it's named notes, we'll go to the next.
             if(xml.name() == "notes") continue;
 
             // If it's named tache, we'll dig the information from there.
@@ -677,7 +677,7 @@ TypeMultimedia Multimedia::QStringtoTypeMultimedia(const QString & str){
   }
 
 bool Note::QStringtoActuel(const QString & str){
-    if (str=='true'){return true;}
+    if (str=="true"){return true;}
     else{return false;}
 }
 
@@ -883,7 +883,7 @@ void Manager::supprimer(Note& N){
     if (isReferenced(N)) {
         N.setEtat(archivee);
         N.setAncienne();
-        int i=0;
+        unsigned int i=0;
         while (i<nbNotes){
             if (notes[i]->getID()==N.getID()){
                 notes[i]->setAncienne();
@@ -895,7 +895,7 @@ void Manager::supprimer(Note& N){
     else {
         
         N.setEtat(corbeille);
-        int i=0;
+        unsigned int i=0;
         while (i<nbNotes){
             if (notes[i]->getID()==N.getID()){
                 notes[i]->setAncienne();
@@ -907,11 +907,11 @@ void Manager::supprimer(Note& N){
 }
 
 void Manager::viderCorbeille(){
-    int i=0;
+    unsigned int i=0;
     while (i<nbNotes){
         if (notes[i]->getEtat()==corbeille){
             Note* temp=notes[i];
-            for (int j=i; j<nbNotes-1; j++){
+            for (unsigned int j=i; j<nbNotes-1; j++){
                 notes[j]=notes[j+1];
             }
             delete temp;

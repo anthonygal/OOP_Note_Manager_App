@@ -9,7 +9,7 @@ HEADERS += \
     Relations.h \
     timing.h \
     NoteEditeur.h \
-    fenetreprincipale.h
+    FenetrePrincipale.h
 
 SOURCES += \
     main.cpp \
@@ -17,4 +17,4 @@ SOURCES += \
     Relations.cpp \
     timing.cpp \
     NoteEditeur.cpp \
-    fenetreprincipale.cpp
+    FenetrePrincipale.cpp
