@@ -2,6 +2,7 @@
 #define Relations_hpp
 
 #include "PluriNotes.h"
+#include <QString>
 
 using namespace TIME;
 
@@ -14,18 +15,18 @@ class NoteException;
 /**< CLASS COUPLE */
 class Couple{
 private:
-    std::string label;
+    QString label;
     Note* note1;
     Note* note2;
 public:
     /**< Constructeur */
-    Couple(Note* A, Note* B, std::string l):label(l),note1(A),note2(B){};
+    Couple(Note* A, Note* B, QString l):label(l),note1(A),note2(B){};
     /**< Requetes getAttributs */
-    std::string getLabel() const {return label;}
+    QString getLabel() const {return label;}
     Note* getNote1() const {return note1;}
     Note* getNote2() const {return note2;}
     /**< Commandes setAttributs */
-    void setLabel(const std::string& s){label=s;}
+    void setLabel(const QString& s){label=s;}
     void setNotes1(Note* n){note1=n;}
     void setNotes2(Note* n){note2=n;}
 };
@@ -33,20 +34,20 @@ public:
 /**< CLASS RELATION */
 class Relation{
 private:
-    std::string titre;
-    std::string description;
+    QString titre;
+    QString description;
     bool orientee;
     Couple** couples;
     unsigned int nbCouples;
     unsigned int nbMaxCouples;
 public:
     /**< Constructeur */
-    Relation(const std::string& t, const std::string& d, bool o=true);
+    Relation(const QString& t, const QString& d, bool o=true);
     /**< Destructeur */
     virtual ~Relation();
     /**< Requetes getAttributs */
-    std::string getTitre() const {return titre;}
-    std::string getDescription() const {return description;}
+    QString getTitre() const {return titre;}
+    QString getDescription() const {return description;}
     bool getOrientee() const {return orientee;}
     Couple** getCouples() const {return couples;}
     int getnbCouples() const {return nbCouples;}
@@ -75,7 +76,8 @@ private:
  };
 
 /**< Je te laisse Anthony ^^ */
-unsigned long findRefID(const std::string& s, int p=0);
-int getPosition(const std::string s, int p);
+unsigned long findRefID(const QString& s, int p);
+
+int getPosition(const QString& s, int p);
 
 #endif /* Relations_h */

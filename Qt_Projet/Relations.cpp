@@ -2,7 +2,7 @@
 
 // RELATIONS ENTRE NOTES
 
-Relation::Relation(const std::string& t, const std::string& d, bool o){
+Relation::Relation(const QString& t, const QString& d, bool o){
     titre=t;
     description=d;
     orientee=o;
@@ -38,6 +38,36 @@ void Relation::addCouple(Couple& c){
 
 // Fonction qui trouve dans tout string en partant de la position p si il y a une reference, dans ce cas, renvoie son ID, sinon, renvoie 0
 
+unsigned long findRefID(const QString& s, int p){
+
+    int l=s.length();
+    QStringRef r=QStringRef(&s,p,l-p);
+    int i=s.indexOf("\ref{")+4;
+    int j= i;
+    if (i!=-1){
+    QChar c;
+   c=r.at(i);
+   if (!c.isDigit()) return -1;
+    int idlength=0;
+    while (c!='}' && i<l-p) {
+       idlength++;
+        if (!c.isDigit()) return -1;
+        i++;
+        c=r.at(i);
+    }
+    if(i==l-p) return -1;
+    else{
+        QString f=r.toString();
+        QStringRef x=QStringRef(&f,j,idlength);
+        int id=x.toInt();
+        return id;
+        }
+    }
+    return -1;
+}
+
+
+/*
 unsigned long findRefID(const std::string& s, int p){
 
     unsigned long i=s.find("ref{", p);
@@ -60,9 +90,34 @@ unsigned long findRefID(const std::string& s, int p){
             else return 0;
         }
     }
-}
+}*/
 
 //Fonction qui renvoie la position du "}" fermant la reference à partir de la position p passé en argument si une reference existe dans le string s, sinon renvoie 0
+
+int getPosition(const QString& s, int p){
+
+    int l=s.length();
+    QStringRef r=QStringRef(&s,p,l-p);
+    unsigned int i=s.indexOf("\ref{")+4;
+    unsigned int j= i;
+    if (i!=-1){
+
+    QChar c=r.at(i);
+    if (!c.isDigit()) return -1;
+    int idlength=0;
+    while (c!='}' && i<l-p) {
+        idlength++;
+        if (!c.isDigit()) return -1;
+        i++;
+        c=r.at(i);
+    }
+    if(i==l-p) return -1;
+    else return p+j+idlength+3;
+    }
+
+    return -1;
+}
+/*
 int getPosition(const std::string s, int p){
     int i=s.find("ref{", p);
     if (i==p) return 0;
@@ -81,7 +136,7 @@ int getPosition(const std::string s, int p){
     }
 
 }
-
+*/
 
 
 

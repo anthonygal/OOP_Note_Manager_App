@@ -23,6 +23,85 @@ void Date::afficher(std::ostream& f) const{
 	f<<std::setfill('0')<<std::setw(2)<<jour<<"/"<<std::setw(2)<<mois<<"/"<<annee;
 }
 
+QString Date::DatetoQString()const{
+   QString str="";
+   QString str1= QString::number(getJour());
+   QString str2= QString::number(getMois());
+   QString str3= QString::number(getAnnee());
+   str= str1 + "/" + str2 +"/" + str3;
+   return str;
+};
+
+Date Date::QStringtoDate(QString& s){
+    int l=s.length();
+     QStringRef r=QStringRef(&s,0,l);
+     QChar c;
+     int taille=0;
+     c=r.at(taille);
+    while (c!='/'){
+        taille++;
+        c=r.at(taille);
+        }
+    QString f=r.toString();
+    QStringRef x=QStringRef(&f,0,taille);
+    int j=x.toInt();
+    int taille2=0;
+    //QStringRef t=QStringRef(&f,taille+1,l-taille-1);
+    r=QStringRef(&f,taille+1,l-taille-1);
+    c=r.at(taille2);
+    while (c!='/'){ 
+        taille2++;
+        c=r.at(taille2);
+        }
+    QString g=r.toString();
+
+    QStringRef y=QStringRef(&g,0,taille2);
+    int m=y.toInt();      
+/* Problème de runtime error en faisant de cette façon, j'ai due trouver un autre moyen => Ne prend que les années à 4 chiffres,
+ *  ce qui ne possera pas de pb, sinon, en commentaire, c'est le code qui ne marche pas ....
+ int taille3=0;
+    c= r.at(taille3);
+    while (c=='1'){
+        taille3++;
+        c=r.at(taille3);
+        }
+    QString h=r.toString();
+    QStringRef z=QStringRef(&h,0,taille3);*/
+   r=QStringRef(&s, l-4, 4);
+    int a=r.toInt();
+    Date d= Date(j,m,a);
+    return d;
+}
+
+
+QString Horaire::HorairetoQString()const{
+   QString str="";
+   QString str1= QString::number(getHeure());
+   QString str2= QString::number(getMinute());
+   str= str1 + "/" + str2;
+   return str;
+};
+
+Horaire Horaire::QStringtoHoraire(QString& s){
+    int l=s.length();
+     QStringRef r=QStringRef(&s,0,l);
+     QChar c;
+     int taille=0;
+     c=r.at(taille);
+    while (c!='/'){
+        taille++;
+        c=r.at(taille);
+        }
+    QString f=r.toString();
+    QStringRef x=QStringRef(&f,0,taille);
+    int h=x.toInt();
+    QStringRef y=QStringRef(&f,l-2,2);
+    int m=y.toInt();
+    Horaire a=Horaire(h,m);
+    return a;
+};    
+    
+    
 bool Date::operator==(const Date& d) const{
 	if (annee<d.annee) return false;
 	if (annee>d.annee) return false;

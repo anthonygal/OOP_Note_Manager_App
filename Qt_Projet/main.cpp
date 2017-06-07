@@ -1,15 +1,19 @@
 #include "timing.h"
 #include "PluriNotes.h"
+#include <QFile>
+#include <QFileDialog>
+#include <QApplication>
 
 using namespace TIME;
 
-int main()
+int main(int argc, char* argv[])
 {
     // insert code here... modification test
-    Article* a = new Article(4,"test","try");
-    std::cout<<*a;
-    delete a;
+   // Article* a = new Article(4,"test","try");
+    //std::cout<<*a;
+    //delete a;
 
+    /*
     Manager& m=Manager::donneInstance();
     m.newTache("soucis","action",1,Date(03,06,2017));
     m.newArticle("souciss","pluie");
@@ -20,7 +24,7 @@ int main()
       std::cout<<it.current();
     }
     m.libereInstance();
-
+*/
 
 //
 //    Manager& m=Manager::donneInstance();
@@ -84,5 +88,13 @@ int main()
 //
 //    //std::cout<<"\ntype de a : "<<typeid(a).name()<<"\n"; //Ca affiche un chiffre devant la classe mais je n'arrive pas � l'enlever...
 
-    return 0;
+    QApplication app(argc, argv);
+    QString fichier = QFileDialog::getOpenFileName();
+    Manager& m=Manager::donneInstance();
+    m.setFilename(fichier);
+    m.load();
+
+
+
+    return app.exec();
 }

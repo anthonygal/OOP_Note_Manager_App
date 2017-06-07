@@ -1,14 +1,23 @@
 #include "timing.h"
 #include "PluriNotes.h"
 
+
 using namespace TIME;
 
 int main()
 {
     // insert code here... modification test
+
+
     Article* a = new Article(4,"test","try");
     std::cout<<*a;
-    delete a;
+    if((typeid(a).name())==Article){
+    std::cout<<typeid(a).name();
+    }
+
+    //delete a;
+
+    /*
 
     Manager& m=Manager::donneInstance();
     m.newTache("soucis","action",1,Date(03,06,2017));
@@ -20,6 +29,7 @@ int main()
       std::cout<<it.current();
     }
     m.libereInstance();
+    */
 
 
 //

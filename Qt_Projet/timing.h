@@ -4,44 +4,47 @@
 #include <iostream>
 #include <iomanip>
 #include <ctime>
+#include <QString>
 
 namespace TIME {
 	/*! \class TimeException
-			\brief Classe permettant de gérer les exceptions des classes du namespace TIME
+			\brief Classe permettant de gï¿½rer les exceptions des classes du namespace TIME
 	*/
 	class TimeException{
 	public:
-		//! Constructeur à partir d'une string
-		TimeException(const std::string& m):info(m){}
-		const std::string& GetInfo() const { return info; } //<! Retourne l'information stockée dans la classe
+		//! Constructeur ï¿½ partir d'une string
+        TimeException(const std::string& m):info(m){}
+        const std::string& GetInfo() const { return info; } //<! Retourne l'information stockï¿½e dans la classe
 	private:
-		std::string info;
+        std::string info;
 	};
 
 	/*! \class Date
 			\brief Classe permettant de manipuler des dates standards
-			L'utilisation de cette classe nécessite des dates valides au sens commun du terme.
-			Déclenchement d'exception dans le cas contraire
+			L'utilisation de cette classe nï¿½cessite des dates valides au sens commun du terme.
+			Dï¿½clenchement d'exception dans le cas contraire
 	*/
 	class Date {
 	public:
-		//! Constructeur à partir d'un jour, mois, année
+		//! Constructeur ï¿½ partir d'un jour, mois, annï¿½e
 		/*! \param j jour avec 1<=j<=31
 			\param m mois avec 1<=m<=12
-			\param a année avec a>=0
+			\param a annï¿½e avec a>=0
 			*/
 
 		Date(unsigned int short j=1, unsigned int short m=1, unsigned int a=0):jour(1),mois(1),annee(0){ setDate(j,m,a); }
 
-		// méthodes
+        // methodes
 		unsigned short int  getJour() const { return jour; } //<! Retourne le jour de la date
 		unsigned short int  getMois() const { return mois; } //<! Retourne le mois de la date
-		unsigned int getAnnee() const { return annee; } //<! Retourne l'année de la date
+		unsigned int getAnnee() const { return annee; } //<! Retourne l'annï¿½e de la date
 		void setDate(unsigned short int j, unsigned short int m, unsigned int a); //!< initialisation de la date
 		void afficher(std::ostream& f=std::cout) const; //!< affiche le date sous le format JJ/MM/AAAA
-		bool operator==(const Date& d) const; //<! d1==d2 retourne vrai si les deux dates sont égales
+        QString DatetoQString()const;
+        static Date QStringtoDate(QString& s);
+		bool operator==(const Date& d) const; //<! d1==d2 retourne vrai si les deux dates sont ï¿½gales
 		bool operator<(const Date& d) const; //<! Compare deux dates dans le temps : d1<d2 retourne true si d1 est avant d2
-		int operator-(const Date& d) const; //<! Retourne le nombre de jours séparant les deux dates
+		int operator-(const Date& d) const; //<! Retourne le nombre de jours sï¿½parant les deux dates
 		Date demain() const; //<! Retourne la date du lendemain
 		Date operator+(unsigned int nb) const; //<!Retourne la date dans nb jours
 
@@ -56,17 +59,17 @@ namespace TIME {
 
 	/*! \class Duree
 			\brief Classe permettant de manipuler des durees
-			L'utilisation de cette classe nécessite des dates valides au sens commun du terme.
-			Déclenchement d'exception dans le cas contraire
+			L'utilisation de cette classe nï¿½cessite des dates valides au sens commun du terme.
+			Dï¿½clenchement d'exception dans le cas contraire
 	*/
 	class Duree{
 	public:
-		//! Constructeur à partir de heure et minute
+		//! Constructeur ï¿½ partir de heure et minute
 		/*! \param h heure avec h>=0
 			\param m minute avec 0<=m<=59
 			*/
 		Duree(unsigned int h, unsigned int m):nb_minutes(h*60+m) {if (m>59) throw TimeException("erreur: initialisation duree invalide");}
-		//! Constructeur à partir de minute
+		//! Constructeur ï¿½ partir de minute
 		/*! \param m minute avec m>=0
 			*/
 		Duree(unsigned int m=0):nb_minutes(m) {}
@@ -80,21 +83,24 @@ namespace TIME {
 
 	/*! \class Horaire
 			\brief Classe permettant de manipuler des horaires
-			L'utilisation de cette classe nécessite des dates valides au sens commun du terme.
-			Déclenchement d'exception dans le cas contraire
+			L'utilisation de cette classe nï¿½cessite des dates valides au sens commun du terme.
+			Dï¿½clenchement d'exception dans le cas contraire
 	*/
 	class Horaire{
 	public:
-		//! Constructeur à partir de heure et minute
+		//! Constructeur ï¿½ partir de heure et minute
 		/*! \param h heure avec 0<=h<=23
 			\param m minute avec 0<=m<=59
 			*/
 		Horaire(unsigned short int  h=0, unsigned short int  m=0):heure(h),minute(m) {if (h>23||m>59) throw TimeException("erreur: initialisation horaire invalide");}
 		void setHoraire(unsigned short int h, unsigned short int m) { if (h>23||m>59) throw TimeException("erreur: initialisation horaire invalide"); heure=h; minute=m; }
 		void afficher(std::ostream& f=std::cout) const { f<<std::setfill('0')<<std::setw(2)<<heure<<"H"<<std::setfill('0')<<std::setw(2)<<minute; } //<!Affiche l'horaire sous le format hhHmm
-		unsigned short int getHeure() const { return heure; } //<!Retourne l'heure de l'horaire
+        QString HorairetoQString()const;
+        static Horaire QStringtoHoraire(QString& s);
+        unsigned short int getHeure() const { return heure; } //<!Retourne l'heure de l'horaire
 		unsigned short int getMinute() const { return minute; } //<!Retourne les minutes de l'horaire
 		bool operator<(const Horaire& h) const; //<! h1<h2 retourne true si h1 est avant h2 dans le temps
+
 
 	private:
 		unsigned short int  heure;
@@ -102,16 +108,16 @@ namespace TIME {
 	};
 
 	/*! \class Periode
-			\brief Classe permettant de manipuler des periodes exprimées en jours/mois/années
-			L'utilisation de cette classe nécessite des dates valides au sens commun du terme.
-			Déclenchement d'exception dans le cas contraire
+			\brief Classe permettant de manipuler des periodes exprimï¿½es en jours/mois/annï¿½es
+			L'utilisation de cette classe nï¿½cessite des dates valides au sens commun du terme.
+			Dï¿½clenchement d'exception dans le cas contraire
 	*/
 	class Periode{
 	public :
-		//! Constructeur à partir de jour/mois/année
+		//! Constructeur ï¿½ partir de jour/mois/annï¿½e
 		/*! \param j nombre de jours avec 0<=j<=364
 			\param m nombre de mois avec 0<=m<=11
-			\param a nombre d'années
+			\param a nombre d'annï¿½es
 			*/
 		Periode(unsigned int j, unsigned int m, unsigned int a);
 		void afficher(std::ostream& f=std::cout) const { f<<"{"<<nb_jours<<" jours, "<<nb_mois<<" mois, "<<nb_annees<<" ans}"; }
@@ -123,20 +129,20 @@ namespace TIME {
 
 	/*! \class Intervalle
 			\brief Classe permettant de manipuler des intervalles de dates
-			L'utilisation de cette classe nécessite des dates valides au sens commun du terme.
-			Déclenchement d'exception dans le cas contraire
+			L'utilisation de cette classe nï¿½cessite des dates valides au sens commun du terme.
+			Dï¿½clenchement d'exception dans le cas contraire
 	*/
 	class Intervalle{
 	public:
-		//! Constructeur à partir de deux dates
-		/*! \param d date de début de l'intervalle
+		//! Constructeur ï¿½ partir de deux dates
+		/*! \param d date de dï¿½but de l'intervalle
 			\param f date de fin de l'intervalle. On doit avoir d<=f
 			*/
 		Intervalle(const Date & d, const Date & f);
 		void afficher(std::ostream& f=std::cout) const; //<! Affiche l'intervalle de dates
-		Date getDebut() const { return debut; } //<! Retourne la date de début de l'intervalle
+		Date getDebut() const { return debut; } //<! Retourne la date de dï¿½but de l'intervalle
 		Date getFin() const { return fin; } //<! Retourne la date de fin de l'intervalle
-		int getDuree() const { return fin-debut; } //<! Retourne le nombre de jours s'écoulant entre le début et la fin de l'intervalle
+		int getDuree() const { return fin-debut; } //<! Retourne le nombre de jours s'ï¿½coulant entre le dï¿½but et la fin de l'intervalle
 		bool operator&&(const Intervalle & v) const; //<! I1&&I2 Retourne vrai si il y a intersection entre I1 et I2
 		Intervalle operator + (const Intervalle & i) const; //<! I1+I2 Retourne un intervalle union des 2 intervalles I1 et I2 qui se touchent, ie I2.debut est le jour du lendemain de I1.fin
 	private:

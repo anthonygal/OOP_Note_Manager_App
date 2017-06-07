@@ -1,4 +1,5 @@
 #include "PluriNotes.h"
+#include <QFile>
 
 using namespace TIME;
 
@@ -17,7 +18,7 @@ Note::Note(Note& n){
 }
 
 /**< METHODES D'AFFICHAGE DES DIFFERENTES NOTES */
-
+/*
 void Note::afficher(std::ostream& f) const {
     f<<"\n------ "<<typeid(*this).name()<<" "<<ID<<(actuel?" (Version Actuelle)":" (Ancienne Version)")<<" ------\n";
     f<<"\nID : "<<ID;
@@ -62,15 +63,19 @@ void Multimedia::afficherSpecifique(std::ostream& f) const {
         case 1: f<<"video"; break;
         case 2: f<<"audio"; break;}
 }
-
+*/
+/*
 std::ostream& operator<<(std::ostream& f, const Note& n) {
         n.afficher(f);
         return f;
-}
+}*/
 
+/*
 void Manager::afficherTout()const{
     for(ConstIteratorNotes it=getConstIteratorNotes();!it.isDone();it.next()) std::cout<<it.current()<<std::endl;
 }
+*/
+
 
 /**< TEMPLATE METHOD SINGLETON POUR LA CLASS MANAGER */
 
@@ -152,17 +157,17 @@ const Relation& Manager::ConstIteratorRelations::current() const{
 
 unsigned long Manager::nextNoteID = 0;
 
-void Manager::newArticle(const std::string& ti, const std::string& te){
+void Manager::newArticle(const QString& ti, const QString& te){
     Article* a=new Article(nextNoteID++,ti,te);
     ajouterNote(*a);
 }
 
-void Manager::newTache(const std::string& ti, const std::string& act, int prio, Date d){
+void Manager::newTache(const QString& ti, const QString& act, int prio, Date d){
     Tache* a=new Tache(nextNoteID++,ti,act,prio,d);
     ajouterNote(*a);
 }
 
-void Manager::newMultimedia(const std::string& ti, const std::string& adr, const std::string& desc, TypeMultimedia ty){
+void Manager::newMultimedia(const QString& ti, const QString& adr, const QString& desc, TypeMultimedia ty){
     Multimedia* a=new Multimedia(nextNoteID++,ti,adr,ty,desc);
     ajouterNote(*a);
 }
@@ -182,14 +187,16 @@ void Manager::ajouterNote(Note& n){
 /**< DEMANDES D'EDITION DES DIFFERENTS NOTES */
 /**< MODIFIER LES CIN/COUT LORS DE LA MISE EN PLACE DE QT */
 
+/*
 void Manager::editNote(Note& n){
     Note& n2=n.edit();
     ajouterNote(n2);
 }
 
+
 Article& Article::edit(){
-    std::string newTitle;
-    std::string newText;
+    QString newTitle;
+    QString newText;
     std::cout<<"\nAncien titre : "<<this->getTitre()<<"\tNouveau titre : ";
     std::cin>>newTitle;
     std::cout<<"\nAncien texte : "<<this->getTexte()<<"\tNouveau texte : ";
@@ -199,9 +206,14 @@ Article& Article::edit(){
     a->setTexte(newText);
     return *a;
 }
+*/
+
+
+/*
+
 
 Tache& Tache::edit(){
-    std::string newTitle;
+    QString newTitle;
     std::string newAction;
     int newPriorite;
     TIME::Date newEcheance;
@@ -222,7 +234,7 @@ Tache& Tache::edit(){
 }
 
 Multimedia& Multimedia::edit(){
-    std::string newTitle;
+    QString newTitle;
     std::string newAdresseFichier;
     std::string newTypeString;
     TypeMultimedia newType;
@@ -246,10 +258,434 @@ Multimedia& Multimedia::edit(){
     m->setType(newType);
     m->setDescription(newDescription);
     return *m;
+*/
+
+void Manager::save()const{
+ QFile newfile(filename);
+     if (!newfile.open(QIODevice::WriteOnly | QIODevice::Text))
+            throw NoteException(QString("erreur sauvegarde notes : ouverture fichier xml"));
+        QXmlStreamWriter stream(&newfile);
+        stream.setAutoFormatting(true);
+        stream.writeStartDocument();
+        stream.writeStartElement("notes");
+        for(int i=0; i<nbNotes; i++){
+            notes[i]->saveNote(stream);
+        }
+        stream.writeEndElement();
+        stream.writeEndDocument();
+        newfile.close();
+    }
+
+
+void Article::saveNote(QXmlStreamWriter& stream)const{
+    stream.writeStartElement("article");
+    unsigned int n = getID();
+     QString str = "";
+     str = QString::number(n);
+    stream.writeTextElement("id",str);
+    stream.writeTextElement("datecrea",getDateCrea().DatetoQString());
+    stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
+    stream.writeTextElement("datemodif",getDateModif().DatetoQString());
+    stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
+    stream.writeTextElement("etat",NoteEtattoQString());
+    stream.writeTextElement("actuel",ActueltoQString());
+    stream.writeTextElement("titre",getTitre());
+    stream.writeTextElement("texte",getTexte());
+    stream.writeEndElement();
 }
+
+void Tache::saveNote(QXmlStreamWriter& stream)const{
+    stream.writeStartElement("tache");
+    unsigned int n = getID();
+     QString str = "";
+     str = QString::number(n);
+    stream.writeTextElement("id",str);
+    stream.writeTextElement("datecrea",getDateCrea().DatetoQString());
+    stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
+    stream.writeTextElement("datemodif",getDateModif().DatetoQString());
+    stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
+    stream.writeTextElement("etat",NoteEtattoQString());    
+    stream.writeTextElement("actuel",ActueltoQString());
+    stream.writeTextElement("titre",getTitre());
+    stream.writeTextElement("action",getAction());
+    QString str2 = "";
+    str2 = QString::number(getPriorite());
+    stream.writeTextElement("priorite",str2);
+    stream.writeTextElement("echeance",getEcheance().DatetoQString());
+    stream.writeTextElement("statut",TacheStatuttoQString());
+    stream.writeEndElement();
+}
+
+void Multimedia::saveNote(QXmlStreamWriter& stream)const{
+    stream.writeStartElement("tache");
+    unsigned int n = getID();
+     QString str = "";
+     str = QString::number(n);
+    stream.writeTextElement("id",str);
+    stream.writeTextElement("datecrea",getDateCrea().DatetoQString());
+    stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
+    stream.writeTextElement("datemodif",getDateModif().DatetoQString());
+    stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
+    stream.writeTextElement("etat",NoteEtattoQString()); 
+    stream.writeTextElement("actuel",ActueltoQString());
+    stream.writeTextElement("titre",getTitre());
+    stream.writeTextElement("adressefichier",getAdresseFichier());
+    stream.writeTextElement("type",TypeMultimediatoQString());
+    stream.writeTextElement("description",getDescription());
+    stream.writeEndElement();
+}
+
+
+QString Note::NoteEtattoQString()const{
+    QString str="";
+    if (etat==active){str="active";}
+    if (etat==archivee){str="archivee";}
+    if (etat==corbeille){str="corbeille";}
+    return str;}
+
+
+QString Tache::TacheStatuttoQString()const{
+    QString str="";
+    if (statut==attente){str="attente";}
+    if (statut==encours){str="encours";}
+    if (statut==terminee){str="terminee";}
+    return str;}
+
+
+QString Multimedia::TypeMultimediatoQString() const{
+        QString str="";
+        if (type==image){str="image";}
+        if (type==video){str="video";}
+        if (type==audio){str="audio";}
+        return str;}
+
+QString Note::ActueltoQString()const{
+    QString str="";
+    if (actuel==true){str='true';}
+    else{str='false';}
+    return str;
+}
+
+
+
+void Manager::load() {
+    QFile fin(filename);
+    // If we can't open it, let's show an error message.
+    if (!fin.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        throw NoteException("Erreur ouverture fichier notes");
+    }
+    // QXmlStreamReader takes any QIODevice.
+    QXmlStreamReader xml(&fin);
+    //qDebug()<<"debut fichier\n";
+    // We'll parse the XML until we reach end of it.
+    while(!xml.atEnd() && !xml.hasError()) {
+        // Read next element.
+        QXmlStreamReader::TokenType token = xml.readNext();
+        // If token is just StartDocument, we'll go to next.
+        if(token == QXmlStreamReader::StartDocument) continue;
+        // If token is StartElement, we'll see if we can read it.
+        if(token == QXmlStreamReader::StartElement) {
+            // If it's named taches, we'll go to the next.
+            if(xml.name() == "notes") continue;
+
+            // If it's named tache, we'll dig the information from there.
+            if(xml.name() == "article") {
+                qDebug()<<"new article\n";
+                QString identificateur;
+                QString titre;
+                QString texte;
+                QString dateCrea;
+                QString dateModif;
+                QString horaireCrea;
+                QString horaireModif;
+                QString actuel;
+                QString etat;
+                QXmlStreamAttributes attributes = xml.attributes();
+                xml.readNext();
+                //We're going to loop over the things because the order might change.
+                //We'll continue the loop until we hit an EndElement named article.
+                while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "article")) {
+                    if(xml.tokenType() == QXmlStreamReader::StartElement) {
+                        // We've found identificteur.
+                        if(xml.name() == "id") {
+                            xml.readNext(); identificateur=xml.text().toString();
+                            qDebug()<<"id="<<identificateur<<"\n";
+                        }
+                        if(xml.name() == "datecrea") {
+                            xml.readNext(); dateCrea=xml.text().toString();
+                            qDebug()<<"datecrea="<<dateCrea<<"\n";
+                        }
+                        if(xml.name() == "horairecrea") {
+                            xml.readNext(); horaireCrea=xml.text().toString();
+                            qDebug()<<"horairecrea="<<horaireCrea<<"\n";
+                        }
+                        if(xml.name() == "datemodif") {
+                            xml.readNext(); dateModif=xml.text().toString();
+                            qDebug()<<"datemodif="<<dateModif<<"\n";
+                        }
+                        if(xml.name() == "horairemodif") {
+                            xml.readNext(); horaireModif=xml.text().toString();
+                            qDebug()<<"horairemodif="<<horaireModif<<"\n";
+                        }
+
+                        if(xml.name() == "etat") {
+                            xml.readNext(); etat=xml.text().toString();
+                            qDebug()<<"etat="<<etat<<"\n";
+                        }
+                        if(xml.name() == "actuel") {
+                            xml.readNext(); actuel=xml.text().toString();
+                            qDebug()<<"actuel="<<actuel<<"\n";
+                        }
+
+                        // We've found titre.
+                        if(xml.name() == "titre") {
+                            xml.readNext(); titre=xml.text().toString();
+                            qDebug()<<"titre="<<titre<<"\n";
+                        }
+                        // We've found text
+                        if(xml.name() == "texte") {
+                            xml.readNext();
+                            texte=xml.text().toString();
+                            qDebug()<<"text="<<texte<<"\n";
+                        }
+                    }
+                    // ...and next...
+                    xml.readNext();
+                }
+                qDebug()<<"ajout note "<<identificateur<<"\n";
+                addArticle(identificateur.toInt(),titre,TIME::Date::QStringtoDate(dateCrea), TIME::Horaire::QStringtoHoraire(horaireCrea),
+                           TIME::Date::QStringtoDate(dateModif),TIME::Horaire::QStringtoHoraire(horaireModif),Note::QStringtoActuel(actuel),Note::QStringtoNoteEtat(etat),texte );
+            }
+
+            if(xml.name() == "tache") {
+                qDebug()<<"new tache\n";
+                QString identificateur;
+                QString titre;
+                QString action;
+                QString echeance;
+                QString priorite;
+                QString statut;
+                QString dateCrea;
+                QString dateModif;
+                QString horaireCrea;
+                QString horaireModif;
+                QString actuel;
+                QString etat;
+                QXmlStreamAttributes attributes = xml.attributes();
+                xml.readNext();
+                //We're going to loop over the things because the order might change.
+                //We'll continue the loop until we hit an EndElement named article.
+                while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "tache")) {
+                    if(xml.tokenType() == QXmlStreamReader::StartElement) {
+                        // We've found identificteur.
+                        if(xml.name() == "id") {
+                            xml.readNext(); identificateur=xml.text().toString();
+                            qDebug()<<"id="<<identificateur<<"\n";
+                        }
+                        if(xml.name() == "datecrea") {
+                            xml.readNext(); dateCrea=xml.text().toString();
+                            qDebug()<<"datecrea="<<dateCrea<<"\n";
+                        }
+                        if(xml.name() == "horairecrea") {
+                            xml.readNext(); horaireCrea=xml.text().toString();
+                            qDebug()<<"horairecrea="<<horaireCrea<<"\n";
+                        }
+                        if(xml.name() == "datemodif") {
+                            xml.readNext(); dateModif=xml.text().toString();
+                            qDebug()<<"datemodif="<<dateModif<<"\n";
+                        }
+                        if(xml.name() == "horairemodif") {
+                            xml.readNext(); horaireModif=xml.text().toString();
+                            qDebug()<<"horairemodif="<<horaireModif<<"\n";
+                        }
+
+                        if(xml.name() == "etat") {
+                            xml.readNext(); etat=xml.text().toString();
+                            qDebug()<<"etat="<<etat<<"\n";
+                        }
+                        if(xml.name() == "actuel") {
+                            xml.readNext(); actuel=xml.text().toString();
+                            qDebug()<<"actuel="<<actuel<<"\n";
+                        }
+                        if(xml.name() == "titre") {
+                            xml.readNext(); titre=xml.text().toString();
+                            qDebug()<<"titre="<<titre<<"\n";
+                        }
+
+                        if(xml.name() == "action") {
+                            xml.readNext(); action=xml.text().toString();
+                            qDebug()<<"action="<<action<<"\n";
+                        }
+
+                        if(xml.name() == "priorite") {
+                            xml.readNext();
+                            priorite=xml.text().toString();
+                            qDebug()<<"priorite="<<priorite<<"\n";
+                        }
+                        if(xml.name() == "echeance") {
+                            xml.readNext();
+                            echeance=xml.text().toString();
+                            qDebug()<<"echeance="<<echeance<<"\n";
+                        }
+                        if(xml.name() == "statut") {
+                            xml.readNext();
+                            statut=xml.text().toString();
+                            qDebug()<<"statut="<<statut<<"\n";
+                        }
+
+                    }
+                    // ...and next...
+                    xml.readNext();
+                }
+                qDebug()<<"ajout note "<<identificateur<<"\n";
+                addTache(identificateur.toInt(), titre,TIME::Date::QStringtoDate(dateCrea),TIME::Horaire::QStringtoHoraire(horaireCrea),TIME::Date::QStringtoDate(dateModif),TIME::Horaire::QStringtoHoraire(horaireModif),Tache::QStringtoActuel(actuel),Tache::QStringtoNoteEtat(etat),action,priorite.toInt(), TIME::Date::QStringtoDate(echeance), Tache::QStringtoTacheStatut(statut));
+
+                }
+            }
+            if(xml.name() == "multimedia") {
+                qDebug()<<"new multimedia\n";
+                QString identificateur;
+                QString titre;
+                QString adressefichier;
+                QString type;
+                QString description;
+                QString dateCrea;
+                QString dateModif;
+                QString horaireCrea;
+                QString horaireModif;
+                QString actuel;
+                QString etat;
+                QXmlStreamAttributes attributes = xml.attributes();
+                xml.readNext();
+                //We're going to loop over the things because the order might change.
+                //We'll continue the loop until we hit an EndElement named article.
+                while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "multimedia")) {
+                    if(xml.tokenType() == QXmlStreamReader::StartElement) {
+                        // We've found identificteur.
+                        if(xml.name() == "id") {
+                            xml.readNext(); identificateur=xml.text().toString();
+                            qDebug()<<"id="<<identificateur<<"\n";
+                        }
+                        if(xml.name() == "datecrea") {
+                            xml.readNext(); dateCrea=xml.text().toString();
+                            qDebug()<<"datecrea="<<dateCrea<<"\n";
+                        }
+                        if(xml.name() == "horairecrea") {
+                            xml.readNext(); horaireCrea=xml.text().toString();
+                            qDebug()<<"horairecrea="<<horaireCrea<<"\n";
+                        }
+                        if(xml.name() == "datemodif") {
+                            xml.readNext(); dateModif=xml.text().toString();
+                            qDebug()<<"datemodif="<<dateModif<<"\n";
+                        }
+                        if(xml.name() == "horairemodif") {
+                            xml.readNext(); horaireModif=xml.text().toString();
+                            qDebug()<<"horairemodif="<<horaireModif<<"\n";
+                        }
+
+                        if(xml.name() == "etat") {
+                            xml.readNext(); etat=xml.text().toString();
+                            qDebug()<<"etat="<<etat<<"\n";
+                        }
+                        if(xml.name() == "actuel") {
+                            xml.readNext(); actuel=xml.text().toString();
+                            qDebug()<<"actuel="<<actuel<<"\n";
+                        }
+                        if(xml.name() == "titre") {
+                            xml.readNext(); titre=xml.text().toString();
+                            qDebug()<<"titre="<<titre<<"\n";
+                        }
+
+                        if(xml.name() == "adressefichier") {
+                            xml.readNext(); adressefichier=xml.text().toString();
+                            qDebug()<<"adressefichier="<<adressefichier<<"\n";
+                        }
+
+                        if(xml.name() == "type") {
+                            xml.readNext();
+                            type=xml.text().toString();
+                            qDebug()<<"type="<<type<<"\n";
+                        }
+                        if(xml.name() == "description") {
+                            xml.readNext();
+                            description=xml.text().toString();
+                            qDebug()<<"description="<<description<<"\n";
+                        }
+
+                    }
+                    // ...and next...
+                    xml.readNext();
+                }
+                qDebug()<<"ajout note "<<identificateur<<"\n";
+                addMultimedia(identificateur.toInt(),titre,TIME::Date::QStringtoDate(dateCrea), TIME::Horaire::QStringtoHoraire(horaireCrea),
+                           TIME::Date::QStringtoDate(dateModif),TIME::Horaire::QStringtoHoraire(horaireModif),Note::QStringtoActuel(actuel),Note::QStringtoNoteEtat(etat),adressefichier, Multimedia::QStringtoTypeMultimedia(type), description);
+                }
+            }
+
+
+    // Error handling.
+    if(xml.hasError()) {
+        throw NoteException("Erreur lecteur fichier notes, parser xml");
+    }
+    // Removes any device() or data from the reader * and resets its internal state to the initial state.
+    xml.clear();
+    qDebug()<<"fin load\n";
+}
+
+
+
+void Manager::addArticle(const int id, const QString& ti, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e,const QString& te ){
+    Article* a=new Article(id,ti,dc,hc,dm,hm,act,e,te);
+    Manager::ajouterNote(*a);
+}
+
+
+
+
+void Manager::addTache(const int id, const QString& ti, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e,const QString& acti, const int prio, const Date eche, const TacheStatut ts ){
+    Tache* a=new Tache(id,ti,dc,hc,dm,hm,act,e,acti, prio, eche, ts);
+    Manager::ajouterNote(*a);
+}
+
+
+
+void Manager::addMultimedia(const int id, const QString& ti, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec){
+    Multimedia* a=new Multimedia(id,ti,dc,hc,dm,hm,act,e,af,ty,dec);
+    Manager::ajouterNote(*a);
+}
+
+
+
+
+NoteEtat Note::QStringtoNoteEtat(const QString& str){
+    if (str=="active"){return active; }
+    if (str=="archivee"){return archivee; }
+    if (str=="corbeille"){return corbeille; }
+}
+
+TacheStatut Tache::QStringtoTacheStatut(const QString & str){
+    if (str=="attente"){return attente;}
+    if (str=="encours"){return encours;}
+    if (str=="terminee"){return terminee;}
+ }
+
+
+TypeMultimedia Multimedia::QStringtoTypeMultimedia(const QString & str){
+        if (str=="image"){return image;}
+        if (str=="video"){return video;}
+        if (str=="audio"){return audio;}
+  }
+
+bool Note::QStringtoActuel(const QString & str){
+    if (str=='true'){return true;}
+    else{return false;}
+}
+
 
 /**< METHODES D'AJOUT DE RELATIONS */
 
+
+/*
 void Manager::addRelation(Relation& r){
     if (nbRelations==nbRelationsMax){
         Relation** newtab= new Relation* [nbRelationsMax+5];
@@ -268,6 +704,7 @@ void Manager::addRelation(Relation& r){
 void Manager::addCoupleRelation(Relation& r, Couple& c) {
     r.addCouple(c);
 }
+*/
 
 /**< TEMPLATE METHOD SINGLETON POUR LA CLASS REFERENCE */
 
@@ -290,7 +727,7 @@ Note* Manager::searchID(unsigned long id){
 
 /**< Methodes d'edition inutiles pour l'instant mais je prefere garder au cas ou */
 
-Article& Manager::editTexteArticle(Article& A, const std::string& s) {
+Article& Manager::editTexteArticle(Article& A, const QString& s) {
     Article* a= new Article(A);
     a->setTexte(s);
     a->setActuel();
@@ -299,7 +736,7 @@ Article& Manager::editTexteArticle(Article& A, const std::string& s) {
     return *a;
 }
 
-Tache& Manager::editActionTache(Tache& T, const std::string& s){
+Tache& Manager::editActionTache(Tache& T, const QString& s){
     Tache* t= new Tache(T);
     t->setAction(s);
     t->setActuel();
@@ -334,7 +771,7 @@ Tache& Manager::editEcheanceTache(Tache& T, TIME::Date d){
     return *t;
 };
 
-Multimedia& Manager::editFichierMultimedia(Multimedia& M, const std::string s){
+Multimedia& Manager::editFichierMultimedia(Multimedia& M, const QString s){
     Multimedia* m= new Multimedia(M);
     m->setAdresseFichier(s);
     m->setActuel();
@@ -345,6 +782,7 @@ Multimedia& Manager::editFichierMultimedia(Multimedia& M, const std::string s){
 
 //Ajouter un couple à la relation reference
 
+/*
 void Manager::addCoupleReference(Couple& c){
     Reference& R=this->getReference();
     R.addCouple(c);
@@ -366,9 +804,11 @@ void Note::AddRefs(Manager& m){
     }
     AddRefsSpecifique(m);
 }
+*/
 
 //AddrefsSpeacifique(Manager& m) Specifique a chaque sous class de Note
 
+/*
 void Tache::AddRefsSpecifique(Manager& m){
     unsigned long ID=findRefID(this->getAction(), 0);
     int pos=0;
@@ -414,8 +854,10 @@ void Multimedia::AddRefsSpecifique(Manager& m){
     }
 }
 
+
 //AddRefsFromNote du Manager qui permet d'ajouter toute les references contenues dans tous les champs de texte d'une Note
 
 void Manager::AddRefsFromNote(Note& N){
     N.AddRefs(*this);
 }
+*/

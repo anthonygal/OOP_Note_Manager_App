@@ -14,4 +14,8 @@ signals:
 public slots:
 };
 
+
+
+
+
 #endif // NOTEEDITEUR_H
