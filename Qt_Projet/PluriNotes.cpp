@@ -9,32 +9,69 @@ Note::Note(Note& n){
     ID = n.ID;
     titre = n.titre;
     dateCrea = n.dateCrea;
-    horaireCrea = n.horaireCrea;
-    dateModif = dateNow();
-    horaireModif = horaireNow();
+    //horaireCrea = n.horaireCrea;
+    dateModif = QDateTime::currentDateTime();
+    //horaireModif = horaireNow();
     etat = n.etat;
     actuel = true;
     n.setAncienne();
 }
 
 /**< METHODES D'AFFICHAGE DES DIFFERENTES NOTES */
-/*
-void Note::afficher(std::ostream& f) const {
-    f<<"\n------ "<<typeid(*this).name()<<" "<<ID<<(actuel?" (Version Actuelle)":" (Ancienne Version)")<<" ------\n";
-    f<<"\nID : "<<ID;
-    f<<"\nTitre : "<<titre;
-    f<<"\nCree le : "<<dateCrea<<" a "<<horaireCrea;
-    f<<"\nModifie le "<<dateModif<<" a "<<horaireModif;
-    f<<"\nEtat : ";
-    switch(etat){
-        case 0: f<<"Active"; break;
-        case 1: f<<"Archivee"; break;
-        case 2: f<<"Dans la corbeille"; break;
-    }
-    afficherSpecifique(f);
-    f<<"\n\n-------\n";
+
+//QVBoxLayout afficherSpecifique() const = 0;
+
+QVBoxLayout* Note::afficher(QWidget* fenetre) const {
+    QLabel *TypeNote = new QLabel(getTypeNote());
+    QLabel *Actuelle = new QLabel(isActuelle()?"(Version Actuelle)":"(Ancienne Version)");
+    QLabel *lID = new QLabel("ID : ");
+    QLabel *ID = new QLabel(QString::number(getID()));
+    QLabel *lTitre = new QLabel("Titre : ");
+    QLabel *Titre = new QLabel(getTitre());
+    QLabel *lDateCrea = new QLabel("Date de création : ");
+    QLabel *DateCrea = new QLabel(getDateCrea().toString(format));
+    //QLabel *HoraireCrea = new QLabel(getHoraireCrea());
+    QLabel *lDateModif = new QLabel("Date de modification : ");
+    QLabel *DateModif = new QLabel(getDateModif().toString(format));
+    //QLabel *HoraireModif = new QLabel(getHoraireModif());
+    QLabel *lEtat = new QLabel("Etat : ");
+    QLabel *Etat = new QLabel(NoteEtattoQString());
+
+
+    QHBoxLayout *hlayout0 = new QHBoxLayout;
+        hlayout0->addWidget(TypeNote);
+        hlayout0->addWidget(Actuelle);
+    QHBoxLayout *hlayout1 = new QHBoxLayout;
+        hlayout1->addWidget(lID);
+        hlayout1->addWidget(ID);
+    QHBoxLayout *hlayout2 = new QHBoxLayout;
+        hlayout2->addWidget(lTitre);
+        hlayout2->addWidget(Titre);
+    QHBoxLayout *hlayout3 = new QHBoxLayout;
+        hlayout3->addWidget(lDateCrea);
+        hlayout3->addWidget(DateCrea);
+        //hlayout3->addWidget(HoraireCrea);
+    QHBoxLayout *hlayout4 = new QHBoxLayout;
+        hlayout4->addWidget(lDateModif);
+        hlayout4->addWidget(DateModif);
+        //hlayout4->addWidget(HoraireModif);
+    QHBoxLayout *hlayout5 = new QHBoxLayout;
+        hlayout5->addWidget(lEtat);
+        hlayout5->addWidget(Etat);
+    QVBoxLayout *vlayout = new QVBoxLayout;
+        vlayout->addLayout(hlayout0);
+        vlayout->addLayout(hlayout1);
+        vlayout->addLayout(hlayout2);
+        vlayout->addLayout(hlayout3);
+        vlayout->addLayout(hlayout4);
+        vlayout->addLayout(hlayout5);
+
+    //afficherSpecifique(f);
+
+    return vlayout;
 }
 
+/*
 void Article::afficherSpecifique(std::ostream& f) const {
     f<<"\nTexte : "<<texte;
 }
@@ -283,7 +320,7 @@ void Article::saveNote(QXmlStreamWriter& stream)const{
      QString str = "";
      str = QString::number(n);
     stream.writeTextElement("id",str);
-    stream.writeTextElement("datecrea",getDateCrea().DatetoQString());
+    stream.writeTextElement("datecrea",getDateCrea());
     stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
     stream.writeTextElement("datemodif",getDateModif().DatetoQString());
     stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
@@ -717,7 +754,7 @@ Reference& Manager::getReference() {
 Note* Manager::searchID(unsigned long id){
     for (unsigned int i=0; i<nbNotes;i++){
         if (notes[i]->getID()==id){
-            if (notes[i]->getActuel()) {
+            if (notes[i]->isActuelle()) {
                 return notes[i];
             }
         }
@@ -871,7 +908,7 @@ bool Manager::isReferenced(const Note& N) const{
     while (i<R.getnbCouples()) {
         a=c->getNote1();
         b=c->getNote2();
-        if ((a->getID()==N.getID() && a->getActuel()) || (b->getID()==N.getID() && b->getActuel())) return true;
+        if ((a->getID()==N.getID() && a->isActuelle()) || (b->getID()==N.getID() && b->isActuelle())) return true;
         i++;
     }
     return false;

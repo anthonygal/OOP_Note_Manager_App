@@ -9,6 +9,9 @@
 #include <QtXml>
 #include <QXmlStreamWriter>
 #include <QString>
+#include <QtWidgets>
+
+#define format "dd/mm/yyyy hh:mm:ss"
 
 using namespace TIME;
 
@@ -35,29 +38,31 @@ class Note{
 private:
     unsigned long ID;
     QString titre;
-    TIME::Date dateCrea;
-    TIME::Horaire horaireCrea;
-    TIME::Date dateModif;
-    TIME::Horaire horaireModif;
+    QDateTime dateCrea;
+    QDateTime dateModif;
     NoteEtat etat;
     bool actuel;
+//    TIME::Date dateCrea;
+//    TIME::Horaire horaireCrea;
+//    TIME::Date dateModif;
+//    TIME::Horaire horaireModif;
 public:
     /**< Constructeurs */
-    Note(const unsigned long i, const QString& s): ID(i),titre(s), dateCrea(dateNow()), horaireCrea(horaireNow()), dateModif(dateNow()), horaireModif(horaireNow()), etat(active), actuel(true){}
-    Note(const unsigned long i, const QString& s, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e): ID(i), titre(s), dateCrea(dc), horaireCrea(hc),
-        dateModif(dm), horaireModif(hm), etat(e), actuel(act){}
+    Note(const unsigned long i, const QString& s): ID(i),titre(s), dateCrea(QDateTime::currentDateTime()), dateModif(QDateTime::currentDateTime()), etat(active), actuel(true){}
+    Note(const unsigned long i, const QString& s, const QDateTime dc, const QDateTime dm, bool act, NoteEtat e): ID(i), titre(s), dateCrea(dc), dateModif(dm), etat(e), actuel(act){}
     Note(Note& n);
     /**< Destructeur */
     virtual ~Note(){};
     /**< Requetes getAttributs */
     unsigned long getID() const {return ID;}
     QString getTitre() const {return titre;}
-    const Date& getDateCrea() const {return dateCrea;} //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
-    const Date& getDateModif() const {return dateModif;}
-    const Horaire& getHoraireCrea() const {return horaireCrea;}
-    const Horaire& getHoraireModif() const {return horaireModif;}
+    const QDateTime& getDateCrea() const {return dateCrea;} //Pourquoi Date et Horaire doivent passer un const contrairement a string ou autre type?
+    const QDateTime& getDateModif() const {return dateModif;}
+//    const Horaire& getHoraireCrea() const {return horaireCrea;}
+//    const Horaire& getHoraireModif() const {return horaireModif;}
     NoteEtat getEtat() const {return etat;} /**< etat vaut 0 pour active, 1 pour archivee et 2 pour corbeille */
-    bool getActuel() const {return actuel;}
+    bool isActuelle() const {return actuel;}
+    virtual QString getTypeNote() const = 0;
     /**< Commandes setAttributs */
     void setTitre(const QString ti){titre=ti;}
     void setEtat(NoteEtat e){etat=e;}
@@ -66,8 +71,8 @@ public:
     /**< Methode d'edition */
    //virtual Note& edit()=0;
     /**< Methodes d'affichage */
-   // void afficher(std::ostream& f = std::cout) const;
-   // virtual void afficherSpecifique(std::ostream& f) const = 0;
+    QVBoxLayout* afficher(QWidget* parent) const;
+    virtual QVBoxLayout afficherSpecifique(QWidget* parent) const = 0;
     /**< Methodes pour ajouter des references */
     void AddRefs(Manager& m);
     virtual void AddRefsSpecifique(Manager& m)=0;
@@ -89,18 +94,19 @@ private:
 public:
     /**< Constructeurs d'Article */
     Article(const unsigned long i, const QString& ti, const QString& te=""):Note(i,ti),texte(te){}
-    Article(const unsigned long i, const QString& s, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e, const QString& te):Note(i,s,dc,hc,dm,hm,act,e), texte(te){}
+    Article(const unsigned long i, const QString& s, const QDateTime dc, const QDateTime dm, bool act, NoteEtat e, const QString& te):Note(i,s,dc,dm,act,e), texte(te){}
     Article(Article& a):Note(a),texte(a.texte){}
     /**< Destructeur d'Article */
     ~Article(){}
     /**< Requetes getAttributs */
-    QString getTexte() const{return texte;}
+    QString getTexte() const {return texte;}
+    QString getTypeNote() const {return "Article";}
     /**< Commandes setAttributs */
     void setTexte(const QString& t){texte=t;}
     /**< Methode d'edition */
     Article& edit();
     /**< Methode d'affichage specifique */
-   // void afficherSpecifique(std::ostream& f) const;
+    QVBoxLayout afficherSpecifique(QWidget* parent) const;
     /**< Methode pour ajouter des references specifique */
     void AddRefsSpecifique(Manager& m);
 
@@ -118,8 +124,8 @@ private:
 public:
     /**< Constructeurs de Tache */
     Tache(const unsigned long i, const QString& ti, const QString& act, int prio=0, Date d=Date(1,1,0)):Note(i,ti),action(act),priorite(prio),echeance(d),statut(encours){}
-    Tache(const unsigned long i, const QString& s, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e, const QString& acti, const int prio, const Date eche, const TacheStatut ts)
-        :Note(i,s,dc,hc,dm,hm,act,e),action(acti),priorite(prio),echeance(eche), statut(ts){}
+    Tache(const unsigned long i, const QString& s, const QDateTime dc, const QDateTime dm, bool act, NoteEtat e, const QString& acti, const int prio, const Date eche, const TacheStatut ts)
+        :Note(i,s,dc,dm,act,e),action(acti),priorite(prio),echeance(eche), statut(ts){}
     Tache(Tache& t):Note(t),action(t.action),priorite(t.priorite),echeance(t.echeance),statut(t.statut){}
     /**< Destructeur de Tache */
     ~Tache(){}
@@ -128,6 +134,7 @@ public:
     TacheStatut getStatut() const {return statut;}
     int getPriorite() const {return priorite;}
     TIME::Date getEcheance() const {return echeance;}
+    QString getTypeNote() const {return "Tache";}
     /**< Commandes setAttributs */
     void setAction(const QString& act){action=act;}
     void setStatut(const TacheStatut s){statut=s;}
@@ -136,7 +143,7 @@ public:
     /**< Methode d'edition */
     Tache& edit();
     /**< Methode d'affichage specifique */
-    //void afficherSpecifique(std::ostream& f) const;
+    QVBoxLayout afficherSpecifique(QWidget* parent) const;
     /**< Methode pour ajouter des references specifique */
     void AddRefsSpecifique(Manager& m);
 
@@ -156,7 +163,7 @@ public:
     /**< Constructeurs de Multimedia */
     Multimedia(const unsigned long i, const QString& ti, const QString& adr, TypeMultimedia ty=image, const QString& desc=""):Note(i,ti),adresseFichier(adr),type(ty),description(desc){}
     Multimedia(Multimedia& m):Note(m),adresseFichier(m.adresseFichier),type(m.type),description(m.description){}
-    Multimedia(const unsigned long i, const QString& s, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e, const QString& af, const TypeMultimedia ty,const QString& dec):Note(i,s,dc,hc,dm,hm,act,e),adresseFichier(af), type(ty), description(dec){}
+    Multimedia(const unsigned long i, const QString& s, const QDateTime dc, const QDateTime dm, bool act, NoteEtat e, const QString& af, const TypeMultimedia ty,const QString& dec):Note(i,s,dc,dm,act,e),adresseFichier(af), type(ty), description(dec){}
 
     /**< Destructeur de Multimedia */
     ~Multimedia(){}
@@ -164,6 +171,7 @@ public:
     QString getAdresseFichier() const {return adresseFichier;}
     QString getDescription() const {return description;}
     TypeMultimedia getType() const {return type;}
+    QString getTypeNote() const {return "Multimedia";}
     /**< Commandes setAttributs */
     void setAdresseFichier(const QString& adr){adresseFichier=adr;}
     void setDescription(const QString& desc){description=desc;}
@@ -171,7 +179,7 @@ public:
     /**< Methode d'edition */
     Multimedia& edit();
     /**< Methode d'affichage specifique */
-   // void afficherSpecifique(std::ostream& f) const;
+    QVBoxLayout afficherSpecifique(QWidget* parent) const;
     /**< Methode pour ajouter des references specifique */
     void AddRefsSpecifique(Manager& m);
 
