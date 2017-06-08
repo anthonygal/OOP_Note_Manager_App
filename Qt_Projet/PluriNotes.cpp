@@ -113,7 +113,6 @@ void Manager::afficherTout()const{
 }
 */
 
-
 /**< TEMPLATE METHOD SINGLETON POUR LA CLASS MANAGER */
 
 Manager* Manager::InstanceUnique=nullptr;
@@ -404,7 +403,6 @@ QString Note::ActueltoQString()const{
 }
 
 
-
 void Manager::load() {
     QFile fin(filename);
     // If we can't open it, let's show an error message.
@@ -433,8 +431,8 @@ void Manager::load() {
                 QString texte;
                 QString dateCrea;
                 QString dateModif;
-                QString horaireCrea;
-                QString horaireModif;
+                //QString horaireCrea;
+                //QString horaireModif;
                 QString actuel;
                 QString etat;
                 QXmlStreamAttributes attributes = xml.attributes();
@@ -503,8 +501,8 @@ void Manager::load() {
                 QString statut;
                 QString dateCrea;
                 QString dateModif;
-                QString horaireCrea;
-                QString horaireModif;
+                //QString horaireCrea;
+                //QString horaireModif;
                 QString actuel;
                 QString etat;
                 QXmlStreamAttributes attributes = xml.attributes();
@@ -587,8 +585,8 @@ void Manager::load() {
                 QString description;
                 QString dateCrea;
                 QString dateModif;
-                QString horaireCrea;
-                QString horaireModif;
+                //QString horaireCrea;
+                //QString horaireModif;
                 QString actuel;
                 QString etat;
                 QXmlStreamAttributes attributes = xml.attributes();
@@ -674,23 +672,15 @@ void Manager::addArticle(const int id, const QString& ti, const QDateTime& dc, c
     Manager::ajouterNote(*a);
 }
 
-
-
-
-void Manager::addTache(const int id, const QString& ti, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e,const QString& acti, const int prio, const Date eche, const TacheStatut ts ){
-    Tache* a=new Tache(id,ti,dc,hc,dm,hm,act,e,acti, prio, eche, ts);
+void Manager::addTache(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& acti, const int prio, const Date eche, const TacheStatut ts ){
+    Tache* a=new Tache(id,ti,dc,dm,act,e,acti, prio, eche, ts);
     Manager::ajouterNote(*a);
 }
 
-
-
-void Manager::addMultimedia(const int id, const QString& ti, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec){
-    Multimedia* a=new Multimedia(id,ti,dc,hc,dm,hm,act,e,af,ty,dec);
+void Manager::addMultimedia(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec){
+    Multimedia* a=new Multimedia(id,ti,dc,dm,act,e,af,ty,dec);
     Manager::ajouterNote(*a);
 }
-
-
-
 
 NoteEtat Note::QStringtoNoteEtat(const QString& str){
     if (str=="active"){return active; }

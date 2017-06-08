@@ -2,21 +2,17 @@
 <notes>
     <article>
 	 <id>1</id>
-	 <datecrea>12/10/2016</datecrea>
-	 <horairecrea>12/56</horairecrea>
-	 <datemodif>13/10/2016</datemodif>
-	 <horairemodif>11/45</horairemodif>
+	 <datecrea>12/10/2016 12:56</datecrea>
+	 <datemodif>13/10/2016 11:45</datemodif>
 	<etat>active</etat>
 	<actuel>true</actuel>
         <titre>Avant Propos</titre>
-	<texte>aut toujours bien lire un sujet avant de commencer.</texte>
+	<texte>Faut toujours bien lire un sujet avant de commencer.</texte>
     </article>
     <tache>
 	 <id>2</id>
-	 <datecrea>12/09/2005</datecrea>
-	 <horairecrea>9/56</horairecrea>
-	 <datemodif>18/04/2006</datemodif>
-	 <horairemodif>07/45</horairemodif>
+	 <datecrea>12/09/2005 09:56</datecrea>
+	 <datemodif>18/04/2006 07:45</datemodif>
 	<etat>active</etat>
 	<actuel>true</actuel>
         <titre>Avant Propos</titre>
@@ -27,10 +23,8 @@
     </tache>
     <multimedia>
 	 <id>3</id>
-	 <datecrea>08/01/2014</datecrea>
-	 <horairecrea>01/17</horairecrea>
-	 <datemodif>08/01/2014</datemodif>
-	 <horairemodif>01/17</horairemodif>
+	 <datecrea>08/01/2014 01:17</datecrea>
+	 <datemodif>08/01/2014 01:17</datemodif>
 	<etat>active</etat>
 	<actuel>true</actuel>
         <titre>Avant Propos</titre>

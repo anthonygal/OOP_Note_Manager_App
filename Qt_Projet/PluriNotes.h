@@ -11,9 +11,9 @@
 #include <QString>
 #include <QtWidgets>
 
-#define format "dd/mm/yyyy hh:mm:ss"
-
 using namespace TIME;
+
+const QString format = "dd/mm/yyyy hh:mm";
 
 enum NoteEtat{ active, archivee, corbeille }; /**< Les differents etats d'une Note */
 enum TacheStatut{ attente, encours, terminee }; /**< Les differents statuts d'une Tache */
@@ -72,7 +72,7 @@ public:
    //virtual Note& edit()=0;
     /**< Methodes d'affichage */
     QVBoxLayout* afficher(QWidget* parent) const;
-    virtual QVBoxLayout afficherSpecifique(QWidget* parent) const = 0;
+    //virtual QVBoxLayout afficherSpecifique(QWidget* parent) const = 0;
     /**< Methodes pour ajouter des references */
     void AddRefs(Manager& m);
     virtual void AddRefsSpecifique(Manager& m)=0;
@@ -106,7 +106,7 @@ public:
     /**< Methode d'edition */
     Article& edit();
     /**< Methode d'affichage specifique */
-    QVBoxLayout afficherSpecifique(QWidget* parent) const;
+    //QVBoxLayout afficherSpecifique(QWidget* parent) const;
     /**< Methode pour ajouter des references specifique */
     void AddRefsSpecifique(Manager& m);
 
@@ -143,7 +143,7 @@ public:
     /**< Methode d'edition */
     Tache& edit();
     /**< Methode d'affichage specifique */
-    QVBoxLayout afficherSpecifique(QWidget* parent) const;
+    //QVBoxLayout afficherSpecifique(QWidget* parent) const;
     /**< Methode pour ajouter des references specifique */
     void AddRefsSpecifique(Manager& m);
 
@@ -179,7 +179,7 @@ public:
     /**< Methode d'edition */
     Multimedia& edit();
     /**< Methode d'affichage specifique */
-    QVBoxLayout afficherSpecifique(QWidget* parent) const;
+    //QVBoxLayout afficherSpecifique(QWidget* parent) const;
     /**< Methode pour ajouter des references specifique */
     void AddRefsSpecifique(Manager& m);
 
@@ -267,7 +267,8 @@ public:
     int getNbRelations() const {return nbRelations;}
     Reference& getReference();
     Note* searchID(unsigned long id);
-    /**< Methode pour afficher toutes les notes */
+    /**< Methode pour afficher les notes */
+    //void afficherNote() const;
     void afficherTout() const;
     /**< Methodes pour ajouter un Article/Tache/Multimedia au tableau de notes*/
     void newArticle(const QString& ti, const QString& te=""); /**< creation d'un article */
@@ -298,9 +299,9 @@ public:
     //void loadArticle();
     //void loadTache();
     //void loadMultimedia();
-    void addArticle(const int id, const QString& ti, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e,const QString& te );
-    void addTache(const int id, const QString& ti, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e,const QString& acti, const int prio, const Date eche, const TacheStatut ts );
-    void addMultimedia(const int id, const QString& ti, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec);
+    void addArticle(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& te);
+    void addTache(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& acti, const int prio, const Date eche, const TacheStatut ts);
+    void addMultimedia(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec);
 
 
     void setFilename(const QString& f) { filename=f; }

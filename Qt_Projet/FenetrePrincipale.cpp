@@ -1,6 +1,8 @@
 #include "FenetrePrincipale.h"
 
 FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
+    const QString format2 = "dd/mm/yyyy hh:mm:ss";
+
     QMenu *menuAfficher = menuBar()->addMenu("&Fichier");
         QAction *actionQuitter = new QAction("&Quitter", this);
         menuAfficher->addAction(actionQuitter);
@@ -17,20 +19,15 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
     const Note& n = m.getConstIteratorNotes().current();
 
     QWidget *zoneCentrale = new QWidget;
-    QLabel *labID = new QLabel("ID : ",this);
-    QLabel *ID = new QLabel(QString::number(n.getID()),this);
-    QLabel *labTitre = new QLabel("Titre : ",this);
-    QLabel *Titre = new QLabel(n.getTitre(),this);
-
-    QHBoxLayout *hlayout1 = new QHBoxLayout;
-        hlayout1->addWidget(labID);
-        hlayout1->addWidget(ID);
-    QHBoxLayout *hlayout2 = new QHBoxLayout;
-        hlayout2->addWidget(labTitre);
-        hlayout2->addWidget(Titre);
-    QVBoxLayout *vlayout = new QVBoxLayout;
-        vlayout->addLayout(hlayout1);
-        vlayout->addLayout(hlayout2);
-    zoneCentrale->setLayout(vlayout);
+    QVBoxLayout *layout = n.afficher(this);
+    QHBoxLayout *layouth = new QHBoxLayout;
+    QLabel *ldtry = new QLabel("Essai Date : ");
+    layouth->addWidget(ldtry);
+    QDateTime date = QDateTime::fromString("11/12/2016 07:43:37",format2);
+    if(!date.isValid()){ QLabel *error = new QLabel("Erreur !!!"); layouth->addWidget(error);}
+    QLabel *dtry = new QLabel(date.toString(format2));
+    layouth->addWidget(dtry);
+    layout->addLayout(layouth);
+    zoneCentrale->setLayout(layout);
     setCentralWidget(zoneCentrale);
 }
