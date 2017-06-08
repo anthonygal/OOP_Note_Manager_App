@@ -320,10 +320,10 @@ void Article::saveNote(QXmlStreamWriter& stream)const{
      QString str = "";
      str = QString::number(n);
     stream.writeTextElement("id",str);
-    stream.writeTextElement("datecrea",getDateCrea());
-    stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
-    stream.writeTextElement("datemodif",getDateModif().DatetoQString());
-    stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
+    stream.writeTextElement("datecrea",getDateCrea().toString(format));
+    //stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
+    stream.writeTextElement("datemodif",getDateModif().toString(format));
+    //stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
     stream.writeTextElement("etat",NoteEtattoQString());
     stream.writeTextElement("actuel",ActueltoQString());
     stream.writeTextElement("titre",getTitre());
@@ -337,11 +337,11 @@ void Tache::saveNote(QXmlStreamWriter& stream)const{
      QString str = "";
      str = QString::number(n);
     stream.writeTextElement("id",str);
-    stream.writeTextElement("datecrea",getDateCrea().DatetoQString());
-    stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
-    stream.writeTextElement("datemodif",getDateModif().DatetoQString());
-    stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
-    stream.writeTextElement("etat",NoteEtattoQString());    
+    stream.writeTextElement("datecrea",getDateCrea().toString(format));
+    //stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
+    stream.writeTextElement("datemodif",getDateModif().toString(format));
+    //stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
+    stream.writeTextElement("etat",NoteEtattoQString());
     stream.writeTextElement("actuel",ActueltoQString());
     stream.writeTextElement("titre",getTitre());
     stream.writeTextElement("action",getAction());
@@ -359,11 +359,11 @@ void Multimedia::saveNote(QXmlStreamWriter& stream)const{
      QString str = "";
      str = QString::number(n);
     stream.writeTextElement("id",str);
-    stream.writeTextElement("datecrea",getDateCrea().DatetoQString());
-    stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
-    stream.writeTextElement("datemodif",getDateModif().DatetoQString());
-    stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
-    stream.writeTextElement("etat",NoteEtattoQString()); 
+    stream.writeTextElement("datecrea",getDateCrea().toString(format));
+    //stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
+    stream.writeTextElement("datemodif",getDateModif().toString(format));
+    //stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
+    stream.writeTextElement("etat",NoteEtattoQString());
     stream.writeTextElement("actuel",ActueltoQString());
     stream.writeTextElement("titre",getTitre());
     stream.writeTextElement("adressefichier",getAdresseFichier());
@@ -452,18 +452,18 @@ void Manager::load() {
                             xml.readNext(); dateCrea=xml.text().toString();
                             qDebug()<<"datecrea="<<dateCrea<<"\n";
                         }
-                        if(xml.name() == "horairecrea") {
-                            xml.readNext(); horaireCrea=xml.text().toString();
-                            qDebug()<<"horairecrea="<<horaireCrea<<"\n";
-                        }
+                        // if(xml.name() == "horairecrea") {
+                        //     xml.readNext(); horaireCrea=xml.text().toString();
+                        //     qDebug()<<"horairecrea="<<horaireCrea<<"\n";
+                        // }
                         if(xml.name() == "datemodif") {
                             xml.readNext(); dateModif=xml.text().toString();
                             qDebug()<<"datemodif="<<dateModif<<"\n";
                         }
-                        if(xml.name() == "horairemodif") {
-                            xml.readNext(); horaireModif=xml.text().toString();
-                            qDebug()<<"horairemodif="<<horaireModif<<"\n";
-                        }
+                        // if(xml.name() == "horairemodif") {
+                        //     xml.readNext(); horaireModif=xml.text().toString();
+                        //     qDebug()<<"horairemodif="<<horaireModif<<"\n";
+                        // }
 
                         if(xml.name() == "etat") {
                             xml.readNext(); etat=xml.text().toString();
@@ -490,8 +490,7 @@ void Manager::load() {
                     xml.readNext();
                 }
                 qDebug()<<"ajout note "<<identificateur<<"\n";
-                addArticle(identificateur.toInt(),titre,TIME::Date::QStringtoDate(dateCrea), TIME::Horaire::QStringtoHoraire(horaireCrea),
-                           TIME::Date::QStringtoDate(dateModif),TIME::Horaire::QStringtoHoraire(horaireModif),Note::QStringtoActuel(actuel),Note::QStringtoNoteEtat(etat),texte );
+                addArticle(identificateur.toInt(),titre,QDateTime::fromString(dateCrea,format),QDateTime::fromString(dateModif,format),Note::QStringtoActuel(actuel),Note::QStringtoNoteEtat(etat),texte );
             }
 
             if(xml.name() == "tache") {
@@ -523,18 +522,18 @@ void Manager::load() {
                             xml.readNext(); dateCrea=xml.text().toString();
                             qDebug()<<"datecrea="<<dateCrea<<"\n";
                         }
-                        if(xml.name() == "horairecrea") {
-                            xml.readNext(); horaireCrea=xml.text().toString();
-                            qDebug()<<"horairecrea="<<horaireCrea<<"\n";
-                        }
+                        // if(xml.name() == "horairecrea") {
+                        //     xml.readNext(); horaireCrea=xml.text().toString();
+                        //     qDebug()<<"horairecrea="<<horaireCrea<<"\n";
+                        // }
                         if(xml.name() == "datemodif") {
                             xml.readNext(); dateModif=xml.text().toString();
                             qDebug()<<"datemodif="<<dateModif<<"\n";
                         }
-                        if(xml.name() == "horairemodif") {
-                            xml.readNext(); horaireModif=xml.text().toString();
-                            qDebug()<<"horairemodif="<<horaireModif<<"\n";
-                        }
+                        // if(xml.name() == "horairemodif") {
+                        //     xml.readNext(); horaireModif=xml.text().toString();
+                        //     qDebug()<<"horairemodif="<<horaireModif<<"\n";
+                        // }
 
                         if(xml.name() == "etat") {
                             xml.readNext(); etat=xml.text().toString();
@@ -575,7 +574,7 @@ void Manager::load() {
                     xml.readNext();
                 }
                 qDebug()<<"ajout note "<<identificateur<<"\n";
-                addTache(identificateur.toInt(), titre,TIME::Date::QStringtoDate(dateCrea),TIME::Horaire::QStringtoHoraire(horaireCrea),TIME::Date::QStringtoDate(dateModif),TIME::Horaire::QStringtoHoraire(horaireModif),Tache::QStringtoActuel(actuel),Tache::QStringtoNoteEtat(etat),action,priorite.toInt(), TIME::Date::QStringtoDate(echeance), Tache::QStringtoTacheStatut(statut));
+                addTache(identificateur.toInt(), titre,QDateTime::fromString(dateCrea,format),QDateTime::fromString(dateModif,format),Tache::QStringtoActuel(actuel),Tache::QStringtoNoteEtat(etat),action,priorite.toInt(), TIME::Date::QStringtoDate(echeance), Tache::QStringtoTacheStatut(statut));
 
                 }
             }
@@ -607,18 +606,18 @@ void Manager::load() {
                             xml.readNext(); dateCrea=xml.text().toString();
                             qDebug()<<"datecrea="<<dateCrea<<"\n";
                         }
-                        if(xml.name() == "horairecrea") {
-                            xml.readNext(); horaireCrea=xml.text().toString();
-                            qDebug()<<"horairecrea="<<horaireCrea<<"\n";
-                        }
+                        // if(xml.name() == "horairecrea") {
+                        //     xml.readNext(); horaireCrea=xml.text().toString();
+                        //     qDebug()<<"horairecrea="<<horaireCrea<<"\n";
+                        // }
                         if(xml.name() == "datemodif") {
                             xml.readNext(); dateModif=xml.text().toString();
                             qDebug()<<"datemodif="<<dateModif<<"\n";
                         }
-                        if(xml.name() == "horairemodif") {
-                            xml.readNext(); horaireModif=xml.text().toString();
-                            qDebug()<<"horairemodif="<<horaireModif<<"\n";
-                        }
+                        // if(xml.name() == "horairemodif") {
+                        //     xml.readNext(); horaireModif=xml.text().toString();
+                        //     qDebug()<<"horairemodif="<<horaireModif<<"\n";
+                        // }
 
                         if(xml.name() == "etat") {
                             xml.readNext(); etat=xml.text().toString();
@@ -654,8 +653,7 @@ void Manager::load() {
                     xml.readNext();
                 }
                 qDebug()<<"ajout note "<<identificateur<<"\n";
-                addMultimedia(identificateur.toInt(),titre,TIME::Date::QStringtoDate(dateCrea), TIME::Horaire::QStringtoHoraire(horaireCrea),
-                           TIME::Date::QStringtoDate(dateModif),TIME::Horaire::QStringtoHoraire(horaireModif),Note::QStringtoActuel(actuel),Note::QStringtoNoteEtat(etat),adressefichier, Multimedia::QStringtoTypeMultimedia(type), description);
+                addMultimedia(identificateur.toInt(),titre,QDateTime::fromString(dateCrea,format),QDateTime::fromString(dateModif,format),Note::QStringtoActuel(actuel),Note::QStringtoNoteEtat(etat),adressefichier, Multimedia::QStringtoTypeMultimedia(type), description);
                 }
             }
 
@@ -671,8 +669,8 @@ void Manager::load() {
 
 
 
-void Manager::addArticle(const int id, const QString& ti, const Date dc, const Horaire hc, const Date dm, const Horaire hm, bool act, NoteEtat e,const QString& te ){
-    Article* a=new Article(id,ti,dc,hc,dm,hm,act,e,te);
+void Manager::addArticle(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& te ){
+    Article* a=new Article(id,ti,dc,dm,act,e,te);
     Manager::ajouterNote(*a);
 }
 
@@ -930,7 +928,7 @@ void Manager::supprimer(Note& N){
         }
     }
     else {
-        
+
         N.setEtat(corbeille);
         unsigned int i=0;
         while (i<nbNotes){

@@ -49,7 +49,7 @@ private:
 public:
     /**< Constructeurs */
     Note(const unsigned long i, const QString& s): ID(i),titre(s), dateCrea(QDateTime::currentDateTime()), dateModif(QDateTime::currentDateTime()), etat(active), actuel(true){}
-    Note(const unsigned long i, const QString& s, const QDateTime dc, const QDateTime dm, bool act, NoteEtat e): ID(i), titre(s), dateCrea(dc), dateModif(dm), etat(e), actuel(act){}
+    Note(const unsigned long i, const QString& s, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e): ID(i), titre(s), dateCrea(dc), dateModif(dm), etat(e), actuel(act){}
     Note(Note& n);
     /**< Destructeur */
     virtual ~Note(){};
@@ -94,7 +94,7 @@ private:
 public:
     /**< Constructeurs d'Article */
     Article(const unsigned long i, const QString& ti, const QString& te=""):Note(i,ti),texte(te){}
-    Article(const unsigned long i, const QString& s, const QDateTime dc, const QDateTime dm, bool act, NoteEtat e, const QString& te):Note(i,s,dc,dm,act,e), texte(te){}
+    Article(const unsigned long i, const QString& s, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e, const QString& te):Note(i,s,dc,dm,act,e), texte(te){}
     Article(Article& a):Note(a),texte(a.texte){}
     /**< Destructeur d'Article */
     ~Article(){}
@@ -124,7 +124,7 @@ private:
 public:
     /**< Constructeurs de Tache */
     Tache(const unsigned long i, const QString& ti, const QString& act, int prio=0, Date d=Date(1,1,0)):Note(i,ti),action(act),priorite(prio),echeance(d),statut(encours){}
-    Tache(const unsigned long i, const QString& s, const QDateTime dc, const QDateTime dm, bool act, NoteEtat e, const QString& acti, const int prio, const Date eche, const TacheStatut ts)
+    Tache(const unsigned long i, const QString& s, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e, const QString& acti, const int prio, const Date eche, const TacheStatut ts)
         :Note(i,s,dc,dm,act,e),action(acti),priorite(prio),echeance(eche), statut(ts){}
     Tache(Tache& t):Note(t),action(t.action),priorite(t.priorite),echeance(t.echeance),statut(t.statut){}
     /**< Destructeur de Tache */
@@ -163,7 +163,7 @@ public:
     /**< Constructeurs de Multimedia */
     Multimedia(const unsigned long i, const QString& ti, const QString& adr, TypeMultimedia ty=image, const QString& desc=""):Note(i,ti),adresseFichier(adr),type(ty),description(desc){}
     Multimedia(Multimedia& m):Note(m),adresseFichier(m.adresseFichier),type(m.type),description(m.description){}
-    Multimedia(const unsigned long i, const QString& s, const QDateTime dc, const QDateTime dm, bool act, NoteEtat e, const QString& af, const TypeMultimedia ty,const QString& dec):Note(i,s,dc,dm,act,e),adresseFichier(af), type(ty), description(dec){}
+    Multimedia(const unsigned long i, const QString& s, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e, const QString& af, const TypeMultimedia ty,const QString& dec):Note(i,s,dc,dm,act,e),adresseFichier(af), type(ty), description(dec){}
 
     /**< Destructeur de Multimedia */
     ~Multimedia(){}
