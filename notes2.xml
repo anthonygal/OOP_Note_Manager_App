@@ -2,8 +2,8 @@
 <notes>
     <article>
 	 <id>1</id>
-	 <datecrea>12/10/2016 12:56</datecrea>
-	 <datemodif>13/10/2016 11:45</datemodif>
+	 <datecrea>12/10/2016 12:56:59</datecrea>
+	 <datemodif>13/10/2016 11:45:12</datemodif>
 	<etat>active</etat>
 	<actuel>true</actuel>
         <titre>Avant Propos</titre>
@@ -11,8 +11,8 @@
     </article>
     <tache>
 	 <id>2</id>
-	 <datecrea>12/09/2005 09:56</datecrea>
-	 <datemodif>18/04/2006 07:45</datemodif>
+	 <datecrea>12/09/2005 09:56:35</datecrea>
+	 <datemodif>18/04/2006 07:45:43</datemodif>
 	<etat>active</etat>
 	<actuel>true</actuel>
         <titre>Avant Propos</titre>
@@ -23,8 +23,8 @@
     </tache>
     <multimedia>
 	 <id>3</id>
-	 <datecrea>08/01/2014 01:17</datecrea>
-	 <datemodif>08/01/2014 01:17</datemodif>
+	 <datecrea>08/01/2014 01:17:17</datecrea>
+	 <datemodif>08/01/2014 01:17:17</datemodif>
 	<etat>active</etat>
 	<actuel>true</actuel>
         <titre>Avant Propos</titre>

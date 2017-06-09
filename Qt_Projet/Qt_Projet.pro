@@ -6,16 +6,20 @@ QMAKE_CXXFLAGS = -std=c++11
 QMAKE_LFLAGS = -std=c++11
 
 HEADERS += \
-    PluriNotes.h \
     Relations.h \
     timing.h \
     NoteEditeur.h \
-    FenetrePrincipale.h
+    FenetrePrincipale.h \
+    Notes.h \
+    Manager.h \
+    QNotes.h
 
 SOURCES += \
     main.cpp \
-    PluriNotes.cpp \
     Relations.cpp \
     timing.cpp \
     NoteEditeur.cpp \
-    FenetrePrincipale.cpp
+    FenetrePrincipale.cpp \
+    Notes.cpp \
+    Manager.cpp \
+    QNotes.cpp

@@ -1,5 +1,5 @@
 #include "timing.h"
-#include "PluriNotes.h"
+#include "Notes.h"
 #include "FenetrePrincipale.h"
 #include <QFile>
 #include <QFileDialog>
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
     QString fichier = QFileDialog::getOpenFileName();
     m.setFilename(fichier);
     m.load();
-    FenetrePrincipale fenetre;
+    FenetrePrincipale fenetre(Manager::donneInstance());
     fenetre.show();
 
     return app.exec();

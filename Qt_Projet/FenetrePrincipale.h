@@ -1,16 +1,18 @@
 #ifndef FENETREPRINCIPALE_H
 #define FENETREPRINCIPALE_H
 
-#include "PluriNotes.h"
+#include "Manager.h"
+#include "QNotes.h"
 #include <QtWidgets>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-class FenetrePrincipale : public QMainWindow
-{
+class FenetrePrincipale : public QMainWindow{
     Q_OBJECT
+    Manager& manager;
+    //Note& note;
 public:
-    explicit FenetrePrincipale(QWidget *parent = nullptr);
+    explicit FenetrePrincipale(Manager& m, QWidget *parent = nullptr);
 
 signals:
 

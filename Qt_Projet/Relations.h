@@ -1,8 +1,7 @@
 #ifndef Relations_hpp
 #define Relations_hpp
 
-#include "PluriNotes.h"
-#include <QString>
+#include "Notes.h"
 
 using namespace TIME;
 
@@ -14,7 +13,6 @@ class NoteException;
 
 /**< CLASS COUPLE */
 class Couple{
-private:
     QString label;
     Note* note1;
     Note* note2;
@@ -33,7 +31,7 @@ public:
 
 /**< CLASS RELATION */
 class Relation{
-private:
+    friend class Couple;
     QString titre;
     QString description;
     bool orientee;
@@ -52,8 +50,8 @@ public:
     Couple** getCouples() const {return couples;}
     int getnbCouples() const {return nbCouples;}
     /**< Commandes setAttributs */
-    void setOrientatee(){orientee=true;}
-    void setNonOrientatee(){orientee=false;}
+    void setOrientee(){orientee=true;}
+    void setNonOrientee(){orientee=false;}
     /**< Methode pour ajouter un couple a la relation */
     void addCouple(Couple& c);
 };
@@ -74,10 +72,5 @@ private:
     static Reference& donneInstance();
     static void libereInstance();
  };
-
-/**< Je te laisse Anthony ^^ */
-unsigned long findRefID(const QString& s, int p);
-
-int getPosition(const QString& s, int p);
 
 #endif /* Relations_h */
