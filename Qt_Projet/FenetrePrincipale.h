@@ -13,6 +13,7 @@ class FenetrePrincipale : public QMainWindow{
     //Note& note;
 public:
     explicit FenetrePrincipale(Manager& m, QWidget *parent = nullptr);
+    //void afficherNote(const Note& n);
 
 signals:
 

@@ -14,10 +14,13 @@ FenetrePrincipale::FenetrePrincipale(Manager& m, QWidget *parent) : QMainWindow(
             newNote->addAction(newTache);
             newNote->addAction(newMultimedia);
 
-    Note& n = m.getIteratorNotes().current();
+    Manager::IteratorNotes it = m.getIteratorNotes();
+//    it.next();
+//    it.next();
+    Note& n = it.current();
     QNote qn(n,this);
     //QLabel* zoneCentrale = new QLabel("Aucune note n'a ete selectionnée");
     QWidget* zoneCentrale = new QWidget();
-    zoneCentrale->setLayout(qn.getLayout());
+    zoneCentrale->setLayout(qn.layout());
     setCentralWidget(zoneCentrale);
 }
