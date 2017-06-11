@@ -36,6 +36,8 @@ Manager::~Manager(){
 
 /**< TEMPLATE METHOD ITERATOR DANS LA CLASSE MANAGER POUR LES NOTES */
 
+/**< Iterator de notes */
+
 void Manager::IteratorNotes::next(){
     if(isDone()) throw NoteException("\nnext() sur un IteratorNotes fini !\n");
     remain--;
@@ -47,14 +49,66 @@ Note& Manager::IteratorNotes::current() const{
     return **currentN;
 }
 
-void Manager::ConstIteratorNotes::next(){
-    if(isDone()) throw NoteException("\nnext() sur un ConstIteratorNotes fini !\n");
-    remain--;
-    currentN++;
+/**< Iterator de notes actives */
+
+Manager::IteratorNotesActive::IteratorNotesActive(Note** t, int n): currentN(t), remain(n){
+    while(remain>0 && (*currentN)->getEtat()!=active){
+        currentN++;
+        remain--;
+    }
 }
 
-const Note& Manager::ConstIteratorNotes::current() const{
-    if(isDone()) throw NoteException("\ncurrent() sur un ConstIteratorNotes fini !\n");
+void Manager::IteratorNotesActive::next(){
+    while(!isDone() && (*currentN)->getEtat()!=active){
+        remain--;
+        currentN++;
+    }
+}
+
+Note& Manager::IteratorNotesActive::current() const{
+    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
+    return **currentN;
+}
+
+/**< Iterator de notes archivees */
+
+Manager::IteratorNotesArchivee::IteratorNotesArchivee(Note** t, int n): currentN(t), remain(n){
+    while(remain>0 && (*currentN)->getEtat()!=archivee){
+        currentN++;
+        remain--;
+    }
+}
+
+void Manager::IteratorNotesArchivee::next(){
+    while(!isDone() && (*currentN)->getEtat()!=archivee){
+        remain--;
+        currentN++;
+    }
+}
+
+Note& Manager::IteratorNotesArchivee::current() const{
+    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
+    return **currentN;
+}
+
+/**< Iterator de notes dans l'etat corbeille */
+
+Manager::IteratorNotesCorbeille::IteratorNotesCorbeille(Note** t, int n): currentN(t), remain(n){
+    while(remain>0 && (*currentN)->getEtat()!=corbeille){
+        currentN++;
+        remain--;
+    }
+}
+
+void Manager::IteratorNotesCorbeille::next(){
+    while(!isDone() && (*currentN)->getEtat()!=corbeille){
+        remain--;
+        currentN++;
+    }
+}
+
+Note& Manager::IteratorNotesCorbeille::current() const{
+    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
     return **currentN;
 }
 

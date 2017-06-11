@@ -42,10 +42,12 @@ int main(int argc, char* argv[])
 //    //std::cout<<"\ntype de a : "<<typeid(a).name()<<"\n"; //Ca affiche un chiffre devant la classe mais je n'arrive pas � l'enlever...
 
     QApplication app(argc, argv);
+
     Manager& m=Manager::donneInstance();
     QString fichier = QFileDialog::getOpenFileName();
     m.setFilename(fichier);
     m.load();
+
     FenetrePrincipale fenetre(Manager::donneInstance());
     fenetre.show();
 

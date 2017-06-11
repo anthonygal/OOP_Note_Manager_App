@@ -24,32 +24,58 @@ public:
     /**< Template Method Singleton */
     static Manager& donneInstance();
     static void libereInstance();
-    /**< Iterateur pour notes */
+    /**< Iterateur de notes actives */
     class IteratorNotes{
     private:
         friend class Manager;
         Note** currentN;
         int remain;
-        IteratorNotes(Note** t, int n): currentN(t), remain(n){}
+        IteratorNotes(Note** t, int n):currentN(t),remain(n){}
     public:
-       bool isDone() const { return !remain; }
-       void next();
-       Note& current() const;
+        bool isDone() const {return !remain;}
+        void next();
+        Note& current() const;
     };
-    IteratorNotes getIteratorNotes() const {return IteratorNotes(notes, nbNotes);}
-    /**< Iterateur constant pour notes  */
-    class ConstIteratorNotes{
+    IteratorNotes getIteratorNotes() const{return IteratorNotes(notes, nbNotes);}
+    /**< Iterateur de notes actives */
+    class IteratorNotesActive{
     private:
         friend class Manager;
         Note** currentN;
         int remain;
-        ConstIteratorNotes(Note** t, int n): currentN(t), remain(n){}
+        IteratorNotesActive(Note** t, int n);
     public:
-       bool isDone() const { return !remain; }
-       void next();
-       const Note& current() const;
+        bool isDone() const {return !remain;}
+        void next();
+        Note& current() const;
     };
-    ConstIteratorNotes getConstIteratorNotes() const {return ConstIteratorNotes(notes, nbNotes);}
+    IteratorNotesActive getIteratorNotesActive() const{return IteratorNotesActive(notes, nbNotes);}
+    /**< Iterateur de notes archivees */
+    class IteratorNotesArchivee{
+    private:
+        friend class Manager;
+        Note** currentN;
+        int remain;
+        IteratorNotesArchivee(Note** t, int n);
+    public:
+        bool isDone() const {return !remain;}
+        void next();
+        Note& current() const;
+    };
+    IteratorNotesArchivee getIteratorNotesArchivee() const{return IteratorNotesArchivee(notes, nbNotes);}
+    /**< Iterateur de notes dans l'etat corbeille */
+    class IteratorNotesCorbeille{
+    private:
+        friend class Manager;
+        Note** currentN;
+        int remain;
+        IteratorNotesCorbeille(Note** t, int n);
+    public:
+       bool isDone() const {return !remain;}
+       void next();
+       Note& current() const;
+    };
+    IteratorNotesCorbeille getIteratorNotesCorbeille() const{return IteratorNotesCorbeille(notes, nbNotes);}
     /**< Iterateur pour relations */
     class IteratorRelations{
     private:

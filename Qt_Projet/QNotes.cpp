@@ -46,6 +46,8 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
         hlayout5->addWidget(Titre);
     vlayout->addLayout(hlayout5);
 
+    QHBoxLayout *boutonsLayout = new QHBoxLayout;
+
     if(n.getTypeNote() == "Article"){
         Article& a = dynamic_cast<Article&>(n);
 
@@ -118,5 +120,44 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
         vlayout->addLayout(hlayout8);
     }
 
+    if(n.getEtat() == active){
+        if(n.isActuelle()){
+            QPushButton *boutonModifier = new QPushButton("Modifier");
+            boutonsLayout->addWidget(boutonModifier);
+        }
+        else{
+            QPushButton *boutonRestaurerVersion = new QPushButton("Revenir à cette version");
+            boutonsLayout->addWidget(boutonRestaurerVersion);
+        }
+        QPushButton *boutonSupprimer = new QPushButton("Supprimer");
+        boutonsLayout->addWidget(boutonSupprimer);
+    }
+    else{
+        QPushButton *boutonRestaurer = new QPushButton("Restaurer");
+        boutonsLayout->addWidget(boutonRestaurer);
+    }
+
+    vlayout->addLayout(boutonsLayout);
     setLayout(vlayout);
+}
+
+QNoteReduite::QNoteReduite(Note& n, QWidget *parent) : QPushButton(parent), note(n)
+{
+    setMinimumSize(150,50);
+    QVBoxLayout *vlayout = new QVBoxLayout;
+
+    QHBoxLayout *hlayout0 = new QHBoxLayout;
+        QLabel *Type = new QLabel(n.getTypeNote());
+        QLabel *ID = new QLabel(QString::number(n.getID()));
+        hlayout0->addWidget(Type);
+        hlayout0->addWidget(ID);
+    vlayout->addLayout(hlayout0);
+
+    QHBoxLayout *hlayout1 = new QHBoxLayout;
+        QLabel *Titre = new QLabel(n.getTitre());
+        hlayout1->addWidget(Titre);
+    vlayout->addLayout(hlayout1);
+
+    setLayout(vlayout);
+    show();
 }

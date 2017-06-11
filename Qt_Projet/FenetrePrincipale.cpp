@@ -1,26 +1,44 @@
 #include "FenetrePrincipale.h"
 
 FenetrePrincipale::FenetrePrincipale(Manager& m, QWidget *parent) : QMainWindow(parent), manager(m){
-    QAction* actionQuitter = new QAction("&Quitter", this);
-    QAction* newArticle = new QAction("Article", this);
-    QAction* newTache = new QAction("Tache", this);
-    QAction* newMultimedia = new QAction("Article", this);
-
-    QMenu* menuAfficher = menuBar()->addMenu("&Fichier");
+    QMenu *menuAfficher = menuBar()->addMenu("&Fichier");
+        QAction *actionQuitter = new QAction("&Quitter", this);
         menuAfficher->addAction(actionQuitter);
-    QMenu* menuNotes = menuBar()->addMenu("&Notes");
-        QMenu* newNote = menuNotes->addMenu("Nouvelle note");
+    QMenu *menuNotes = menuBar()->addMenu("&Notes");
+        QMenu *newNote = menuNotes->addMenu("Nouvelle note");
+            QAction *newArticle = new QAction("Article", this);
+            QAction *newTache = new QAction("Tache", this);
+            QAction *newMultimedia = new QAction("Article", this);
             newNote->addAction(newArticle);
             newNote->addAction(newTache);
             newNote->addAction(newMultimedia);
 
+    QDockWidget *leftDockWidget = new QDockWidget("Toutes les notes");
+        leftDockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
+        QWidget *leftWidget = new QWidget;
+        QVBoxLayout *leftLayout = new QVBoxLayout;
+            QVBoxLayout *partieNotesActives = new QVBoxLayout;
+                for(Manager::IteratorNotes it=m.getIteratorNotes();!it.isDone();it.next()){
+                    if(it.current().getEtat() == active){
+                        QNoteReduite *qnr = new QNoteReduite(it.current(),this);
+                        partieNotesActives->addWidget(qnr);
+                    }
+                }
+            leftLayout->addLayout(partieNotesActives);
+            QVBoxLayout *partieNotesArchivees = new QVBoxLayout;
+            for(Manager::IteratorNotes it=m.getIteratorNotes();!it.isDone();it.next()){
+                if(it.current().getEtat() == archivee){
+                    QNoteReduite *qnr = new QNoteReduite(it.current(),this);
+                    partieNotesArchivees->addWidget(qnr);
+                }
+            }
+            leftLayout->addLayout(partieNotesArchivees);
+        leftWidget->setLayout(leftLayout);
+        leftDockWidget->setWidget(leftWidget);
+    addDockWidget(Qt::LeftDockWidgetArea,leftDockWidget);
+
     Manager::IteratorNotes it = m.getIteratorNotes();
-//    it.next();
-//    it.next();
-    Note& n = it.current();
-    QNote qn(n,this);
-    //QLabel* zoneCentrale = new QLabel("Aucune note n'a ete selectionnée");
-    QWidget* zoneCentrale = new QWidget();
-    zoneCentrale->setLayout(qn.layout());
-    setCentralWidget(zoneCentrale);
+    while(it.current().getEtat() != active) it.next();
+    QNote *qn = new QNote(it.current(),this);
+    setCentralWidget(qn);
 }
