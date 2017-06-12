@@ -124,35 +124,38 @@ void FenetrePrincipale::updateCentralWidget(Note& n){
     setCentralWidget(zoneCentrale);
 }
 
-//void updateRightDockWidget(Note& n){
-//    QDockWidget *rightDockWidget = new QDockWidget("Relations de la note principale");
-//        QWidget *rightWidget = new QWidget;
-//        QVBoxLayout *rightLayout = new QVBoxLayout;
-//            QScrollArea *scrollRelAsc = new QScrollArea;
-//                QWidget *relAscWidget = new QWidget;
-//                QVBoxLayout *relAscLayout = new QVBoxLayout;
-//                    for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
-//                        //A faire
-//                    }
-//                relAscWidget->setLayout(relAscLayout);
-//            scrollRelAsc->setWidget(relAscWidget);
-//            scrollRelAsc->setWidgetResizable(true);
-//        rightLayout->addWidget(scrollRelAsc);
+void FenetrePrincipale::updateRightDockWidget(Note& n){
+    Manager& manager = Manager::donneInstance();
 
-//            QScrollArea *scrollRelDesc = new QScrollArea;
-//                QWidget *relDescWidget = new QWidget;
-//                QVBoxLayout *relDescLayout = new QVBoxLayout;
-//                    for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
-//                        //A faire
-//                    }
-//                relDescWidget->setLayout(relDescLayout);
-//            scrollRelDesc->setWidget(relDescWidget);
-//            scrollRelDesc->setWidgetResizable(true);
-//        rightLayout->addWidget(scrollRelDesc);
-//    rightDockWidget->setWidget(rightWidget);
-//    addDockWidget(Qt::RightDockWidgetArea,rightDockWidget);
-//}
+    QDockWidget *rightDockWidget = new QDockWidget("Relations de la note principale");
+        QWidget *rightWidget = new QWidget;
+        QVBoxLayout *rightLayout = new QVBoxLayout;
+            QScrollArea *scrollRelAsc = new QScrollArea;
+                QWidget *relAscWidget = new QWidget;
+                QVBoxLayout *relAscLayout = new QVBoxLayout;
+                    for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
+                        //A faire
+                    }
+                relAscWidget->setLayout(relAscLayout);
+            scrollRelAsc->setWidget(relAscWidget);
+            scrollRelAsc->setWidgetResizable(true);
+        rightLayout->addWidget(scrollRelAsc);
+
+            QScrollArea *scrollRelDesc = new QScrollArea;
+                QWidget *relDescWidget = new QWidget;
+                QVBoxLayout *relDescLayout = new QVBoxLayout;
+                    for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
+                        //A faire
+                    }
+                relDescWidget->setLayout(relDescLayout);
+            scrollRelDesc->setWidget(relDescWidget);
+            scrollRelDesc->setWidgetResizable(true);
+        rightLayout->addWidget(scrollRelDesc);
+    rightDockWidget->setWidget(rightWidget);
+    addDockWidget(Qt::RightDockWidgetArea,rightDockWidget);
+}
 
 void FenetrePrincipale::changerNotePrincipale(Note &n){
     updateCentralWidget(n);
+    updateRightDockWidget(n);
 }

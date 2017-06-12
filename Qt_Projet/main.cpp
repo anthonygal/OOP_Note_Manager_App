@@ -44,8 +44,8 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
 
     Manager& m=Manager::donneInstance();
-    QString fichier = QFileDialog::getOpenFileName();
-    m.setFilename(fichier);
+    //QString fichier = QFileDialog::getOpenFileName();
+    m.setFilename("notes2.xml");
     m.load();
 
     FenetrePrincipale fenetre;
