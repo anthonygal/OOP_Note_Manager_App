@@ -129,9 +129,7 @@ void Article::saveNote(QXmlStreamWriter& stream)const{
     stream.writeStartElement("article");
     stream.writeTextElement("id",QString::number(getID()));
     stream.writeTextElement("datecrea",getDateCrea().toString(formatDateTime));
-    //stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
     stream.writeTextElement("datemodif",getDateModif().toString(formatDateTime));
-    //stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
     stream.writeTextElement("etat",NoteEtattoQString());
     stream.writeTextElement("actuel",ActueltoQString());
     stream.writeTextElement("titre",getTitre());
@@ -143,9 +141,7 @@ void Tache::saveNote(QXmlStreamWriter& stream)const{
     stream.writeStartElement("tache");
     stream.writeTextElement("id",QString::number(getID()));
     stream.writeTextElement("datecrea",getDateCrea().toString(formatDateTime));
-    //stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
     stream.writeTextElement("datemodif",getDateModif().toString(formatDateTime));
-    //stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
     stream.writeTextElement("etat",NoteEtattoQString());
     stream.writeTextElement("actuel",ActueltoQString());
     stream.writeTextElement("titre",getTitre());
@@ -160,9 +156,7 @@ void Multimedia::saveNote(QXmlStreamWriter& stream)const{
     stream.writeStartElement("tache");
     stream.writeTextElement("id",QString::number(getID()));
     stream.writeTextElement("datecrea",getDateCrea().toString(formatDateTime));
-    //stream.writeTextElement("horairecrea",getHoraireCrea().HorairetoQString());
     stream.writeTextElement("datemodif",getDateModif().toString(formatDateTime));
-    //stream.writeTextElement("horairemodif",getHoraireModif().HorairetoQString());
     stream.writeTextElement("etat",NoteEtattoQString());
     stream.writeTextElement("actuel",ActueltoQString());
     stream.writeTextElement("titre",getTitre());

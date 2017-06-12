@@ -144,6 +144,8 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
             boutonsLayout->addWidget(boutonModifier);
             QPushButton *boutonSupprimer = new QPushButton("Supprimer");
             boutonsLayout->addWidget(boutonSupprimer);
+            QObject::connect(boutonModifier,SIGNAL(clicked()),this,SLOT(editNote()));
+            QObject::connect(boutonModifier,SIGNAL(clicked()),this,SLOT(supprimerNote()));
         }
         else{
             QPushButton *boutonRestaurerVersion = new QPushButton("Revenir à cette version");
