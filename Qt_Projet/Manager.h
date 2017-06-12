@@ -15,7 +15,8 @@ private:
     unsigned int nbRelations; /**< Tableau de Relations */
     unsigned int nbRelationsMax;
     Relation** relations;
-    Manager(): nbNotes(0), nbNotesMax(5), notes(new Note*[nbNotesMax]), nbRelations(0), nbRelationsMax(5), relations(new Relation*[100]){} /**< Constructeur de Manager */
+    Reference& reference;
+    Manager(): nbNotes(0), nbNotesMax(5), notes(new Note*[nbNotesMax]), nbRelations(0), nbRelationsMax(5), relations(new Relation*[100]),reference(Reference::donneInstance()){} /**< Constructeur de Manager */
     Manager(const Manager&); /**< Constructeur de recopie de Manager */
     void operator=(const Manager&); /**< Surcharge de l'operateur = pour affecter un Manager */
     ~Manager(); /**< Destructeur Manager */
@@ -42,45 +43,6 @@ public:
         Note& current() const;
     };
     IteratorNotes getIteratorNotes() const{return IteratorNotes(notes, nbNotes);}
-//    /**< Iterateur de notes actives */
-//    class IteratorNotesActive{
-//    private:
-//        friend class Manager;
-//        Note** currentN;
-//        int remain;
-//        IteratorNotesActive(Note** t, int n);
-//    public:
-//        bool isDone() const {return !remain;}
-//        void next();
-//        Note& current() const;
-//    };
-//    IteratorNotesActive getIteratorNotesActive() const{return IteratorNotesActive(notes, nbNotes);}
-//    /**< Iterateur de notes archivees */
-//    class IteratorNotesArchivee{
-//    private:
-//        friend class Manager;
-//        Note** currentN;
-//        int remain;
-//        IteratorNotesArchivee(Note** t, int n);
-//    public:
-//        bool isDone() const {return !remain;}
-//        void next();
-//        Note& current() const;
-//    };
-//    IteratorNotesArchivee getIteratorNotesArchivee() const{return IteratorNotesArchivee(notes, nbNotes);}
-//    /**< Iterateur de notes dans l'etat corbeille */
-//    class IteratorNotesCorbeille{
-//    private:
-//        friend class Manager;
-//        Note** currentN;
-//        int remain;
-//        IteratorNotesCorbeille(Note** t, int n);
-//    public:
-//       bool isDone() const {return !remain;}
-//       void next();
-//       Note& current() const;
-//    };
-//    IteratorNotesCorbeille getIteratorNotesCorbeille() const{return IteratorNotesCorbeille(notes, nbNotes);}
     /**< Iterateur pour relations */
     class IteratorRelations{
     private:
@@ -89,7 +51,7 @@ public:
         int remain;
         IteratorRelations(Relation** t, int n): currentR(t), remain(n){}
     public:
-        bool isDone() const { return !remain; }
+        bool isDone() const {return !remain;}
         void next();
         Relation& current() const;
     };
@@ -102,18 +64,19 @@ public:
         int remain;
         ConstIteratorRelations(Relation** t, int n): currentR(t), remain(n){}
     public:
-        bool isDone() const { return !remain; }
+        bool isDone() const {return !remain;}
         void next();
         const Relation& current() const;
     };
     ConstIteratorRelations getConstIteratorRelations() const {return ConstIteratorRelations(relations, nbRelations);}
-    /**< Je sais pas quoi ecrire */
+    /**< Requetes getAttributs */
     int getNbNotes()const {return nbNotes;}
     int getNbRelations() const {return nbRelations;}
+    Relation& getRelation(const QString& t);
     Reference& getReference();
-    Note* searchID(unsigned long id);
+    Note* getNoteID(unsigned long id);
     /**< Methode pour ajouter une Note, utilisee dans les methodes de creation et d'edition d'article/tache/multimedia */
-    void ajouterNote(Note& n);
+    void ajouterNote(Note &n);
     /**< Methodes pour ajouter un Article/Tache/Multimedia au tableau de notes*/
     void newArticle(const QString& ti, const QString& te=""); /**< creation d'un article */
     void newTache(const QString& ti, const QString& act, int prio=0, const QDate& d=QDate()); /**< creation d'une tache */
@@ -128,10 +91,10 @@ public:
     Tache& editEcheanceTache(Tache& T, const QDate& d);
     Multimedia& editFichierMultimedia(Multimedia& M, const QString s);
     /**< Methodes d'ajout de Relation/Reference */
-    void addRelation(Relation& r);
-    void addCoupleRelation(Relation& r, Couple& c);
-    void addCoupleReference(Couple& c);
-    void AddRefsFromNote(Note& N);
+    void addRelation(const QString& t, const QString& d, bool o=true);
+    void addCoupleRelation(Relation& r, unsigned int id1, unsigned int id2, const QString& lab);
+    void addCoupleReference(unsigned int id1, unsigned int id2, const QString& lab);
+    void addRefsFromNote(const Note& n);
     //Methode permettant de savoir si une note est referencee
     bool isReferenced(const Note& N) const;
     //Methode pour supprimer ou archiver une Note

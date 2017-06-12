@@ -13,25 +13,23 @@ class NoteException;
 
 /**< CLASS COUPLE */
 class Couple{
+    friend class Relation;
     QString label;
-    Note* note1;
-    Note* note2;
-public:
+    unsigned int ID1;
+    unsigned int ID2;
     /**< Constructeur */
-    Couple(Note* A, Note* B, QString l):label(l),note1(A),note2(B){};
+    Couple(unsigned int id1, unsigned int id2, const QString& l):label(l),ID1(id1),ID2(id2){}
+public:
     /**< Requetes getAttributs */
     QString getLabel() const {return label;}
-    Note* getNote1() const {return note1;}
-    Note* getNote2() const {return note2;}
+    unsigned int getID1() const {return ID1;}
+    unsigned int getID2() const {return ID2;}
     /**< Commandes setAttributs */
     void setLabel(const QString& s){label=s;}
-    void setNotes1(Note* n){note1=n;}
-    void setNotes2(Note* n){note2=n;}
 };
 
 /**< CLASS RELATION */
 class Relation{
-    friend class Couple;
     QString titre;
     QString description;
     bool orientee;
@@ -40,20 +38,33 @@ class Relation{
     unsigned int nbMaxCouples;
 public:
     /**< Constructeur */
-    Relation(const QString& t, const QString& d, bool o=true);
+    Relation(const QString& t, const QString& d, bool o=true):titre(t), description(d), orientee(o), couples(new Couple*[5]), nbCouples(0),nbMaxCouples(5){}
     /**< Destructeur */
     virtual ~Relation();
     /**< Requetes getAttributs */
     QString getTitre() const {return titre;}
     QString getDescription() const {return description;}
-    bool getOrientee() const {return orientee;}
+    bool isOrientee() const {return orientee;}
     Couple** getCouples() const {return couples;}
     int getnbCouples() const {return nbCouples;}
     /**< Commandes setAttributs */
     void setOrientee(){orientee=true;}
     void setNonOrientee(){orientee=false;}
+    /**< Iterateur de couples */
+    class IteratorCouples{
+    private:
+        friend class Relation;
+        Couple** currentC;
+        int remain;
+        IteratorCouples(Couple** t, int n): currentC(t), remain(n){}
+    public:
+        bool isDone() const {return !remain;}
+        void next();
+        Couple& current() const;
+    };
+    IteratorCouples getIteratorCouples() const {return IteratorCouples(couples, nbCouples);}
     /**< Methode pour ajouter un couple a la relation */
-    void addCouple(Couple& c);
+    void addCouple(unsigned int id1, unsigned int id2, const QString& lab);
 };
 
 /**< CLASS REFERENCE FILLE DE RELATION */
@@ -61,12 +72,12 @@ class Reference: public Relation {
 private:
     /**< Template Method Singleton */
     static Reference* instanceUnique;
-    /**< Constructeur */
-    Reference():Relation("Reference","Note1 fait reference à Note2", true){};
+    /**< Constructeurs */
+    Reference():Relation("Reference","Note1 fait reference à Note2", true){}
     Reference(const Reference& R);
     void operator=(const Reference& R);
     /**< Destructeur */
-    ~Reference();
+    ~Reference(){}
  public:
     /**< Template Method Singleton */
     static Reference& donneInstance();

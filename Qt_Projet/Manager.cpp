@@ -155,7 +155,7 @@ void Manager::newMultimedia(const QString& ti, const QString& adr, const QString
     ajouterNote(*a);
 }
 
-void Manager::ajouterNote(Note& n){
+void Manager::ajouterNote(Note &n){
     if(nbNotes == nbNotesMax){
         Note** newtab = new Note* [Manager::nbNotesMax+5];
         for(unsigned int i=0;i<nbNotes;i++) newtab[i] = notes[i];
@@ -165,7 +165,8 @@ void Manager::ajouterNote(Note& n){
         delete[] oldtab;
     }
     notes[nbNotes++] = &n;
-};
+    addRefsFromNote(n);
+}
 
 void Manager::addArticle(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& te ){
     Article* a=new Article(id,ti,dc,dm,act,e,te);
@@ -182,9 +183,29 @@ void Manager::addMultimedia(const int id, const QString& ti, const QDateTime& dc
     Manager::ajouterNote(*a);
 }
 
+/**< Methode permettant de rechercher une note à partir d'un ID */
+
+Note* Manager::getNoteID(unsigned long id){
+    for(IteratorNotes it=getIteratorNotes(); !it.isDone();it.next())
+        if (it.current().getID()==id && it.current().isActuelle())
+            return &(it.current());
+    return nullptr;
+}
+
+/**< Methode permettant de rechercher une relation à partir d'un titre */
+
+Relation& Manager::getRelation(const QString& t){
+    for(IteratorRelations it=getIteratorRelations();!it.isDone();it.next())
+        if(it.current().getTitre() == t) return it.current();
+    else throw NoteException("Aucune relation avec ce titre");
+}
+
 /**< METHODES D'AJOUT DE RELATIONS */
 
-void Manager::addRelation(Relation& r){
+void Manager::addRelation(const QString& t, const QString& d, bool o){
+    for(IteratorRelations it=getIteratorRelations();!it.isDone();it.next())
+        if(it.current().getTitre() == t) throw NoteException("Une relation avec le meme titre existe deja !");
+
     if (nbRelations==nbRelationsMax){
         Relation** newtab= new Relation* [nbRelationsMax+5];
         for(unsigned int i=0; i<nbRelations;i++){
@@ -193,34 +214,34 @@ void Manager::addRelation(Relation& r){
         nbRelationsMax=nbRelationsMax+5;
         Relation** oldtab= relations;
         relations=newtab;
-        delete [] oldtab;
+        delete[] oldtab;
     }
-    relations[nbRelations]=&r;
-    nbRelations++;
+    relations[nbRelations++]= new Relation(t, d, o);
 }
 
-void Manager::addCoupleRelation(Relation& r, Couple& c) {
-    r.addCouple(c);
+//Ajouter un couple à une relation
+
+void Manager::addCoupleRelation(Relation& r, unsigned int id1, unsigned int id2, const QString& lab){
+    r.addCouple(id1,id2,lab);
 }
 
+//Ajouter un couple à la relation reference
 
-/**< TEMPLATE METHOD SINGLETON POUR LA CLASS REFERENCE */
-
-Reference& Manager::getReference() {
-    Reference& R=Reference::donneInstance();
-    return R;
+void Manager::addCoupleReference(unsigned int id1, unsigned int id2, const QString& lab){
+    reference.addCouple(id1,id2,lab);
 }
 
-/**< Methode permettant de rechercher une note à partir d'un ID */
-Note* Manager::searchID(unsigned long id){
-    for (unsigned int i=0; i<nbNotes;i++){
-        if (notes[i]->getID()==id){
-            if (notes[i]->isActuelle()) {
-                return notes[i];
-            }
-        }
-    }
-    return nullptr;
+//AddRefsFromNote du Manager qui permet d'ajouter toute les references contenues dans tous les champs de texte d'une Note
+
+void Manager::addRefsFromNote(const Note& n){
+    n.addRefs();
+}
+
+bool Manager::isReferenced(const Note& n) const{
+    Reference& r=Reference::donneInstance();
+    for(Relation::IteratorCouples it=r.getIteratorCouples();!it.isDone();it.next())
+        if(it.current().getID1()==n.getID() || it.current().getID2()==n.getID()) return true;
+    return false;
 }
 
 /**< Methodes d'edition inutiles pour l'instant mais je prefere garder au cas ou */
@@ -277,36 +298,6 @@ Multimedia& Manager::editFichierMultimedia(Multimedia& M, const QString s){
     ajouterNote(*m);
     return *m;
 };
-
-//Ajouter un couple à la relation reference
-
-
-void Manager::addCoupleReference(Couple& c){
-    Reference& R=this->getReference();
-    R.addCouple(c);
-}
-
-//AddRefsFromNote du Manager qui permet d'ajouter toute les references contenues dans tous les champs de texte d'une Note
-
-void Manager::AddRefsFromNote(Note& N){
-    N.AddRefs(*this);
-}
-
-bool Manager::isReferenced(const Note& N) const{
-    Reference& R=Reference::donneInstance();
-    if (R.getnbCouples()==0) return false;
-    Couple* c=*(R.getCouples());
-    Note* a;
-    Note* b;
-    int i=0;
-    while (i<R.getnbCouples()) {
-        a=c->getNote1();
-        b=c->getNote2();
-        if ((a->getID()==N.getID() && a->isActuelle()) || (b->getID()==N.getID() && b->isActuelle())) return true;
-        i++;
-    }
-    return false;
-}
 
 //Suppression Archivage et Vidage de Corbeille
 

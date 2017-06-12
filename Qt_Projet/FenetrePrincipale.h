@@ -11,6 +11,8 @@ class QNote;
 
 class FenetrePrincipale : public QMainWindow{
     Q_OBJECT
+    QDockWidget* leftDockWidget;
+    QDockWidget* rightDockWidget;
 public:
     explicit FenetrePrincipale(QWidget *parent = nullptr);
     void updateCentralWidget(Note& n);

@@ -1,8 +1,6 @@
 #include "Notes.h"
 #include "Manager.h"
 
-using namespace TIME;
-
 /**< CONSTRUCTEUR DE RECOPIE DE LA CLASS NOTE */
 
 Note::Note(Note& n){
@@ -15,43 +13,7 @@ Note::Note(Note& n){
     n.setAncienne();
 }
 
-/**< METHODES D'AFFICHAGE DES DIFFERENTES NOTES */
-
-//QVBoxLayout afficherSpecifique() const = 0;
-
-/*
-void Article::afficherSpecifique(std::ostream& f) const {
-    f<<"\nTexte : "<<texte;
-}
-
-void Tache::afficherSpecifique(std::ostream& f) const {
-    f<<"\nAction : "<<action;
-    f<<"\nStatut : ";
-    switch(statut){
-        case 0: f<<"Attente"; break;
-        case 1: f<<"En cours"; break;
-        case 2: f<<"Terminee"; break;}
-    if (priorite!=0){
-    f<<"\nPriorite : "<<priorite;
-    }
-    if (echeance.getAnnee()!=0 || echeance.getMois()!=1 || echeance.getJour()!=1  ){
-    f<<"\nEcheance : "<<echeance;
-    }
-}
-
-void Multimedia::afficherSpecifique(std::ostream& f) const {
-    f<<"\nAdresseFichier : "<<adresseFichier;
-    f<<"\nDescription : "<<description;
-    f<<"\nType : ";
-    switch(type){
-        case 0: f<<"image"; break;
-        case 1: f<<"video"; break;
-        case 2: f<<"audio"; break;}
-}
-*/
-
 /**< DEMANDES D'EDITION DES DIFFERENTS NOTES */
-/**< MODIFIER LES CIN/COUT LORS DE LA MISE EN PLACE DE QT */
 
 /*
 void Manager::editNote(Note& n){
@@ -226,62 +188,55 @@ bool Note::QStringtoActuel(const QString & str){
 
 // Ajout de toutes les references contenues dans les champs de texte d'une notes avec Template Method
 
-void Note::AddRefs(Manager& m){
+void Note::addRefs() const {
+    Manager& m = Manager::donneInstance();
     long ID=findRefID(this->getTitre(), 0);
     int pos=0;
-    while (ID!=-1){
-        Note* N=m.searchID(ID);
-        if (N!=nullptr) {
-            Couple* C=new Couple(this,N,"");
-            m.addCoupleReference(*C);
-        }
-        else throw NoteException("l'ID ne correspond a aucune Note");
+    while(ID!=-1){
+        Note* n=m.getNoteID(ID);
+        if (n!=nullptr) m.addCoupleReference(this->getID(),n->getID(),"ref");
+        else throw NoteException("reference à une ID qui ne correspond à aucune Note");
         pos+=getPosition(this->getTitre(), pos);
+        ID=findRefID(this->getTitre(), pos);
     }
-    AddRefsSpecifique(m);
+    addRefsSpecifique();
 }
 
 //AddrefsSpeacifique(Manager& m) Specifique a chaque sous class de Note
 
-void Tache::AddRefsSpecifique(Manager& m){
+void Tache::addRefsSpecifique() const {
+    Manager& m = Manager::donneInstance();
     long ID=findRefID(this->getAction(), 0);
     int pos=0;
     while (ID!=-1){
-        Note* N=m.searchID(ID);
-        if (N!=nullptr) {
-            Couple* C=new Couple(this,N,"");
-            m.addCoupleReference(*C);
-        }
+        Note* n=m.getNoteID(ID);
+        if (n!=nullptr) m.addCoupleReference(this->getID(),n->getID(),"ref");
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getAction(), pos);
         ID=findRefID(this->getAction(), pos);
     }
 }
 
-void Article::AddRefsSpecifique(Manager& m){
+void Article::addRefsSpecifique() const {
+    Manager& m = Manager::donneInstance();
     long ID=findRefID(this->getTexte(), 0);
     int pos=0;
     while (ID!=-1){
-        Note* N=m.searchID(ID);
-        if (N!=nullptr) {
-            Couple* C=new Couple(this,N,"");
-            m.addCoupleReference(*C);
-        }
+        Note* n=m.getNoteID(ID);
+        if (n!=nullptr) m.addCoupleReference(this->getID(),n->getID(),"ref");
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getTexte(), pos);
         ID=findRefID(this->getTexte(), pos);
     }
 }
 
-void Multimedia::AddRefsSpecifique(Manager& m){
+void Multimedia::addRefsSpecifique() const {
+    Manager& m = Manager::donneInstance();
     long ID=findRefID(this->getDescription(), 0);
     int pos=0;
     while (ID!=-1){
-        Note* N=m.searchID(ID);
-        if (N!=nullptr) {
-            Couple* C=new Couple(this,N,"");
-            m.addCoupleReference(*C);
-        }
+        Note* n=m.getNoteID(ID);
+        if (n!=nullptr) m.addCoupleReference(this->getID(),n->getID(),"ref");
         else throw NoteException("l'ID ne correspond a aucune Note");
         pos+=getPosition(this->getDescription(), pos);
         ID=findRefID(this->getDescription(), pos);
