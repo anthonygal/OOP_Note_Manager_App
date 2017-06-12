@@ -20,11 +20,15 @@ private:
     void operator=(const Manager&); /**< Surcharge de l'operateur = pour affecter un Manager */
     ~Manager(); /**< Destructeur Manager */
     mutable QString filename;
+    /**< Methodes d'ajout de Note utilisées dans la methode load() */
+    void addArticle(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& te);
+    void addTache(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& acti, const int prio, const QDate& eche, const TacheStatut ts);
+    void addMultimedia(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec);
 public:
     /**< Template Method Singleton */
     static Manager& donneInstance();
     static void libereInstance();
-    /**< Iterateur de notes actives */
+    /**< Iterateur de notes */
     class IteratorNotes{
     private:
         friend class Manager;
@@ -32,50 +36,51 @@ public:
         int remain;
         IteratorNotes(Note** t, int n):currentN(t),remain(n){}
     public:
+        int getRemain() const {return remain;}
         bool isDone() const {return !remain;}
         void next();
         Note& current() const;
     };
     IteratorNotes getIteratorNotes() const{return IteratorNotes(notes, nbNotes);}
-    /**< Iterateur de notes actives */
-    class IteratorNotesActive{
-    private:
-        friend class Manager;
-        Note** currentN;
-        int remain;
-        IteratorNotesActive(Note** t, int n);
-    public:
-        bool isDone() const {return !remain;}
-        void next();
-        Note& current() const;
-    };
-    IteratorNotesActive getIteratorNotesActive() const{return IteratorNotesActive(notes, nbNotes);}
-    /**< Iterateur de notes archivees */
-    class IteratorNotesArchivee{
-    private:
-        friend class Manager;
-        Note** currentN;
-        int remain;
-        IteratorNotesArchivee(Note** t, int n);
-    public:
-        bool isDone() const {return !remain;}
-        void next();
-        Note& current() const;
-    };
-    IteratorNotesArchivee getIteratorNotesArchivee() const{return IteratorNotesArchivee(notes, nbNotes);}
-    /**< Iterateur de notes dans l'etat corbeille */
-    class IteratorNotesCorbeille{
-    private:
-        friend class Manager;
-        Note** currentN;
-        int remain;
-        IteratorNotesCorbeille(Note** t, int n);
-    public:
-       bool isDone() const {return !remain;}
-       void next();
-       Note& current() const;
-    };
-    IteratorNotesCorbeille getIteratorNotesCorbeille() const{return IteratorNotesCorbeille(notes, nbNotes);}
+//    /**< Iterateur de notes actives */
+//    class IteratorNotesActive{
+//    private:
+//        friend class Manager;
+//        Note** currentN;
+//        int remain;
+//        IteratorNotesActive(Note** t, int n);
+//    public:
+//        bool isDone() const {return !remain;}
+//        void next();
+//        Note& current() const;
+//    };
+//    IteratorNotesActive getIteratorNotesActive() const{return IteratorNotesActive(notes, nbNotes);}
+//    /**< Iterateur de notes archivees */
+//    class IteratorNotesArchivee{
+//    private:
+//        friend class Manager;
+//        Note** currentN;
+//        int remain;
+//        IteratorNotesArchivee(Note** t, int n);
+//    public:
+//        bool isDone() const {return !remain;}
+//        void next();
+//        Note& current() const;
+//    };
+//    IteratorNotesArchivee getIteratorNotesArchivee() const{return IteratorNotesArchivee(notes, nbNotes);}
+//    /**< Iterateur de notes dans l'etat corbeille */
+//    class IteratorNotesCorbeille{
+//    private:
+//        friend class Manager;
+//        Note** currentN;
+//        int remain;
+//        IteratorNotesCorbeille(Note** t, int n);
+//    public:
+//       bool isDone() const {return !remain;}
+//       void next();
+//       Note& current() const;
+//    };
+//    IteratorNotesCorbeille getIteratorNotesCorbeille() const{return IteratorNotesCorbeille(notes, nbNotes);}
     /**< Iterateur pour relations */
     class IteratorRelations{
     private:
@@ -107,9 +112,6 @@ public:
     int getNbRelations() const {return nbRelations;}
     Reference& getReference();
     Note* searchID(unsigned long id);
-    /**< Methode pour afficher les notes */
-    //void afficherNote() const;
-    void afficherTout() const;
     /**< Methode pour ajouter une Note, utilisee dans les methodes de creation et d'edition d'article/tache/multimedia */
     void ajouterNote(Note& n);
     /**< Methodes pour ajouter un Article/Tache/Multimedia au tableau de notes*/
@@ -126,26 +128,19 @@ public:
     Tache& editEcheanceTache(Tache& T, const QDate& d);
     Multimedia& editFichierMultimedia(Multimedia& M, const QString s);
     /**< Methodes d'ajout de Relation/Reference */
-   void addRelation(Relation& r);
-  void addCoupleRelation(Relation& r, Couple& c);
-  void addCoupleReference(Couple& c);
+    void addRelation(Relation& r);
+    void addCoupleRelation(Relation& r, Couple& c);
+    void addCoupleReference(Couple& c);
     void AddRefsFromNote(Note& N);
     //Methode permettant de savoir si une note est referencee
     bool isReferenced(const Note& N) const;
-    //Supression ou Archivage de Note
-    void supprimer(Note& N);
+    //Methode pour supprimer ou archiver une Note
+    void supprimerNote(Note& N);
     void viderCorbeille();
 
-    void save()const;
+    void setFilename(const QString& f) {filename=f;}
     void load();
-    //void loadArticle();
-    //void loadTache();
-    //void loadMultimedia();
-    void addArticle(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& te);
-    void addTache(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& acti, const int prio, const QDate& eche, const TacheStatut ts);
-    void addMultimedia(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec);
-
-    void setFilename(const QString& f) { filename=f; }
+    void save() const;
 };
 
 #endif // MANAGER_H

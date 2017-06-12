@@ -5,10 +5,22 @@
 #include <QtWidgets>
 #include <QItemSelectionModel>
 
+//class NewNote : public QWidget{
+//    Q_OBJECT
+//    Note& note;
+//public:
+//    explicit NewNote(Note& n, QWidget *parent = nullptr);
+//signals:
+
+//public slots:
+//   void editNote();
+//   void supprimerNote();
+//};
+
 class NoteEditeur : public QWidget
 {
     Q_OBJECT
-    friend class Manager;
+    //friend class Manager;
 protected:
     /** Edit */
     QLineEdit* ID;
@@ -39,12 +51,9 @@ protected:
     //bool isSaved;
 
 public:
-     //explicit NoteEditeur(QWidget *parent = nullptr);
-    virtual ~NoteEditeur(){};
+    virtual ~NoteEditeur(){}
     NoteEditeur(Note& n, QWidget* parent=0);
     virtual void activerEnregistrer();
-   // virtual void readOnly() = 0;
-
 
 signals:
 

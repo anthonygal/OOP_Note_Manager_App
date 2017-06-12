@@ -2,14 +2,16 @@
 
 QNoteReduite::QNoteReduite(Note& n, FenetrePrincipale* f, QWidget* parent) : QPushButton(parent), note(n), fenetre(f)
 {
-    setMinimumSize(150,40);
+    setMinimumSize(275,40);
     QHBoxLayout *layout = new QHBoxLayout;
         QLabel *Type = new QLabel(n.getTypeNote());
         QLabel *ID = new QLabel(QString::number(n.getID()));
         QLabel *Titre = new QLabel(n.getTitre());
+        QLabel *DateModif = new QLabel(n.getDateModif().toString(formatDateTime));
         layout->addWidget(Type);
         layout->addWidget(ID);
         layout->addWidget(Titre);
+        layout->addWidget(DateModif);
     setLayout(layout);
     QObject::connect(this,SIGNAL(clicked()),SLOT(onClicked()));
 }
@@ -144,8 +146,8 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
             boutonsLayout->addWidget(boutonModifier);
             QPushButton *boutonSupprimer = new QPushButton("Supprimer");
             boutonsLayout->addWidget(boutonSupprimer);
-            QObject::connect(boutonModifier,SIGNAL(clicked()),this,SLOT(editNote()));
-            QObject::connect(boutonModifier,SIGNAL(clicked()),this,SLOT(supprimerNote()));
+            QObject::connect(boutonModifier,SIGNAL(clicked()),this,SLOT(editer()));
+            QObject::connect(boutonModifier,SIGNAL(clicked()),this,SLOT(supprimer()));
         }
         else{
             QPushButton *boutonRestaurerVersion = new QPushButton("Revenir à cette version");
@@ -159,4 +161,12 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
 
     vlayout->addLayout(boutonsLayout);
     setLayout(vlayout);
+}
+
+void QNote::editer(){
+    //Manager::donneInstance().editNote(note);
+}
+
+void QNote::supprimer(){
+    Manager::donneInstance().supprimerNote(note);
 }

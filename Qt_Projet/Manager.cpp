@@ -49,68 +49,68 @@ Note& Manager::IteratorNotes::current() const{
     return **currentN;
 }
 
-/**< Iterator de notes actives */
+///**< Iterator de notes actives */
 
-Manager::IteratorNotesActive::IteratorNotesActive(Note** t, int n): currentN(t), remain(n){
-    while(remain>0 && (*currentN)->getEtat()!=active){
-        currentN++;
-        remain--;
-    }
-}
+//Manager::IteratorNotesActive::IteratorNotesActive(Note** t, int n): currentN(t), remain(n){
+//    while(remain>0 && (*currentN)->getEtat()!=active){
+//        currentN++;
+//        remain--;
+//    }
+//}
 
-void Manager::IteratorNotesActive::next(){
-    while(!isDone() && (*currentN)->getEtat()!=active){
-        remain--;
-        currentN++;
-    }
-}
+//void Manager::IteratorNotesActive::next(){
+//    while(!isDone() && (*currentN)->getEtat()!=active){
+//        remain--;
+//        currentN++;
+//    }
+//}
 
-Note& Manager::IteratorNotesActive::current() const{
-    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
-    return **currentN;
-}
+//Note& Manager::IteratorNotesActive::current() const{
+//    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
+//    return **currentN;
+//}
 
-/**< Iterator de notes archivees */
+///**< Iterator de notes archivees */
 
-Manager::IteratorNotesArchivee::IteratorNotesArchivee(Note** t, int n): currentN(t), remain(n){
-    while(remain>0 && (*currentN)->getEtat()!=archivee){
-        currentN++;
-        remain--;
-    }
-}
+//Manager::IteratorNotesArchivee::IteratorNotesArchivee(Note** t, int n): currentN(t), remain(n){
+//    while(remain>0 && (*currentN)->getEtat()!=archivee){
+//        currentN++;
+//        remain--;
+//    }
+//}
 
-void Manager::IteratorNotesArchivee::next(){
-    while(!isDone() && (*currentN)->getEtat()!=archivee){
-        remain--;
-        currentN++;
-    }
-}
+//void Manager::IteratorNotesArchivee::next(){
+//    while(!isDone() && (*currentN)->getEtat()!=archivee){
+//        remain--;
+//        currentN++;
+//    }
+//}
 
-Note& Manager::IteratorNotesArchivee::current() const{
-    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
-    return **currentN;
-}
+//Note& Manager::IteratorNotesArchivee::current() const{
+//    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
+//    return **currentN;
+//}
 
-/**< Iterator de notes dans l'etat corbeille */
+///**< Iterator de notes dans l'etat corbeille */
 
-Manager::IteratorNotesCorbeille::IteratorNotesCorbeille(Note** t, int n): currentN(t), remain(n){
-    while(remain>0 && (*currentN)->getEtat()!=corbeille){
-        currentN++;
-        remain--;
-    }
-}
+//Manager::IteratorNotesCorbeille::IteratorNotesCorbeille(Note** t, int n): currentN(t), remain(n){
+//    while(remain>0 && (*currentN)->getEtat()!=corbeille){
+//        currentN++;
+//        remain--;
+//    }
+//}
 
-void Manager::IteratorNotesCorbeille::next(){
-    while(!isDone() && (*currentN)->getEtat()!=corbeille){
-        remain--;
-        currentN++;
-    }
-}
+//void Manager::IteratorNotesCorbeille::next(){
+//    while(!isDone() && (*currentN)->getEtat()!=corbeille){
+//        remain--;
+//        currentN++;
+//    }
+//}
 
-Note& Manager::IteratorNotesCorbeille::current() const{
-    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
-    return **currentN;
-}
+//Note& Manager::IteratorNotesCorbeille::current() const{
+//    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
+//    return **currentN;
+//}
 
 /**< TEMPLATE METHOD ITERATOR DANS LA CLASSE MANAGER POUR LES RELATIONS */
 
@@ -310,45 +310,28 @@ bool Manager::isReferenced(const Note& N) const{
 
 //Suppression Archivage et Vidage de Corbeille
 
-void Manager::supprimer(Note& N){
-    if (isReferenced(N)) {
-        N.setEtat(archivee);
-        N.setAncienne();
-        unsigned int i=0;
-        while (i<nbNotes){
-            if (notes[i]->getID()==N.getID()){
-                notes[i]->setAncienne();
-                notes[i]->setEtat(archivee);
-            }
-            i++;
-        }
+void Manager::supprimerNote(Note& n){
+    if(isReferenced(n)){
+        for(IteratorNotes it=getIteratorNotes();!it.isDone();it.next())
+            if(it.current().getID()==n.getID())
+                it.current().setEtat(archivee);
     }
-    else {
-
-        N.setEtat(corbeille);
-        unsigned int i=0;
-        while (i<nbNotes){
-            if (notes[i]->getID()==N.getID()){
-                notes[i]->setAncienne();
-                notes[i]->setEtat(corbeille);
-            }
-            i++;
-        }
-    }
+    else
+        for(IteratorNotes it=getIteratorNotes();!it.isDone();it.next())
+            if(it.current().getID()==n.getID()) it.current().setEtat(corbeille);
 }
 
 void Manager::viderCorbeille(){
     unsigned int i=0;
     while (i<nbNotes){
-        if (notes[i]->getEtat()==corbeille){
+        if(notes[i]->getEtat()==corbeille){
             Note* temp=notes[i];
-            for (unsigned int j=i; j<nbNotes-1; j++){
+            for(unsigned int j=i; j<nbNotes-1;j++)
                 notes[j]=notes[j+1];
-            }
             delete temp;
             nbNotes--;
         }
-        i++;
+        else i++;
     }
 }
 
@@ -360,7 +343,7 @@ void Manager::load() {
     }
     // QXmlStreamReader takes any QIODevice.
     QXmlStreamReader xml(&fin);
-    //qDebug()<<"debut fichier\n";
+    // qDebug()<<"debut fichier\n";
     // We'll parse the XML until we reach end of it.
     while(!xml.atEnd() && !xml.hasError()) {
         // Read next element.
@@ -368,7 +351,7 @@ void Manager::load() {
         // If token is just StartDocument, we'll go to next.
         if(token == QXmlStreamReader::StartDocument) continue;
         // If token is StartElement, we'll see if we can read it.
-        if(token == QXmlStreamReader::StartElement) {
+        if(token == QXmlStreamReader::StartElement){
             // If it's named notes, we'll go to the next.
             if(xml.name() == "notes") continue;
 
@@ -380,8 +363,6 @@ void Manager::load() {
                 QString texte;
                 QString dateCrea;
                 QString dateModif;
-                //QString horaireCrea;
-                //QString horaireModif;
                 QString actuel;
                 QString etat;
                 QXmlStreamAttributes attributes = xml.attributes();
@@ -399,19 +380,10 @@ void Manager::load() {
                             xml.readNext(); dateCrea=xml.text().toString();
                             qDebug()<<"datecrea="<<dateCrea<<"\n";
                         }
-                        // if(xml.name() == "horairecrea") {
-                        //     xml.readNext(); horaireCrea=xml.text().toString();
-                        //     qDebug()<<"horairecrea="<<horaireCrea<<"\n";
-                        // }
                         if(xml.name() == "datemodif") {
                             xml.readNext(); dateModif=xml.text().toString();
                             qDebug()<<"datemodif="<<dateModif<<"\n";
                         }
-                        // if(xml.name() == "horairemodif") {
-                        //     xml.readNext(); horaireModif=xml.text().toString();
-                        //     qDebug()<<"horairemodif="<<horaireModif<<"\n";
-                        // }
-
                         if(xml.name() == "etat") {
                             xml.readNext(); etat=xml.text().toString();
                             qDebug()<<"etat="<<etat<<"\n";
@@ -420,7 +392,6 @@ void Manager::load() {
                             xml.readNext(); actuel=xml.text().toString();
                             qDebug()<<"actuel="<<actuel<<"\n";
                         }
-
                         // We've found titre.
                         if(xml.name() == "titre") {
                             xml.readNext(); titre=xml.text().toString();
@@ -450,8 +421,6 @@ void Manager::load() {
                 QString statut;
                 QString dateCrea;
                 QString dateModif;
-                //QString horaireCrea;
-                //QString horaireModif;
                 QString actuel;
                 QString etat;
                 QXmlStreamAttributes attributes = xml.attributes();
@@ -469,19 +438,10 @@ void Manager::load() {
                             xml.readNext(); dateCrea=xml.text().toString();
                             qDebug()<<"datecrea="<<dateCrea<<"\n";
                         }
-                        // if(xml.name() == "horairecrea") {
-                        //     xml.readNext(); horaireCrea=xml.text().toString();
-                        //     qDebug()<<"horairecrea="<<horaireCrea<<"\n";
-                        // }
                         if(xml.name() == "datemodif") {
                             xml.readNext(); dateModif=xml.text().toString();
                             qDebug()<<"datemodif="<<dateModif<<"\n";
                         }
-                        // if(xml.name() == "horairemodif") {
-                        //     xml.readNext(); horaireModif=xml.text().toString();
-                        //     qDebug()<<"horairemodif="<<horaireModif<<"\n";
-                        // }
-
                         if(xml.name() == "etat") {
                             xml.readNext(); etat=xml.text().toString();
                             qDebug()<<"etat="<<etat<<"\n";
@@ -494,12 +454,10 @@ void Manager::load() {
                             xml.readNext(); titre=xml.text().toString();
                             qDebug()<<"titre="<<titre<<"\n";
                         }
-
                         if(xml.name() == "action") {
                             xml.readNext(); action=xml.text().toString();
                             qDebug()<<"action="<<action<<"\n";
                         }
-
                         if(xml.name() == "priorite") {
                             xml.readNext();
                             priorite=xml.text().toString();
@@ -522,9 +480,9 @@ void Manager::load() {
                 }
                 qDebug()<<"ajout note "<<identificateur<<"\n";
                 addTache(identificateur.toInt(),titre,QDateTime::fromString(dateCrea,formatDateTime),QDateTime::fromString(dateModif,formatDateTime),Tache::QStringtoActuel(actuel),Tache::QStringtoNoteEtat(etat),action,priorite.toInt(),QDate::fromString(echeance,formatDate),Tache::QStringtoTacheStatut(statut));
-                }
             }
-            if(xml.name() == "multimedia") {
+
+            if(xml.name() == "multimedia"){
                 qDebug()<<"new multimedia\n";
                 QString identificateur;
                 QString titre;
@@ -600,14 +558,12 @@ void Manager::load() {
                 }
                 qDebug()<<"ajout note "<<identificateur<<"\n";
                 addMultimedia(identificateur.toInt(),titre,QDateTime::fromString(dateCrea,formatDateTime),QDateTime::fromString(dateModif,formatDateTime),Note::QStringtoActuel(actuel),Note::QStringtoNoteEtat(etat),adressefichier, Multimedia::QStringtoTypeMultimedia(type), description);
-                }
             }
-
+        }
+    }
 
     // Error handling.
-    if(xml.hasError()) {
-        throw NoteException("Erreur lecteur fichier notes, parser xml");
-    }
+    if(xml.hasError()) throw NoteException("Erreur lecteur fichier notes, parser xml");
     // Removes any device() or data from the reader * and resets its internal state to the initial state.
     xml.clear();
     qDebug()<<"fin load\n";

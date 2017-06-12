@@ -28,8 +28,8 @@ public:
 signals:
 
 public slots:
-   void editNote();
-   void supprimerNote();
+   void editer();
+   void supprimer();
 };
 
 #endif // QNOTES_H
