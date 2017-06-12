@@ -50,3 +50,40 @@ void Reference::libereInstance(){
     if (instanceUnique!=0) delete instanceUnique;
     instanceUnique=nullptr;
 }
+
+QString label;
+Note* note1;
+Note* note2;
+
+void Relation::saveRelation(QXmlStreamWriter& stream)const{
+    stream.writeStartElement("relations");
+    stream.writeTextElement("titre", getTitre());
+    stream.writeTextElement("description",getDescription());
+    stream.writeTextElement("orientee",orienteetoQString());
+    stream.writeTextElement("nbCouples",QString::number(getnbCouples()));
+    stream.writeTextElement("nbMaxCouples",QString::number(getnbMaxCouples()));
+    for(unsigned int j=0; j<nbCouples;j++){
+        couples[i]->savecouple(stream);
+    }
+
+    stream.writeEndElement();
+}
+
+
+void Couple::savecouple(QXmlStreamWriter& stream) const{
+    stream.writerStartElement("couples");
+    stream.writeTextElement("label", getLabel());
+    stream.writeTextElement("ID1",getID1());
+    stream.writeTextElement("ID2",getID2());
+    stream.writeEndElement();
+}
+
+
+QString Relation::orienteetoQString()const{
+    QString str="";
+    if (orientee==true){str="Orientee";}
+    else{str="Non Orientee";}
+    return str;
+}
+
+

@@ -27,6 +27,7 @@ public:
     void setLabel(const QString& s){label=s;}
     void setNotes1(Note* n){note1=n;}
     void setNotes2(Note* n){note2=n;}
+    void savecouple(QXmlStreamWriter& stream) const;
 };
 
 /**< CLASS RELATION */
@@ -49,11 +50,14 @@ public:
     bool getOrientee() const {return orientee;}
     Couple** getCouples() const {return couples;}
     int getnbCouples() const {return nbCouples;}
+    int getnbMaxCouples() const {return nbMaxCouples;}
     /**< Commandes setAttributs */
     void setOrientee(){orientee=true;}
     void setNonOrientee(){orientee=false;}
     /**< Methode pour ajouter un couple a la relation */
     void addCouple(Couple& c);
+    void saveRelation(QXmlStreamWriter& stream)const;
+    QString orienteetoQString()const;
 };
 
 /**< CLASS REFERENCE FILLE DE RELATION */

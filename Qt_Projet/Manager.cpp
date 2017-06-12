@@ -353,7 +353,7 @@ void Manager::load() {
         // If token is StartElement, we'll see if we can read it.
         if(token == QXmlStreamReader::StartElement){
             // If it's named notes, we'll go to the next.
-            if(xml.name() == "notes") continue;
+            if(xml.name() == "notes") continue;{
 
             // If it's named tache, we'll dig the information from there.
             if(xml.name() == "article") {
@@ -558,8 +558,76 @@ void Manager::load() {
                 }
                 qDebug()<<"ajout note "<<identificateur<<"\n";
                 addMultimedia(identificateur.toInt(),titre,QDateTime::fromString(dateCrea,formatDateTime),QDateTime::fromString(dateModif,formatDateTime),Note::QStringtoActuel(actuel),Note::QStringtoNoteEtat(etat),adressefichier, Multimedia::QStringtoTypeMultimedia(type), description);
+                }
             }
         }
+
+            // If it's named tache, we'll dig the information from there.
+            if(xml.name() == "relation") {
+                qDebug()<<"new relation\n";
+                QString titre;
+                QString description;
+                QString orientee;
+                QString nbCouples;
+                QString nbMaxCouples;
+                QXmlStreamAttributes attributes = xml.attributes();
+                xml.readNext();
+                //We're going to loop over the things because the order might change.
+                //We'll continue the loop until we hit an EndElement named article.
+                while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "relation")) {
+                    if(xml.tokenType() == QXmlStreamReader::StartElement) {
+                        
+                        if(xml.name() == "titre") {
+                            xml.readNext(); titre=xml.text().toString();
+                            qDebug()<<"titre="<titre<<"\n";
+                        }
+                        if(xml.name() == "description") {
+                            xml.readNext(); description=xml.text().toString();
+                            qDebug()<<"description="<<description<<"\n";
+                        }
+                        if(xml.name() == "orientee") {
+                            xml.readNext(); orientee=xml.text().toString();
+                            qDebug()<<"orientee="<<orientee<<"\n";
+                        }   
+                        if(xml.name() == "couples") {
+                            qDebug()<<"new couple\n";   
+                            QString label;
+                            QString ID1;
+                            QString ID2;
+                            QXmlStreamAttributes attributes = xml.attributes();
+                            xml.readNext();
+                            //We're going to loop over the things because the order might change.
+                            //We'll continue the loop until we hit an EndElement named article.
+                            while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "couples")) {
+                                if(xml.tokenType() == QXmlStreamReader::StartElement) {
+                                if(xml.name() == "label") {
+                                     xml.readNext(); label=xml.text().toString();
+                                     qDebug()<<"label="<<label<<"\n";
+                                    }
+                                 if(xml.name() == "ID1") {
+                                    xml.readNext(); ID1=xml.text().toString();
+                                    qDebug()<<"ID1="<<ID1<<"\n";
+                                    }
+                                if(xml.name() == "ID2") {
+                                    xml.readNext(); ID2=xml.text().toString();
+                                    qDebug()<<"ID2="<<ID2<<"\n";
+                                    }
+                                }
+                            xml.readNext();
+                            }
+                        qDebug()<<"ajout couple "<<label<<"\n";    
+                        }                       
+                    }                       
+                    xml.readNext();
+                    addCoupleRelation(ID1.toInt(), ID2.toInt(), label);
+                }
+                qDebug()<<"ajout relation "<<titre<<"\n";
+                addRelation();
+            }
+        }
+
+
+
     }
 
     // Error handling.
@@ -580,7 +648,12 @@ void Manager::save()const{
         for(unsigned int i=0; i<nbNotes; i++){
             notes[i]->saveNote(stream);
         }
+        for (unsigned int i=0; i<nbRelations;i++){
+            relations[i]->saveRelation(stream);
+        }
+        stream.writeTextElement("NextNoteID",nextNoteID);
         stream.writeEndElement();
         stream.writeEndDocument();
         newfile.close();
 }
+
