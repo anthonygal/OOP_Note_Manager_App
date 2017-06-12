@@ -60,7 +60,7 @@ void Relation::saveRelation(QXmlStreamWriter& stream)const{
     stream.writeTextElement("nbCouples",QString::number(getnbCouples()));
     stream.writeTextElement("nbMaxCouples",QString::number(getnbMaxCouples()));
     for(unsigned int j=0; j<nbCouples;j++){
-        couples[i]->savecouple(stream);
+        couples[j]->savecouple(stream);
     }
     stream.writeEndElement();
 }
