@@ -620,8 +620,7 @@ void Manager::load() {
                         }                       
                     }                       
                     xml.readNext();
-                    Relation r= getRelation(titre);
-                    addCoupleRelation(r, ID1.toInt(), ID2.toInt(), label);
+                    addCoupleRelation(getRelation(titre), ID1.toInt(), ID2.toInt(), label);
                 }
                 qDebug()<<"ajout relation "<<titre<<"\n";
             }
