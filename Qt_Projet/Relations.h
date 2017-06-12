@@ -58,6 +58,7 @@ public:
     void addCouple(Couple& c);
     void saveRelation(QXmlStreamWriter& stream)const;
     QString orienteetoQString()const;
+    bool QStringtoOrientee(const QString& str);
 };
 
 /**< CLASS REFERENCE FILLE DE RELATION */

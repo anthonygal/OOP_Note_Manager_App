@@ -588,6 +588,7 @@ void Manager::load() {
                         if(xml.name() == "orientee") {
                             xml.readNext(); orientee=xml.text().toString();
                             qDebug()<<"orientee="<<orientee<<"\n";
+                            addRelation(titre, description,QStringtoOrientee(orientee));
                         }   
                         if(xml.name() == "couples") {
                             qDebug()<<"new couple\n";   
@@ -619,10 +620,10 @@ void Manager::load() {
                         }                       
                     }                       
                     xml.readNext();
-                    addCoupleRelation(ID1.toInt(), ID2.toInt(), label);
+                    Relation r= getRelation(titre);
+                    addCoupleRelation(r, ID1.toInt(), ID2.toInt(), label);
                 }
                 qDebug()<<"ajout relation "<<titre<<"\n";
-                addRelation();
             }
         }
 

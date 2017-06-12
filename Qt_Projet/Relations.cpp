@@ -51,9 +51,6 @@ void Reference::libereInstance(){
     instanceUnique=nullptr;
 }
 
-QString label;
-Note* note1;
-Note* note2;
 
 void Relation::saveRelation(QXmlStreamWriter& stream)const{
     stream.writeStartElement("relations");
@@ -65,7 +62,6 @@ void Relation::saveRelation(QXmlStreamWriter& stream)const{
     for(unsigned int j=0; j<nbCouples;j++){
         couples[i]->savecouple(stream);
     }
-
     stream.writeEndElement();
 }
 
@@ -86,4 +82,7 @@ QString Relation::orienteetoQString()const{
     return str;
 }
 
-
+bool Relation::QStringtoOrientee(const QString& str){
+    if (str=="Orientee") {return true;}
+    else {return false;}
+}
