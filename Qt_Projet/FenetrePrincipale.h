@@ -7,17 +7,21 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+class QNote;
+
 class FenetrePrincipale : public QMainWindow{
     Q_OBJECT
     Manager& manager;
-    //Note& note;
+    QNote* notePrincipale;
+    //QFrame* anciennesVersions;
 public:
-    explicit FenetrePrincipale(Manager& m, QWidget *parent = nullptr);
-    //void afficherNote(const Note& n);
+    explicit FenetrePrincipale(QWidget *parent = nullptr);
+    void updateCentralWidget(Note& n);
 
 signals:
 
 public slots:
+    void changerNotePrincipale(Note& n);
 
 };
 

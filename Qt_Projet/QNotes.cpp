@@ -1,12 +1,30 @@
 #include "QNotes.h"
 
+QNoteReduite::QNoteReduite(Note& n, FenetrePrincipale* f, QWidget* parent) : QPushButton(parent), note(n), fenetre(f)
+{
+    setMinimumSize(150,40);
+    QHBoxLayout *layout = new QHBoxLayout;
+        QLabel *Type = new QLabel(n.getTypeNote());
+        QLabel *ID = new QLabel(QString::number(n.getID()));
+        QLabel *Titre = new QLabel(n.getTitre());
+        layout->addWidget(Type);
+        layout->addWidget(ID);
+        layout->addWidget(Titre);
+    setLayout(layout);
+    QObject::connect(this,SIGNAL(clicked()),SLOT(onClicked()));
+}
+
+void QNoteReduite::onClicked(){
+    fenetre->changerNotePrincipale(note);
+}
+
 QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
 {
     QVBoxLayout *vlayout = new QVBoxLayout;
 
     QHBoxLayout *hlayout0 = new QHBoxLayout;
         QLabel *TypeNote = new QLabel(n.getTypeNote()); TypeNote->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-        QLabel *Actuelle = new QLabel(n.isActuelle()?"(Version Actuelle)":"(Ancienne Version)");
+        QLabel *Actuelle = new QLabel(n.isActuelle()?"(Version Actuelle)":"(Ancienne Version)",this);
         hlayout0->addWidget(TypeNote);
         hlayout0->addWidget(Actuelle);
     vlayout->addLayout(hlayout0);
@@ -124,13 +142,13 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
         if(n.isActuelle()){
             QPushButton *boutonModifier = new QPushButton("Modifier");
             boutonsLayout->addWidget(boutonModifier);
+            QPushButton *boutonSupprimer = new QPushButton("Supprimer");
+            boutonsLayout->addWidget(boutonSupprimer);
         }
         else{
             QPushButton *boutonRestaurerVersion = new QPushButton("Revenir à cette version");
             boutonsLayout->addWidget(boutonRestaurerVersion);
         }
-        QPushButton *boutonSupprimer = new QPushButton("Supprimer");
-        boutonsLayout->addWidget(boutonSupprimer);
     }
     else{
         QPushButton *boutonRestaurer = new QPushButton("Restaurer");
@@ -139,25 +157,4 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
 
     vlayout->addLayout(boutonsLayout);
     setLayout(vlayout);
-}
-
-QNoteReduite::QNoteReduite(Note& n, QWidget *parent) : QPushButton(parent), note(n)
-{
-    setMinimumSize(150,50);
-    QVBoxLayout *vlayout = new QVBoxLayout;
-
-    QHBoxLayout *hlayout0 = new QHBoxLayout;
-        QLabel *Type = new QLabel(n.getTypeNote());
-        QLabel *ID = new QLabel(QString::number(n.getID()));
-        hlayout0->addWidget(Type);
-        hlayout0->addWidget(ID);
-    vlayout->addLayout(hlayout0);
-
-    QHBoxLayout *hlayout1 = new QHBoxLayout;
-        QLabel *Titre = new QLabel(n.getTitre());
-        hlayout1->addWidget(Titre);
-    vlayout->addLayout(hlayout1);
-
-    setLayout(vlayout);
-    show();
 }

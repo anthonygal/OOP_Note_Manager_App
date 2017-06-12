@@ -2,16 +2,21 @@
 #define QNOTES_H
 
 #include "Notes.h"
+#include "FenetrePrincipale.h"
 #include <QtWidgets>
+
+class FenetrePrincipale;
 
 class QNoteReduite : public QPushButton{
     Q_OBJECT
     Note& note;
+    FenetrePrincipale* fenetre;
 public:
-    explicit QNoteReduite(Note& n, QWidget *parent = nullptr);
+    explicit QNoteReduite(Note& n, FenetrePrincipale* f, QWidget* parent = nullptr);
 signals:
 
 public slots:
+    void onClicked();
 };
 
 

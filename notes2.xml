@@ -32,4 +32,16 @@
 	<type>image</type>
 	<description>Pierre vacance chez mamie</description>
     </multimedia>
+    <tache>
+	 <id>2</id>
+	 <datecrea>12/09/2005 09:56:35</datecrea>
+	 <datemodif>18/04/2006 06:43:43</datemodif>
+	<etat>active</etat>
+	<actuel>false</actuel>
+        <titre>Avant Propos</titre>
+	<action>Faire la vaisselle</action>
+	<priorite>2</priorite>
+	<echeance>19/05/2008</echeance>
+	<statut>terminee</statut>
+    </tache>
 </notes>

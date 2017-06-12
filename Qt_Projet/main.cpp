@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     m.setFilename(fichier);
     m.load();
 
-    FenetrePrincipale fenetre(Manager::donneInstance());
+    FenetrePrincipale fenetre;
     fenetre.show();
 
     return app.exec();
