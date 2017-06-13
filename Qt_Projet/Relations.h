@@ -67,6 +67,7 @@ public:
     IteratorCouples getIteratorCouples() const {return IteratorCouples(couples, nbCouples);}
     /**< Methode pour ajouter un couple a la relation */
     void addCouple(unsigned int id1, unsigned int id2, const QString& lab);
+    void supprimerCouple(Couple& c);
     void saveRelation(QXmlStreamWriter& stream)const;
 };
 

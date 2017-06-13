@@ -36,6 +36,21 @@ void Relation::addCouple(unsigned int id1, unsigned int id2, const QString &lab)
     couples[nbCouples++]= new Couple(id1,id2,lab);
 }
 
+//Passer en iterateur?
+void Relation::supprimerCouple(Couple& c){
+    for(unsigned int i=0; i<nbCouples; i++){
+        if(couples[i]==&c){     //On cherche si le couple existe bien dans la relation
+            Couple* temp=couples[i];
+            for(unsigned int j=i; j<nbCouples-1;j++){ //on sort le couple du tableau
+                couples[j]=couples[j+1];
+            }
+            delete temp;    //On detruit le couple
+            nbCouples--;    //On met a jour le nombre de couples dans la relation
+            i--;
+        }
+    }
+}
+
 //Singleton de la classe REFERENCE
 
 Reference* Reference::instanceUnique=nullptr;

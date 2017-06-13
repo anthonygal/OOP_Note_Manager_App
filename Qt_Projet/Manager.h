@@ -90,11 +90,12 @@ public:
     Tache& editPrioriteTache(Tache& T, int p);
     Tache& editEcheanceTache(Tache& T, const QDate& d);
     Multimedia& editFichierMultimedia(Multimedia& M, const QString s);
-    /**< Methodes d'ajout de Relation/Reference */
+    /**< Methodes d'ajout/suppression de Relation/Reference */
     void addRelation(const QString& t, const QString& d, bool o=true);
     void addCoupleRelation(Relation& r, unsigned int id1, unsigned int id2, const QString& lab);
     void addCoupleReference(unsigned int id1, unsigned int id2, const QString& lab);
     void addRefsFromNote(const Note& n);
+    void suppRefsFromNote(const Note& n);
     //Methode permettant de savoir si une note est referencee
     bool isReferenced(const Note& N) const;
     //Methode pour supprimer ou archiver une Note

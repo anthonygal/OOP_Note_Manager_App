@@ -220,27 +220,35 @@ void Manager::addRelation(const QString& t, const QString& d, bool o){
 }
 
 //Ajouter un couple à une relation
-
 void Manager::addCoupleRelation(Relation& r, unsigned int id1, unsigned int id2, const QString& lab){
     r.addCouple(id1,id2,lab);
 }
 
 //Ajouter un couple à la relation reference
-
 void Manager::addCoupleReference(unsigned int id1, unsigned int id2, const QString& lab){
     reference.addCouple(id1,id2,lab);
 }
 
 //AddRefsFromNote du Manager qui permet d'ajouter toute les references contenues dans tous les champs de texte d'une Note
-
 void Manager::addRefsFromNote(const Note& n){
     n.addRefs();
 }
 
+//On recherche tous les couples de reference dont l'id de la note passées en argument correspond a l'id1 du couple et on supprimes ces couples.
+//Ensuite comme on a supprimer des couples de reference on parcourt les notes archivees et si elles ne sont plus referencées, on les met dans la corbeille.
+void Manager::suppRefsFromNote(const Note &n){
+    for(Relation::IteratorCouples itc=reference.getIteratorCouples();!itc.isDone();itc.next())
+        if(itc.current().getID1()==n.getID())
+            reference.supprimerCouple(itc.current());
+    for(IteratorNotes itn=getIteratorNotes();!itn.isDone();itn.isDone())
+            if(itn.current().getEtat() == archivee)
+                if(!isReferenced(itn.current())) itn.current().setEtat(corbeille);
+}
+
+//On parcourt tous les couples de reference et si l'ID de la note passée en argument correspond à l'ID2 d'un couple on renvoie vraie sinon faux.
 bool Manager::isReferenced(const Note& n) const{
-    Reference& r=Reference::donneInstance();
-    for(Relation::IteratorCouples it=r.getIteratorCouples();!it.isDone();it.next())
-        if(it.current().getID1()==n.getID() || it.current().getID2()==n.getID()) return true;
+    for(Relation::IteratorCouples it=reference.getIteratorCouples();!it.isDone();it.next())
+        if(it.current().getID2()==n.getID()) return true;
     return false;
 }
 
@@ -319,18 +327,23 @@ void Manager::supprimerNote(Note& n){
             if(it.current().getID()==n.getID())
                 it.current().setEtat(archivee);
     }
-    else
+    else{
+        suppRefsFromNote(n);
         for(IteratorNotes it=getIteratorNotes();!it.isDone();it.next())
             if(it.current().getID()==n.getID()) it.current().setEtat(corbeille);
+    }
 }
 
-void Manager::viderCorbeille(){
+void Manager::viderCorbeille(){ // detruit les notes a la corbeille et couples associes
     unsigned int i=0;
     while (i<nbNotes){
         if(notes[i]->getEtat()==corbeille){
             Note* temp=notes[i];
             for(unsigned int j=i; j<nbNotes-1;j++)
-                notes[j]=notes[j+1];
+                notes[j]=notes[j+1]; //La note est sortie du tableau
+            for (IteratorRelations itr=getIteratorRelations();!itr.isDone();itr.next())   //On recherche les couples dans toutes les relation pour lesquelles la note est engagee.
+                for(Relation::IteratorCouples itc=itr.current().getIteratorCouples();!itc.isDone();itc.next())
+                    if(itc.current().getID1()==temp->getID() || itc.current().getID2()==temp->getID()) itr.current().supprimerCouple(itc.current());
             delete temp;
             nbNotes--;
         }
