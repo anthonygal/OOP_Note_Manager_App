@@ -73,7 +73,7 @@ public:
     int getNbNotes()const {return nbNotes;}
     int getNbRelations() const {return nbRelations;}
     Relation& getRelation(const QString& t);
-    Reference& getReference();
+    Reference& getReference() const {return reference;}
     Note* getNoteID(unsigned long id);
     /**< Methode pour ajouter une Note, utilisee dans les methodes de creation et d'edition d'article/tache/multimedia */
     void ajouterNote(Note& n);

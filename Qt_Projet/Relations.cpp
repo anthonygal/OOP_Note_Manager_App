@@ -83,3 +83,14 @@ void Couple::saveCouple(QXmlStreamWriter& stream) const{
     stream.writeTextElement("ID2",QString::number(ID2));
     stream.writeEndElement();
 }
+
+//void Reference::saveReference(QXmlStreamWriter& stream){
+//    stream.writeStartElement("references");
+//    stream.writeTextElement("titre", getTitre());
+//    stream.writeTextElement("description",getDescription());
+//    stream.writeTextElement("orientee",orienteetoQString());
+//    for(unsigned int j=0; j<nbCouples;j++){
+//        couples[j]->savecouple(stream);
+//    }
+//}
+
