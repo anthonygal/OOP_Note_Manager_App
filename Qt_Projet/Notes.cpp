@@ -115,7 +115,7 @@ void Tache::saveNote(QXmlStreamWriter& stream)const{
 }
 
 void Multimedia::saveNote(QXmlStreamWriter& stream)const{
-    stream.writeStartElement("tache");
+    stream.writeStartElement("multimedia");
     stream.writeTextElement("id",QString::number(getID()));
     stream.writeTextElement("datecrea",getDateCrea().toString(formatDateTime));
     stream.writeTextElement("datemodif",getDateModif().toString(formatDateTime));

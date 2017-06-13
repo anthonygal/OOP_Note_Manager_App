@@ -76,7 +76,7 @@ public:
     Reference& getReference();
     Note* getNoteID(unsigned long id);
     /**< Methode pour ajouter une Note, utilisee dans les methodes de creation et d'edition d'article/tache/multimedia */
-    void ajouterNote(Note &n);
+    void ajouterNote(Note& n);
     /**< Methodes pour ajouter un Article/Tache/Multimedia au tableau de notes*/
     void newArticle(const QString& ti, const QString& te=""); /**< creation d'un article */
     void newTache(const QString& ti, const QString& act, int prio=0, const QDate& d=QDate()); /**< creation d'une tache */
@@ -101,9 +101,13 @@ public:
     void supprimerNote(Note& N);
     void viderCorbeille();
 
+    static QString booltoQString(bool o);
+    static bool QStringtobool(const QString& str);
+
     void setFilename(const QString& f) {filename=f;}
     void load();
     void save() const;
 };
+
 
 #endif // MANAGER_H

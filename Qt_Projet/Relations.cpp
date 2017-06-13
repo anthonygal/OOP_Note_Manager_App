@@ -1,4 +1,5 @@
 #include "Relations.h"
+#include "Manager.h"
 
 // RELATIONS ENTRE NOTES
 
@@ -47,4 +48,23 @@ Reference& Reference::donneInstance(){
 void Reference::libereInstance(){
     if (instanceUnique!=0) delete instanceUnique;
     instanceUnique=nullptr;
+}
+
+void Relation::saveRelation(QXmlStreamWriter& stream)const{
+    stream.writeStartElement("relations");
+    stream.writeTextElement("titre", titre);
+    stream.writeTextElement("description",description);
+    stream.writeTextElement("orientee", Manager::booltoQString(orientee));
+    for(unsigned int j=0; j<nbCouples;j++){
+        couples[j]->saveCouple(stream);
+    }
+    stream.writeEndElement();
+}
+
+void Couple::saveCouple(QXmlStreamWriter& stream) const{
+    stream.writeStartElement("couples");
+    stream.writeTextElement("label", label);
+    stream.writeTextElement("ID1",QString::number(ID1));
+    stream.writeTextElement("ID2",QString::number(ID2));
+    stream.writeEndElement();
 }

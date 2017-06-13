@@ -26,6 +26,7 @@ public:
     unsigned int getID2() const {return ID2;}
     /**< Commandes setAttributs */
     void setLabel(const QString& s){label=s;}
+    void saveCouple(QXmlStreamWriter& stream) const;
 };
 
 /**< CLASS RELATION */
@@ -47,6 +48,7 @@ public:
     bool isOrientee() const {return orientee;}
     Couple** getCouples() const {return couples;}
     int getnbCouples() const {return nbCouples;}
+    int getnbMaxCouples() const {return nbMaxCouples;}
     /**< Commandes setAttributs */
     void setOrientee(){orientee=true;}
     void setNonOrientee(){orientee=false;}
@@ -65,6 +67,7 @@ public:
     IteratorCouples getIteratorCouples() const {return IteratorCouples(couples, nbCouples);}
     /**< Methode pour ajouter un couple a la relation */
     void addCouple(unsigned int id1, unsigned int id2, const QString& lab);
+    void saveRelation(QXmlStreamWriter& stream)const;
 };
 
 /**< CLASS REFERENCE FILLE DE RELATION */
