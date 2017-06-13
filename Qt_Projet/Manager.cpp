@@ -321,13 +321,23 @@ void Manager::supprimerNote(Note& n){
             if(it.current().getID()==n.getID()) it.current().setEtat(corbeille);
 }
 
-void Manager::viderCorbeille(){
+void Manager::viderCorbeille(){ // detruit les notes a la corbeille et couples associes
     unsigned int i=0;
     while (i<nbNotes){
         if(notes[i]->getEtat()==corbeille){
             Note* temp=notes[i];
             for(unsigned int j=i; j<nbNotes-1;j++)
-                notes[j]=notes[j+1];
+                notes[j]=notes[j+1]; //La note est sortie du tableau
+            for (unsigned int k=0;k<nbRelations;k++){   //On recherche les relation pour lesquelles il existe des couples dans laquelle la note est engagee
+                Relation* r=relations[k];
+                couple* c=*(r->getCouples());
+                for (unsigned int q=0; q++; q<r->getnbCouples()) {
+                    c=c[q];
+                    if ((temp->getID())==(c->getNote1()->getID()) || (temp->getID())==(c->getNote2()->getID())) { //On supprime les couples associes a la note
+                       r->supprimerCouple(c);
+                    }
+                }
+            }
             delete temp;
             nbNotes--;
         }

@@ -59,6 +59,7 @@ public:
     void saveRelation(QXmlStreamWriter& stream)const;
     QString orienteetoQString()const;
     bool QStringtoOrientee(const QString& str);
+    void supprimerCouple(Couple* c);
 };
 
 /**< CLASS REFERENCE FILLE DE RELATION */

@@ -35,6 +35,19 @@ void Relation::addCouple(Couple& c){
     nbCouples++;
 }
 
+void Relation::supprimerCouple(Couple* c){
+    for (int i=0; i<nbCouples; i++){    
+        if (couples[i]==c){     //On cherche si le couple existe bien dans la relation
+            Couple* temp=couples[i];
+            for(unsigned int j=i; j<nbCouples-1;j++){ //on sort le couple du tableau
+                couples[j]=couples[j+1];
+            }
+            delete temp;    //On detruit le couple
+            nbCouples--;    //On met a jour le nombre de couples dans la relation
+        }
+    }
+}
+
 Reference::~Reference(){
     this->Relation::~Relation();
 }
