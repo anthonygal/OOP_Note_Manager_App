@@ -70,14 +70,23 @@ void Relation::saveRelation(QXmlStreamWriter& stream)const{
     stream.writeTextElement("titre", getTitre());
     stream.writeTextElement("description",getDescription());
     stream.writeTextElement("orientee",orienteetoQString());
-    stream.writeTextElement("nbCouples",QString::number(getnbCouples()));
-    stream.writeTextElement("nbMaxCouples",QString::number(getnbMaxCouples()));
     for(unsigned int j=0; j<nbCouples;j++){
         couples[j]->savecouple(stream);
     }
     stream.writeEndElement();
 }
 
+
+void Reference::saveReference(QXmlStreamWriter& stream){
+    stream.writeStartElement("references");
+    stream.writeTextElement("titre", getTitre());
+    stream.writeTextElement("description",getDescription());
+    stream.writeTextElement("orientee",orienteetoQString());
+    for(unsigned int j=0; j<nbCouples;j++){
+        couples[j]->savecouple(stream);
+    }
+
+}
 
 void Couple::savecouple(QXmlStreamWriter& stream) const{
     stream.writerStartElement("couples");
@@ -86,6 +95,7 @@ void Couple::savecouple(QXmlStreamWriter& stream) const{
     stream.writeTextElement("ID2",getID2());
     stream.writeEndElement();
 }
+
 
 
 QString Relation::orienteetoQString()const{

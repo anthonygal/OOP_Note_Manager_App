@@ -129,22 +129,21 @@ MultimediaEditeur::MultimediaEditeur(Multimedia& m, QWidget* parent) : NoteEdite
     adresse= new QLineEdit(this);
 
 
-    /*
+
     desc = new QTextEdit(this);
-    filename = new QLineEdit(this);
+    adresse = new QLineEdit(this);
     type = new QGroupBox("type de Multimedia", this);
 
-    QRadioButton *Image = new QRadioButton("Image");
-    QRadioButton *Audio = new QRadioButton("Audio");
-    QRadioButton *Video = new QRadioButton("Video");
-
-    QHBoxLayout *hbox = new QHBoxLayout;
-    hbox->addWidget(Image);
-    hbox->addWidget(Audio);
-    hbox->addWidget(Video);*/
+    Image = new QRadioButton("Image");
+    Audio = new QRadioButton("Audio");
+    Video = new QRadioButton("Video");
 
     desc->setText(multimedia.getDescription());
-    type->setText(multimedia.TypeMultimediatoQString());
+
+    if(multimedia.getType()==image) Image->setChecked(true);
+    else if (multimedia.getType()==audio) Audio->setChecked(true);
+           else Video->setChecked(true);
+
     adresse->setText(multimedia.getAdresseFichier());
 
 
@@ -158,6 +157,12 @@ MultimediaEditeur::MultimediaEditeur(Multimedia& m, QWidget* parent) : NoteEdite
     typeLayout->addWidget(type);
     adresseLayout->addWidget(adresseLab);
     adresseLayout->addWidget(adresse);
+
+    hbox = new QHBoxLayout;
+    hbox->addWidget(Image);
+    hbox->addWidget(Audio);
+    hbox->addWidget(Video);
+    type->setLayout(hbox);
 
     layer->addLayout(descLayout);
     layer->addLayout(typeLayout);
@@ -176,10 +181,12 @@ MultimediaEditeur::MultimediaEditeur(Multimedia& m, QWidget* parent) : NoteEdite
 }
 
 void ArticleEditeur::enregistrerNote(){
+    Manager& m=Manager::donneInstance();
+    m.SupRefsFromNote(article);
     Article* a = new Article(article);
     a->setTitre(titre->text());
-    a->setTexte(texte->toPlainText());
-    Manager& m=Manager::donneInstance();
+    a->setTexte(texte->toPlainText());   
+    m.AddRefsFromNote(*a);
     m.ajouterNote(*a);
     QMessageBox::information(this,"Sauvegarde","Votre Article a bien été enregistré");
     close();
@@ -187,23 +194,28 @@ void ArticleEditeur::enregistrerNote(){
 
 void TacheEditeur::enregistrerNote(){
     Tache* t = new Tache(tache);
+    Manager& m=Manager::donneInstance();
+    m.SupRefsFromNote(tache);
     t->setTitre(titre->text());
     t->setAction(action->toPlainText());
     t->setEcheance(echeance->selectedDate());
     t->setPriorite(priorite->value());
-    Manager& m=Manager::donneInstance();
     m.ajouterNote(*t);
     QMessageBox::information(this,"Sauvegarde","Votre Tache a bien été enregistrée");
     close();
 }
 
 void MultimediaEditeur::enregistrerNote(){
+    Manager& ma = Manager::donneInstance();
+    m.SupRefsFromNote(multimedia);
     Multimedia* m = new Multimedia(multimedia);
     m->setTitre(titre->text());
     m->setDescription(desc->toPlainText());
     m->setAdresseFichier(adresse->text());
-    m->setType(m->QStringtoTypeMultimedia(type->text()));
-    Manager& ma = Manager::donneInstance();
+    if(Image->isChecked()) m->setType(image);
+    else if(Audio->isChecked()) m->setType(audio);
+         else m->setType(video);
+
     ma.ajouterNote(*m);
     QMessageBox::information(this,"Sauvegarde","Votre Multimedia a bien été enregistré");
     close();

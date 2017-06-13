@@ -77,6 +77,7 @@ private:
     /**< Template Method Singleton */
     static Reference& donneInstance();
     static void libereInstance();
+    void saveReference(QXmlStreamWriter& stream)const;
  };
 
 #endif /* Relations_h */

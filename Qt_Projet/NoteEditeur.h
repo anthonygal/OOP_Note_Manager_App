@@ -115,7 +115,11 @@ private:
     Multimedia& multimedia;
     QTextEdit* desc;
     QLineEdit* adresse;
-    QLineEdit* type;
+    QGroupBox* type;
+    QRadioButton* Image;
+    QRadioButton* Audio;
+    QRadioButton* Video;
+
 
     QLabel* descLab;
     QLabel* adresseLab;
@@ -125,6 +129,7 @@ private:
     QHBoxLayout* descLayout;
     QHBoxLayout* adresseLayout;
     QHBoxLayout* typeLayout;
+    QHBoxLayout *hbox ;
 
 public:
     explicit MultimediaEditeur(Multimedia& t, QWidget* parent=0);
