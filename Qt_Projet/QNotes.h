@@ -13,6 +13,7 @@ class QNoteReduite : public QPushButton{
     FenetrePrincipale* fenetre;
 public:
     explicit QNoteReduite(Note& n, FenetrePrincipale* f, QWidget* parent = nullptr);
+    Note& getNote() const {return note;}
 signals:
 
 public slots:
@@ -25,6 +26,7 @@ class QNote : public QWidget{
     Note& note;
 public:
     explicit QNote(Note& n, QWidget *parent = nullptr);
+    Note& getNote() const {return note;}
 signals:
 
 public slots:

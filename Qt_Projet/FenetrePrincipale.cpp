@@ -16,7 +16,7 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
             newNote->addAction(newMultimedia);
 
 
-    QDockWidget *leftDockWidget = new QDockWidget("Toutes les notes");
+    leftDockWidget = new QDockWidget("Toutes les notes");
     leftDockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
         QWidget *leftWidget = new QWidget;
         QVBoxLayout *leftLayout = new QVBoxLayout;
@@ -52,27 +52,30 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
         Manager::IteratorNotes it=manager.getIteratorNotes();
         while(!it.isDone() && it.current().getEtat() != active && !it.current().isActuelle())
             it.next();
-        QNote *notePrincipale = new QNote(it.current());
+        notePrincipale = new QNote(it.current());
     centralLayout->addWidget(notePrincipale);
 
-        QScrollArea *anciennesVersions = new QScrollArea;
-            QWidget *oldVerWidget = new QWidget;
-            QVBoxLayout *oldVerLayout = new QVBoxLayout;
+        autresVersions = new QScrollArea;
+            QWidget *autresVerWidget = new QWidget;
+            QVBoxLayout *autresVerLayout = new QVBoxLayout;
                 for(Manager::IteratorNotes it2=manager.getIteratorNotes();!it2.isDone();it2.next()){
-                    if(it2.current().getID() == it.current().getID() && !it2.current().isActuelle()){
-                        oldVerLayout->addWidget(new QNoteReduite(it2.current(),this));
+                    if(it2.current().getID() == notePrincipale->getNote().getID() && it2.current().getDateModif() != notePrincipale->getNote().getDateModif()){
+                        QHBoxLayout *hlayout = new QHBoxLayout;
+                            hlayout->addWidget(new QLabel(it2.current().getDateModif().toString(formatDateTime)));
+                            hlayout->addWidget(new QNoteReduite(it2.current(),this));
+                        autresVerLayout->addLayout(hlayout);
                     }
                 }
-            oldVerWidget->setLayout(oldVerLayout);
-        anciennesVersions->setWidget(oldVerWidget);
-        anciennesVersions->setWidgetResizable(true);
-    centralLayout->addWidget(anciennesVersions);
+            autresVerWidget->setLayout(autresVerLayout);
+        autresVersions->setWidget(autresVerWidget);
+        autresVersions->setWidgetResizable(true);
+    centralLayout->addWidget(autresVersions);
 
     zoneCentrale->setLayout(centralLayout);
     setCentralWidget(zoneCentrale);
 
 
-    QDockWidget *rightDockWidget = new QDockWidget("Relations de la note principale");
+    rightDockWidget = new QDockWidget("Relations de la note principale");
         QWidget *rightWidget = new QWidget;
         QVBoxLayout *rightLayout = new QVBoxLayout;
             QScrollArea *scrollRelAsc = new QScrollArea;
@@ -100,62 +103,73 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
     addDockWidget(Qt::RightDockWidgetArea,rightDockWidget);
 }
 
-void FenetrePrincipale::updateCentralWidget(Note& n){
-    QWidget *zoneCentrale = new QWidget;
-    QVBoxLayout *centralLayout = new QVBoxLayout;
+void FenetrePrincipale::updateNotePrincipale(Note& n){
+    QNote *oldNotePrincipale = notePrincipale;
+    QNote *newNotePrincipale = new QNote(n);
+    centralWidget()->layout()->replaceWidget(notePrincipale, newNotePrincipale);
+    notePrincipale = newNotePrincipale;
+    delete oldNotePrincipale;
+}
 
-        QNote *notePrincipale = new QNote(n);
-    centralLayout->addWidget(notePrincipale);
+void FenetrePrincipale::updateAutresVersions(Note& n){
+    QScrollArea *oldAutreVersions = autresVersions;
 
-        QScrollArea *anciennesVersions = new QScrollArea;
-            QWidget *oldVerWidget = new QWidget;
-            QVBoxLayout *oldVerLayout = new QVBoxLayout;
-                for(Manager::IteratorNotes it=Manager::donneInstance().getIteratorNotes();!it.isDone();it.next()){
-                    if(it.current().getID() == n.getID() && !it.current().isActuelle()){
-                        oldVerLayout->addWidget(new QNoteReduite(it.current(),this));
-                    }
+    QScrollArea *newAutresVersions = new QScrollArea;
+        QWidget *autresVerWidget = new QWidget;
+        QVBoxLayout *autresVerLayout = new QVBoxLayout;
+            for(Manager::IteratorNotes it=Manager::donneInstance().getIteratorNotes();!it.isDone();it.next()){
+                if(it.current().getID() == n.getID() && it.current().getDateModif() != n.getDateModif()){
+                    QHBoxLayout *hlayout = new QHBoxLayout;
+                        hlayout->addWidget(new QLabel(it.current().getDateModif().toString(formatDateTime)));
+                        hlayout->addWidget(new QNoteReduite(it.current(),this));
+                    autresVerLayout->addLayout(hlayout);
                 }
-            oldVerWidget->setLayout(oldVerLayout);
-        anciennesVersions->setWidget(oldVerWidget);
-        anciennesVersions->setWidgetResizable(true);
-    centralLayout->addWidget(anciennesVersions);
+            }
+        autresVerWidget->setLayout(autresVerLayout);
+    newAutresVersions->setWidget(autresVerWidget);
+    newAutresVersions->setWidgetResizable(true);
 
-    zoneCentrale->setLayout(centralLayout);
-    setCentralWidget(zoneCentrale);
+    centralWidget()->layout()->replaceWidget(autresVersions, newAutresVersions);
+    autresVersions = newAutresVersions;
+    delete oldAutreVersions;
 }
 
 void FenetrePrincipale::updateRightDockWidget(Note& n){
     Manager& manager = Manager::donneInstance();
 
-    QDockWidget *rightDockWidget = new QDockWidget("Relations de la note principale");
-        QWidget *rightWidget = new QWidget;
-        QVBoxLayout *rightLayout = new QVBoxLayout;
-            QScrollArea *scrollRelAsc = new QScrollArea;
-                QWidget *relAscWidget = new QWidget;
-                QVBoxLayout *relAscLayout = new QVBoxLayout;
-                    for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
-                        //A faire
-                    }
-                relAscWidget->setLayout(relAscLayout);
-            scrollRelAsc->setWidget(relAscWidget);
-            scrollRelAsc->setWidgetResizable(true);
-        rightLayout->addWidget(scrollRelAsc);
+    QWidget *oldDockWidget = rightDockWidget->widget();
 
-            QScrollArea *scrollRelDesc = new QScrollArea;
-                QWidget *relDescWidget = new QWidget;
-                QVBoxLayout *relDescLayout = new QVBoxLayout;
-                    for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
-                        //A faire
-                    }
-                relDescWidget->setLayout(relDescLayout);
-            scrollRelDesc->setWidget(relDescWidget);
-            scrollRelDesc->setWidgetResizable(true);
-        rightLayout->addWidget(scrollRelDesc);
+    QWidget *rightWidget = new QWidget;
+    QVBoxLayout *rightLayout = new QVBoxLayout;
+        QScrollArea *scrollRelAsc = new QScrollArea;
+            QWidget *relAscWidget = new QWidget;
+            QVBoxLayout *relAscLayout = new QVBoxLayout;
+                for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
+                    //A faire
+                }
+            relAscWidget->setLayout(relAscLayout);
+        scrollRelAsc->setWidget(relAscWidget);
+        scrollRelAsc->setWidgetResizable(true);
+    rightLayout->addWidget(scrollRelAsc);
+
+        QScrollArea *scrollRelDesc = new QScrollArea;
+            QWidget *relDescWidget = new QWidget;
+            QVBoxLayout *relDescLayout = new QVBoxLayout;
+                for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
+                    //A faire
+                }
+            relDescWidget->setLayout(relDescLayout);
+        scrollRelDesc->setWidget(relDescWidget);
+        scrollRelDesc->setWidgetResizable(true);
+    rightLayout->addWidget(scrollRelDesc);
+
     rightDockWidget->setWidget(rightWidget);
-    addDockWidget(Qt::RightDockWidgetArea,rightDockWidget);
+    //rightWidget->show(); //surement besoin
+    delete oldDockWidget;
 }
 
 void FenetrePrincipale::changerNotePrincipale(Note &n){
-    updateCentralWidget(n);
+    updateNotePrincipale(n);
+    updateAutresVersions(n);
     updateRightDockWidget(n);
 }

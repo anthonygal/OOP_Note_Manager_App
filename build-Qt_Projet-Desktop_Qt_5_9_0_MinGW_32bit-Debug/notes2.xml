@@ -44,4 +44,16 @@
 	<echeance>19/05/2008</echeance>
 	<statut>terminee</statut>
     </tache>
+    <tache>
+	 <id>2</id>
+	 <datecrea>12/09/2005 09:56:35</datecrea>
+	 <datemodif>16/04/2006 07:43:43</datemodif>
+	<etat>active</etat>
+	<actuel>false</actuel>
+        <titre>Apres Propos</titre>
+	<action>Ranger la vaisselle</action>
+	<priorite>2</priorite>
+	<echeance>19/05/2008</echeance>
+	<statut>terminee</statut>
+    </tache>
 </notes>

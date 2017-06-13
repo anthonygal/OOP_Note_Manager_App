@@ -12,10 +12,13 @@ class QNote;
 class FenetrePrincipale : public QMainWindow{
     Q_OBJECT
     QDockWidget* leftDockWidget;
+    QNote *notePrincipale;
+    QScrollArea *autresVersions;
     QDockWidget* rightDockWidget;
 public:
     explicit FenetrePrincipale(QWidget *parent = nullptr);
-    void updateCentralWidget(Note& n);
+    void updateNotePrincipale(Note& n);
+    void updateAutresVersions(Note& n);
     void updateRightDockWidget(Note& n);
 
 signals:

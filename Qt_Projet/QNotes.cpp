@@ -2,16 +2,15 @@
 
 QNoteReduite::QNoteReduite(Note& n, FenetrePrincipale* f, QWidget* parent) : QPushButton(parent), note(n), fenetre(f)
 {
-    setMinimumSize(275,40);
+    setMinimumSize(150,40);
     QHBoxLayout *layout = new QHBoxLayout;
         QLabel *Type = new QLabel(n.getTypeNote());
         QLabel *ID = new QLabel(QString::number(n.getID()));
         QLabel *Titre = new QLabel(n.getTitre());
-        QLabel *DateModif = new QLabel(n.getDateModif().toString(formatDateTime));
         layout->addWidget(Type);
         layout->addWidget(ID);
         layout->addWidget(Titre);
-        layout->addWidget(DateModif);
+        //layout->addWidget(DateModif);
     setLayout(layout);
     QObject::connect(this,SIGNAL(clicked()),SLOT(onClicked()));
 }
