@@ -163,9 +163,7 @@ public:
     void setDescription(const QString& desc){description=desc;}
     void setType(const TypeMultimedia ty){type=ty;}
     /**< Methode d'edition */
-    Multimedia& edit();
-    /**< Methode d'affichage specifique */
-    //QVBoxLayout afficherSpecifique(QWidget* parent) const;
+    //Multimedia& edit();
     /**< Methode pour ajouter des references specifique */
     void addRefsSpecifique() const;
     /** Methode permettant de sauvegarder dans un fichier xml une note particuliere */

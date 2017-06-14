@@ -77,7 +77,7 @@ void Relation::saveRelation(QXmlStreamWriter& stream)const{
 }
 
 void Couple::saveCouple(QXmlStreamWriter& stream) const{
-    stream.writeStartElement("couples");
+    stream.writeStartElement("couple");
     stream.writeTextElement("label", label);
     stream.writeTextElement("ID1",QString::number(ID1));
     stream.writeTextElement("ID2",QString::number(ID2));

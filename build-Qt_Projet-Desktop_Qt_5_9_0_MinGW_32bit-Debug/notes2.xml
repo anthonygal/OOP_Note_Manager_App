@@ -1,59 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<notes>
-    <article>
-	 <id>1</id>
-	 <datecrea>12/10/2016 12:56:59</datecrea>
-	 <datemodif>13/10/2016 11:45:12</datemodif>
-	<etat>archivee</etat>
-	<actuel>true</actuel>
-        <titre>Avant Propos</titre>
-	<texte>Faut toujours bien lire un sujet avant de commencer.</texte>
-    </article>
-    <tache>
-	 <id>2</id>
-	 <datecrea>12/09/2005 09:56:35</datecrea>
-	 <datemodif>18/04/2006 07:45:43</datemodif>
-	<etat>active</etat>
-	<actuel>true</actuel>
-        <titre>Avant Propos</titre>
-	<action>Faire a manger</action>
-	<priorite>2</priorite>
-	<echeance>19/05/2008</echeance>
-	<statut>terminee</statut>
-    </tache>
-    <multimedia>
-	 <id>3</id>
-	 <datecrea>08/01/2014 01:17:17</datecrea>
-	 <datemodif>08/01/2014 01:17:17</datemodif>
-	<etat>active</etat>
-	<actuel>true</actuel>
-        <titre>Avant Propos</titre>
-	<adressefichier>a mettre!</adressefichier>
-	<type>image</type>
-	<description>Pierre vacance chez mamie</description>
-    </multimedia>
-    <tache>
-	 <id>2</id>
-	 <datecrea>12/09/2005 09:56:35</datecrea>
-	 <datemodif>18/04/2006 06:43:43</datemodif>
-	<etat>active</etat>
-	<actuel>false</actuel>
-        <titre>Avant Propos</titre>
-	<action>Faire la vaisselle</action>
-	<priorite>2</priorite>
-	<echeance>19/05/2008</echeance>
-	<statut>terminee</statut>
-    </tache>
-    <tache>
-	 <id>2</id>
-	 <datecrea>12/09/2005 09:56:35</datecrea>
-	 <datemodif>16/04/2006 07:43:43</datemodif>
-	<etat>active</etat>
-	<actuel>false</actuel>
-        <titre>Apres Propos</titre>
-	<action>Ranger la vaisselle</action>
-	<priorite>2</priorite>
-	<echeance>19/05/2008</echeance>
-	<statut>terminee</statut>
-    </tache>
-</notes>
+<manager>
+  <article>
+    <id>1</id>b
+    <datecrea>12/10/2016 12:56:59</datecrea>
+    <datemodif>13/10/2016 11:45:12</datemodif>
+    <etat>archivee</etat>
+    <actuel>true</actuel>
+    <titre>Avant Propos</titre>
+    <texte>Faut toujours bien lire un sujet avant de commencer.</texte>
+  </article>
+  <tache>
+    <id>2</id>
+    <datecrea>12/09/2005 09:56:35</datecrea>
+    <datemodif>18/04/2006 07:45:43</datemodif>
+    <etat>active</etat>
+    <actuel>true</actuel>
+    <titre>Avant Propos</titre>
+    <action>Faire a manger</action>
+    <priorite>2</priorite>
+    <echeance>19/05/2008</echeance>
+    <statut>terminee</statut>
+  </tache>
+  <multimedia>
+    <id>3</id>
+    <datecrea>08/01/2014 01:17:17</datecrea>
+    <datemodif>08/01/2014 01:17:17</datemodif>
+    <etat>active</etat>
+    <actuel>true</actuel>
+    <titre>Avant Propos</titre>
+    <adressefichier>a mettre!</adressefichier>
+    <type>image</type>
+    <description>Pierre vacance chez mamie</description>
+  </multimedia>
+  <tache>
+    <id>2</id>
+    <datecrea>12/09/2005 09:56:35</datecrea>
+    <datemodif>18/04/2006 06:43:43</datemodif>
+    <etat>active</etat>
+    <actuel>false</actuel>
+    <titre>Avant Propos</titre>
+    <action>Faire la vaisselle</action>
+    <priorite>2</priorite>
+    <echeance>19/05/2008</echeance>
+    <statut>terminee</statut>
+  </tache>
+  <tache>
+  <id>2</id>
+    <datecrea>12/09/2005 09:56:35</datecrea>
+    <datemodif>16/04/2006 07:43:43</datemodif>
+    <etat>active</etat>
+    <actuel>false</actuel>
+    <titre>Apres Propos</titre>
+    <action>Ranger la vaisselle</action>
+    <priorite>2</priorite>
+    <echeance>19/05/2008</echeance>
+    <statut>terminee</statut>
+  </tache>
+  <relation>
+    <titre>rel1</titre>
+    <description>Description de la rel1</description>
+    <orientee>true</orientee>
+    <couple>
+      <label>lab1</label>
+      <ID1>1</ID1>
+      <ID2>2</ID2>
+    </couple>
+    <couple>
+      <label>lab2</label>
+      <ID1>2</ID1>
+      <ID2>3</ID2>
+    </couple>
+    <couple>
+      <label>lab3</label>
+      <ID1>1</ID1>
+      <ID2>3</ID2>
+    </couple>
+  </relation>
+  <relation>
+    <titre>rel2</titre>
+    <description>Description de la rel2</description>
+    <orientee>false</orientee>
+    <couple>
+      <label>lab1</label>
+      <ID1>1</ID1>
+      <ID2>3</ID2>
+    </couple>
+    <couple>
+      <label>lab2</label>
+      <ID1>3</ID1>
+      <ID2>2</ID2>
+    </couple>
+  </relation>
+</manager>

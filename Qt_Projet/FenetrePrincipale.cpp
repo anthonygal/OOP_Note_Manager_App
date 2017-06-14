@@ -3,6 +3,7 @@
 FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
     Manager& manager = Manager::donneInstance();
 
+    //MENU
     QMenu *menuAfficher = menuBar()->addMenu("&Fichier");
         QAction *actionQuitter = new QAction("&Quitter");
         menuAfficher->addAction(actionQuitter);
@@ -15,7 +16,7 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
             newNote->addAction(newTache);
             newNote->addAction(newMultimedia);
 
-
+    //DOCK WIDGET GAUCHE
     leftDockWidget = new QDockWidget("Toutes les notes");
 
     leftDockWidget->setStyleSheet("background-color: white");
@@ -47,7 +48,7 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
     leftDockWidget->setWidget(leftWidget);
     addDockWidget(Qt::LeftDockWidgetArea,leftDockWidget);
 
-
+    //ZONE CENTRALE
     QWidget *zoneCentrale = new QWidget;
     QVBoxLayout *centralLayout = new QVBoxLayout;
 
@@ -76,31 +77,86 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
     zoneCentrale->setLayout(centralLayout);
     setCentralWidget(zoneCentrale);
 
-
+    //DOCK WIDGET DROIT
     rightDockWidget = new QDockWidget("Relations de la note principale");
         QWidget *rightWidget = new QWidget;
         QVBoxLayout *rightLayout = new QVBoxLayout;
-            QScrollArea *scrollRelAsc = new QScrollArea;
+
+            QLabel *labRelAsc = new QLabel("Relations Ascendantes : ");
+        rightLayout->addWidget(labRelAsc);
+
+            scrollRelAsc = new QScrollArea;
                 QWidget *relAscWidget = new QWidget;
                 QVBoxLayout *relAscLayout = new QVBoxLayout;
-                    for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
-                        //A faire
+                //Affiche les references ascendantes
+                //Donc l' ID de la note principale doit correspondre à l'id2 des couples
+                relAscLayout->addWidget(new QLabel(manager.getReference().getTitre()));
+                for(Relation::IteratorCouples itc=manager.getReference().getIteratorCouples();!itc.isDone();itc.next()){
+                    if(notePrincipale->getID() == itc.current().getID2()){
+                        QHBoxLayout *coupleLayout = new QHBoxLayout;
+                        coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID1())),this));
+                        coupleLayout->addWidget(new QLabel(itc.current().getLabel()));
+                        coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID2())),this));
+                        relAscLayout->addLayout(coupleLayout);
+                    }
+                }
+                //Affiche les relations ascendantes
+                //Donc l' ID de la note principale doit correspondre à l'id2 des couples des relations orientees et à l'un des deux id des couples des relations non orientees
+                    for(Manager::IteratorRelations itr=manager.getIteratorRelations();!itr.isDone();itr.next()){
+                        relAscLayout->addWidget(new QLabel(itr.current().getTitre()));
+                        for(Relation::IteratorCouples itc=itr.current().getIteratorCouples();!itc.isDone();itc.next()){
+                            if((itr.current().isOrientee() && notePrincipale->getID() == itc.current().getID2()) || (!itr.current().isOrientee() && (notePrincipale->getID() == itc.current().getID1() || notePrincipale->getID() == itc.current().getID2()))){
+                                QHBoxLayout *coupleLayout = new QHBoxLayout;
+                                coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID1())),this));
+                                coupleLayout->addWidget(new QLabel(itc.current().getLabel()));
+                                coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID2())),this));
+                                relAscLayout->addLayout(coupleLayout);
+                            }
+                        }
                     }
                 relAscWidget->setLayout(relAscLayout);
             scrollRelAsc->setWidget(relAscWidget);
             scrollRelAsc->setWidgetResizable(true);
         rightLayout->addWidget(scrollRelAsc);
 
-            QScrollArea *scrollRelDesc = new QScrollArea;
+        QLabel *labRelDesc = new QLabel("Relations Descendantes : ");
+    rightLayout->addWidget(labRelDesc);
+
+            scrollRelDesc = new QScrollArea;
                 QWidget *relDescWidget = new QWidget;
                 QVBoxLayout *relDescLayout = new QVBoxLayout;
-                    for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
-                        //A faire
+                //Affiche les references descendantes
+                //Donc l' ID de la note principale doit correspondre à l'id1 des couples
+                relDescLayout->addWidget(new QLabel(manager.getReference().getTitre()));
+                for(Relation::IteratorCouples itc=manager.getReference().getIteratorCouples();!itc.isDone();itc.next()){
+                    if(notePrincipale->getID() == itc.current().getID1()){
+                        QHBoxLayout *coupleLayout = new QHBoxLayout;
+                        coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID1())),this));
+                        coupleLayout->addWidget(new QLabel(itc.current().getLabel()));
+                        coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID2())),this));
+                        relDescLayout->addLayout(coupleLayout);
+                    }
+                }
+                //Affiche les relations descendantes
+                //Donc l' ID de la note principale doit correspondre à l'id1 des couples des relations orientees et à l'un des deux id des couples des relations non orientees
+                    for(Manager::IteratorRelations itr=manager.getIteratorRelations();!itr.isDone();itr.next()){
+                        relDescLayout->addWidget(new QLabel(itr.current().getTitre()));
+                        for(Relation::IteratorCouples itc=itr.current().getIteratorCouples();!itc.isDone();itc.next()){
+                            if((itr.current().isOrientee() && notePrincipale->getID() == itc.current().getID1()) || (!itr.current().isOrientee() && (notePrincipale->getID() == itc.current().getID1() || notePrincipale->getID() == itc.current().getID2()))){
+                                QHBoxLayout *coupleLayout = new QHBoxLayout;
+                                coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID1())),this));
+                                coupleLayout->addWidget(new QLabel(itc.current().getLabel()));
+                                coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID2())),this));
+                                relDescLayout->addLayout(coupleLayout);
+                            }
+                        }
                     }
                 relDescWidget->setLayout(relDescLayout);
             scrollRelDesc->setWidget(relDescWidget);
             scrollRelDesc->setWidgetResizable(true);
         rightLayout->addWidget(scrollRelDesc);
+
+    rightWidget->setLayout(rightLayout);
     rightDockWidget->setWidget(rightWidget);
     addDockWidget(Qt::RightDockWidgetArea,rightDockWidget);
 }
@@ -136,42 +192,93 @@ void FenetrePrincipale::updateAutresVersions(Note& n){
     delete oldAutreVersions;
 }
 
-void FenetrePrincipale::updateRightDockWidget(Note& n){
+void FenetrePrincipale::updateScrollRelAsc(Note& n){
     Manager& manager = Manager::donneInstance();
 
-    QWidget *oldDockWidget = rightDockWidget->widget();
-
-    QWidget *rightWidget = new QWidget;
-    QVBoxLayout *rightLayout = new QVBoxLayout;
-        QScrollArea *scrollRelAsc = new QScrollArea;
-            QWidget *relAscWidget = new QWidget;
-            QVBoxLayout *relAscLayout = new QVBoxLayout;
-                for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
-                    //A faire
+    QScrollArea *newScrollRelAsc = new QScrollArea;
+        QWidget *relAscWidget = new QWidget;
+        QVBoxLayout *relAscLayout = new QVBoxLayout;
+        //Affiche les references ascendantes
+        //Donc l' ID de la note principale doit correspondre à l'id2 des couples
+        relAscLayout->addWidget(new QLabel(manager.getReference().getTitre()));
+        for(Relation::IteratorCouples itc=manager.getReference().getIteratorCouples();!itc.isDone();itc.next()){
+            if(n.getID() == itc.current().getID2()){
+                QHBoxLayout *coupleLayout = new QHBoxLayout;
+                coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID1())),this));
+                coupleLayout->addWidget(new QLabel(itc.current().getLabel()));
+                coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID2())),this));
+                relAscLayout->addLayout(coupleLayout);
+            }
+        }
+        //Affiche les relations ascendantes
+        //Donc l' ID de la note principale doit correspondre à l'id2 des couples des relations orientees et à l'un des deux id des couples des relations non orientees
+            for(Manager::IteratorRelations itr=manager.getIteratorRelations();!itr.isDone();itr.next()){
+                relAscLayout->addWidget(new QLabel(itr.current().getTitre()));
+                for(Relation::IteratorCouples itc=itr.current().getIteratorCouples();!itc.isDone();itc.next()){
+                    if((itr.current().isOrientee() && n.getID() == itc.current().getID2()) || (!itr.current().isOrientee() && (n.getID() == itc.current().getID1() || n.getID() == itc.current().getID2()))){
+                        QHBoxLayout *coupleLayout = new QHBoxLayout;
+                        coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID1())),this));
+                        coupleLayout->addWidget(new QLabel(itc.current().getLabel()));
+                        coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID2())),this));
+                        relAscLayout->addLayout(coupleLayout);
+                    }
                 }
-            relAscWidget->setLayout(relAscLayout);
-        scrollRelAsc->setWidget(relAscWidget);
-        scrollRelAsc->setWidgetResizable(true);
-    rightLayout->addWidget(scrollRelAsc);
+            }
+        relAscWidget->setLayout(relAscLayout);
+    newScrollRelAsc->setWidget(relAscWidget);
+    newScrollRelAsc->setWidgetResizable(true);
 
-        QScrollArea *scrollRelDesc = new QScrollArea;
-            QWidget *relDescWidget = new QWidget;
-            QVBoxLayout *relDescLayout = new QVBoxLayout;
-                for(Manager::IteratorRelations it=manager.getIteratorRelations();!it.isDone();it.next()){
-                    //A faire
+    QScrollArea *oldScrollRelAsc = scrollRelAsc;
+    rightDockWidget->widget()->layout()->replaceWidget(scrollRelAsc,newScrollRelAsc);
+    scrollRelAsc = newScrollRelAsc;
+    delete oldScrollRelAsc;
+}
+
+void FenetrePrincipale::updateScrollRelDesc(Note& n){
+    Manager& manager = Manager::donneInstance();
+
+    QScrollArea *newScrollRelDesc = new QScrollArea;
+        QWidget *relDescWidget = new QWidget;
+        QVBoxLayout *relDescLayout = new QVBoxLayout;
+        //Affiche les references descendantes
+        //Donc l' ID de la note principale doit correspondre à l'id1 des couples
+        relDescLayout->addWidget(new QLabel(manager.getReference().getTitre()));
+        for(Relation::IteratorCouples itc=manager.getReference().getIteratorCouples();!itc.isDone();itc.next()){
+            if(n.getID() == itc.current().getID1()){
+                QHBoxLayout *coupleLayout = new QHBoxLayout;
+                coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID1())),this));
+                coupleLayout->addWidget(new QLabel(itc.current().getLabel()));
+                coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID2())),this));
+                relDescLayout->addLayout(coupleLayout);
+            }
+        }
+        //Affiche les relations descendantes
+        //Donc l' ID de la note principale doit correspondre à l'id1 des couples des relations orientees et à l'un des deux id des couples des relations non orientees
+            for(Manager::IteratorRelations itr=manager.getIteratorRelations();!itr.isDone();itr.next()){
+                relDescLayout->addWidget(new QLabel(itr.current().getTitre()));
+                for(Relation::IteratorCouples itc=itr.current().getIteratorCouples();!itc.isDone();itc.next()){
+                    if((itr.current().isOrientee() && n.getID() == itc.current().getID1()) || (!itr.current().isOrientee() && (n.getID() == itc.current().getID1() || n.getID() == itc.current().getID2()))){
+                        QHBoxLayout *coupleLayout = new QHBoxLayout;
+                        coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID1())),this));
+                        coupleLayout->addWidget(new QLabel(itc.current().getLabel()));
+                        coupleLayout->addWidget(new QNoteReduite(*(manager.getNoteID(itc.current().getID2())),this));
+                        relDescLayout->addLayout(coupleLayout);
+                    }
                 }
-            relDescWidget->setLayout(relDescLayout);
-        scrollRelDesc->setWidget(relDescWidget);
-        scrollRelDesc->setWidgetResizable(true);
-    rightLayout->addWidget(scrollRelDesc);
+            }
+        relDescWidget->setLayout(relDescLayout);
+    newScrollRelDesc->setWidget(relDescWidget);
+    newScrollRelDesc->setWidgetResizable(true);
 
-    rightDockWidget->setWidget(rightWidget);
-    //rightWidget->show(); //surement besoin
-    delete oldDockWidget;
+    QScrollArea *oldScrollRelDesc = scrollRelDesc;
+    rightDockWidget->widget()->layout()->replaceWidget(scrollRelDesc,newScrollRelDesc);
+    scrollRelDesc = newScrollRelDesc;
+    delete oldScrollRelDesc;
 }
 
 void FenetrePrincipale::changerNotePrincipale(Note &n){
     updateNotePrincipale(n);
     updateAutresVersions(n);
-    updateRightDockWidget(n);
+    updateScrollRelAsc(n);
+    updateScrollRelDesc(n);
 }

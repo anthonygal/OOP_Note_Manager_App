@@ -4,16 +4,16 @@ QNoteReduite::QNoteReduite(Note& n, FenetrePrincipale* f, QWidget* parent) : QPu
 {
     setMinimumSize(150,40);
     QHBoxLayout *layout = new QHBoxLayout;
-        QLabel *Type = new QLabel(n.getTypeNote());
-        QLabel *ID = new QLabel(QString::number(n.getID()));
-        QLabel *Titre = new QLabel(n.getTitre());
+        QLabel *Type = new QLabel(note.getTypeNote());
+        QLabel *ID = new QLabel(QString::number(note.getID()));
+        QLabel *Titre = new QLabel(note.getTitre());
         layout->addWidget(Type);
         layout->addWidget(ID);
         layout->addWidget(Titre);
-        //layout->addWidget(DateModif);
     setLayout(layout);
     QObject::connect(this,SIGNAL(clicked()),SLOT(onClicked()));
     setStyleSheet("background-color: grey");
+    setCursor(Qt::PointingHandCursor);
 }
 
 void QNoteReduite::onClicked(){

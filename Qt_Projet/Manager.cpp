@@ -195,9 +195,10 @@ Note* Manager::getNoteID(unsigned long id){
 /**< Methode permettant de rechercher une relation à partir d'un titre */
 
 Relation& Manager::getRelation(const QString& t){
-    for(IteratorRelations it=getIteratorRelations();!it.isDone();it.next())
+    for(IteratorRelations it=getIteratorRelations();!it.isDone();it.next()){
         if(it.current().getTitre() == t) return it.current();
-    else throw NoteException("Aucune relation avec ce titre");
+    }
+    throw NoteException("Aucune relation avec ce titre");
 }
 
 /**< METHODES D'AJOUT DE RELATIONS */
@@ -352,6 +353,7 @@ void Manager::viderCorbeille(){ // detruit les notes a la corbeille et couples a
 }
 
 void Manager::load() {
+    try{
     QFile fin(filename);
     // If we can't open it, let's show an error message.
     if (!fin.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -369,7 +371,7 @@ void Manager::load() {
         // If token is StartElement, we'll see if we can read it.
         if(token == QXmlStreamReader::StartElement){
             // If it's named notes, we'll go to the next.
-            if(xml.name() == "notes") continue;{
+            if(xml.name() == "manager") continue;
 
             // If it's named tache, we'll dig the information from there.
             if(xml.name() == "article") {
@@ -563,11 +565,9 @@ void Manager::load() {
                 }
                 qDebug()<<"ajout note "<<identificateur<<"\n";
                 addMultimedia(identificateur.toInt(),titre,QDateTime::fromString(dateCrea,formatDateTime),QDateTime::fromString(dateModif,formatDateTime),Note::QStringtoActuel(actuel),Note::QStringtoNoteEtat(etat),adressefichier, Multimedia::QStringtoTypeMultimedia(type), description);
-                }
             }
 
-            // If it's named tache, we'll dig the information from there.
-            if(xml.name() == "relations") {
+            if(xml.name() == "relation") {
                 qDebug()<<"new relation\n";
                 QString titre;
                 QString description;
@@ -593,7 +593,7 @@ void Manager::load() {
                             addRelation(titre, description, QStringtobool(orientee));
                             qDebug()<<"creation relation "<<titre<<"\n";
                         }   
-                        if(xml.name() == "couples") {
+                        if(xml.name() == "couple") {
                             qDebug()<<"new couple\n";   
                             QString label;
                             QString ID1;
@@ -602,7 +602,7 @@ void Manager::load() {
                             xml.readNext();
                             //We're going to loop over the things because the order might change.
                             //We'll continue the loop until we hit an EndElement named article.
-                            while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "couples")) {
+                            while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "couple")) {
                                 if(xml.tokenType() == QXmlStreamReader::StartElement) {
                                     if(xml.name() == "label") {
                                          xml.readNext(); label=xml.text().toString();
@@ -681,6 +681,7 @@ void Manager::load() {
     // Removes any device() or data from the reader * and resets its internal state to the initial state.
     xml.clear();
     qDebug()<<"fin load\n";
+    }catch(NoteException e){qDebug()<<e.getInfo()<<"\n";}
 }
 
 void Manager::save()const{
