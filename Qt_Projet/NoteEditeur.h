@@ -26,6 +26,7 @@ class NoteEditeur : public QWidget
 {
     Q_OBJECT
 protected:
+    Note& note;
     /** Edit */
     QLineEdit* ID;
     QLineEdit* titre;
@@ -55,13 +56,12 @@ protected:
     //bool isSaved;
 
 public:
-    NoteEditeur(Note &n, QWidget* parent=0);
+    NoteEditeur(Note &n, QWidget* parent = nullptr);
     virtual ~NoteEditeur(){}
-
 signals:
 
 public slots:
-    void activerEnregistrer();
+    virtual void activerEnregistrer();
     virtual void enregistrerNote()=0;
 };
 

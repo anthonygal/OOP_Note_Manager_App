@@ -3,7 +3,7 @@
 #include "Manager.h"
 #include "Notes.h"
 
-NoteEditeur::NoteEditeur(Note& n, QWidget* parent)
+NoteEditeur::NoteEditeur(Note& n, QWidget* parent):QWidget(parent),note(n)
 {
     IDLab= new QLabel("ID :");
     titreLab = new  QLabel("Titre :");
