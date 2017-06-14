@@ -5,18 +5,18 @@
 
 NoteEditeur::NoteEditeur(Note& n, QWidget* parent)
 {
-    IDLab= new QLabel("ID :", this);
-    titreLab = new  QLabel("Titre :", this);
-    dateCreaLab = new QLabel("Date de création :", this);
-    dateModifLab = new QLabel("Date de Modification :", this);
+    IDLab= new QLabel("ID :");
+    titreLab = new  QLabel("Titre :");
+    dateCreaLab = new QLabel("Date de création :");
+    dateModifLab = new QLabel("Date de Modification :");
 
-    ID = new QLineEdit(this);
-    titre = new QLineEdit(this);
-    dateCrea = new QDateEdit(this);
-    dateModif =  new QDateEdit(this);
+    ID = new QLineEdit;
+    titre = new QLineEdit;
+    dateCrea = new QDateEdit;
+    dateModif =  new QDateEdit;
 
-    enregistrer = new QPushButton("Enregistrer",this);
-    annuler = new QPushButton("Annuler",this);
+    enregistrer = new QPushButton("Enregistrer");
+    annuler = new QPushButton("Annuler");
 
     IDLayout = new QHBoxLayout;
     titreLayout = new QHBoxLayout;
@@ -36,7 +36,7 @@ NoteEditeur::NoteEditeur(Note& n, QWidget* parent)
     titreLayout->addWidget(titre);
     datesLayout->addWidget(dateCreaLab);
     datesLayout->addWidget(dateCrea);
-    datesLayout->addWidget(dateModif);
+    datesLayout->addWidget(dateModifLab);
     datesLayout->addWidget(dateModif);
 
     boutonLayout->addWidget(enregistrer);
@@ -70,7 +70,7 @@ ArticleEditeur::ArticleEditeur(Article& a, QWidget* parent) : NoteEditeur(a,pare
     QObject::connect(texte, SIGNAL(textChanged()), this, SLOT(activerEnregistrer()));
     QObject::connect(titre, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
     QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
-    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(quit()));
+    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 
@@ -114,7 +114,7 @@ TacheEditeur::TacheEditeur(Tache& t, QWidget* parent) : NoteEditeur(t,parent), t
     QObject::connect(action, SIGNAL(textChanged()), this, SLOT(activerEnregistrer()));
     QObject::connect(echeance, SIGNAL(selectionChanged()), this, SLOT(activerEnregistrer()));
     QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
-    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(quit()));
+    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 
@@ -170,9 +170,9 @@ MultimediaEditeur::MultimediaEditeur(Multimedia& m, QWidget* parent) : NoteEdite
     QObject::connect(titre, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
     QObject::connect(adresse, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer));
     QObject::connect(desc, SIGNAL(textChanged()), this, SLOT(activerEnregistrer));
-    QObject::connect(type, SIGNAL(), this, SLOT(activerEnregistrer));
+    //QObject::connect(type, SIGNAL(clicked()), this, SLOT(activerEnregistrer));
     QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
-    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(quit()));
+    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 void ArticleEditeur::enregistrerNote(){

@@ -57,11 +57,11 @@ protected:
 public:
     NoteEditeur(Note &n, QWidget* parent=0);
     virtual ~NoteEditeur(){}
-    void activerEnregistrer();
 
 signals:
 
 public slots:
+    void activerEnregistrer();
     virtual void enregistrerNote()=0;
 };
 
