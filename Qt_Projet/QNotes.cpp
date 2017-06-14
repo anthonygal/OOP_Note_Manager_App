@@ -167,7 +167,7 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
             boutonSupprimer->setCursor(Qt::PointingHandCursor);
             boutonsLayout->addWidget(boutonSupprimer);
             QObject::connect(boutonModifier,SIGNAL(clicked()),this,SLOT(editer()));
-            QObject::connect(boutonModifier,SIGNAL(clicked()),this,SLOT(supprimer()));
+            QObject::connect(boutonSupprimer,SIGNAL(clicked()),this,SLOT(supprimer()));
         }
         else{
             QPushButton *boutonRestaurerVersion = new QPushButton("Revenir à cette version");

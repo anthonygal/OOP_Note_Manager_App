@@ -3,32 +3,23 @@
 #include "Manager.h"
 #include "Notes.h"
 
-NoteEditeur::NoteEditeur(Note& n, QWidget* parent):QWidget(parent),note(n)
+NoteEditeur::NoteEditeur(Note& n, QWidget* parent):QWidget(parent), note(n)
 {
-    IDLab= new QLabel("ID :");
-    titreLab = new  QLabel("Titre :");
-    dateCreaLab = new QLabel("Date de création :");
-    dateModifLab = new QLabel("Date de Modification :");
-
-    ID = new QLineEdit;
-    titre = new QLineEdit;
-    dateCrea = new QDateEdit;
-    dateModif =  new QDateEdit;
-
-    enregistrer = new QPushButton("Enregistrer");
-    annuler = new QPushButton("Annuler");
-
-    IDLayout = new QHBoxLayout;
-    titreLayout = new QHBoxLayout;
-    datesLayout = new QHBoxLayout;
-    boutonLayout = new QHBoxLayout;
-
     layer = new QVBoxLayout;
-
-    ID->setText(QString::number(n.getID()));
-    dateCrea->setDateTime(n.getDateCrea());
-    dateModif->setDateTime(n.getDateModif());
-    titre->setText(n.getTitre());
+        IDLayout = new QHBoxLayout;
+            IDLab= new QLabel("ID :");
+            ID = new QLineEdit(QString::number(n.getID())); ID->setDisabled(true);
+        titreLayout = new QHBoxLayout;
+            titreLab = new  QLabel("Titre :");
+            titre = new QLineEdit(n.getTitre());
+        datesLayout = new QHBoxLayout;
+            dateCreaLab = new QLabel("Date de création :");
+            dateCrea = new QDateTimeEdit(n.getDateCrea()); dateCrea->setDisabled(true);
+            dateModifLab = new QLabel("Date de Modification :");
+            dateModif =  new QDateTimeEdit(n.getDateModif()); dateModif->setDisabled(true);
+        boutonLayout = new QHBoxLayout;
+            enregistrer = new QPushButton("Enregistrer"); enregistrer->setEnabled(false);
+            annuler = new QPushButton("Annuler");
 
     IDLayout->addWidget(IDLab);
     IDLayout->addWidget(ID);
@@ -47,9 +38,9 @@ NoteEditeur::NoteEditeur(Note& n, QWidget* parent):QWidget(parent),note(n)
     layer->addLayout(titreLayout);
     layer->addLayout(datesLayout);
 
-    ID->setDisabled(true);
-    dateCrea->setDisabled(true);
-    dateModif->setDisabled(true);
+    QObject::connect(titre, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
+    QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
+    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 ArticleEditeur::ArticleEditeur(Article& a, QWidget* parent) : NoteEditeur(a,parent), article(a)
@@ -62,15 +53,13 @@ ArticleEditeur::ArticleEditeur(Article& a, QWidget* parent) : NoteEditeur(a,pare
         texteLayout->addWidget(texte);
 
     layer->addLayout(texteLayout);
-//    layer->addWidget(enregistrer);
-//    layer->addWidget(annuler);
     layer->addLayout(boutonLayout);
     setLayout(layer);
 
     QObject::connect(texte, SIGNAL(textChanged()), this, SLOT(activerEnregistrer()));
-    QObject::connect(titre, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
-    QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
-    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
+//    QObject::connect(titre, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
+//    QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
+//    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 
@@ -108,39 +97,39 @@ TacheEditeur::TacheEditeur(Tache& t, QWidget* parent) : NoteEditeur(t,parent), t
 
     setLayout(layer);
 
-    QObject::connect(titre, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
+//    QObject::connect(titre, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
     QObject::connect(statut, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
     QObject::connect(priorite, SIGNAL(valueChanged(int)), this, SLOT(activerEnregistrer()));
     QObject::connect(action, SIGNAL(textChanged()), this, SLOT(activerEnregistrer()));
     QObject::connect(echeance, SIGNAL(selectionChanged()), this, SLOT(activerEnregistrer()));
-    QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
-    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
+//    QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
+//    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 
 MultimediaEditeur::MultimediaEditeur(Multimedia& m, QWidget* parent) : NoteEditeur(m,parent), multimedia(m) {
 
     descLab =new QLabel ("Description",this);
-    desc= new QTextEdit(this);
+    desc= new QTextEdit(this); desc->setText(multimedia.getDescription());
 
     //typeLab = new QLabel ("Type",this);
     type = new QGroupBox("Type de Multimedia", this);
+        Image = new QRadioButton("Image");
+        Audio = new QRadioButton("Audio");
+        Video = new QRadioButton("Video");
+
+        if(multimedia.getType()==image) Image->setChecked(true);
+        else if (multimedia.getType()==audio) Audio->setChecked(true);
+        else Video->setChecked(true);
+
+        hbox = new QHBoxLayout;
+        hbox->addWidget(Image);
+        hbox->addWidget(Audio);
+        hbox->addWidget(Video);
+    type->setLayout(hbox);
 
     adresseLab = new QLabel ("Adresse Fichier",this);
-    adresse= new QLineEdit(this);    
-
-    Image = new QRadioButton("Image");
-    Audio = new QRadioButton("Audio");
-    Video = new QRadioButton("Video");
-
-    desc->setText(multimedia.getDescription());
-
-    if(multimedia.getType()==image) Image->setChecked(true);
-    else if (multimedia.getType()==audio) Audio->setChecked(true);
-           else Video->setChecked(true);
-
-    adresse->setText(multimedia.getAdresseFichier());
-
+    adresse= new QLineEdit(this); adresse->setText(multimedia.getAdresseFichier());
 
     descLayout = new QHBoxLayout;
     typeLayout = new QHBoxLayout;
@@ -148,31 +137,23 @@ MultimediaEditeur::MultimediaEditeur(Multimedia& m, QWidget* parent) : NoteEdite
 
     descLayout->addWidget(descLab);
     descLayout->addWidget(desc);
-    typeLayout->addWidget(typeLab);
     typeLayout->addWidget(type);
     adresseLayout->addWidget(adresseLab);
     adresseLayout->addWidget(adresse);
 
-    hbox = new QHBoxLayout;
-    hbox->addWidget(Image);
-    hbox->addWidget(Audio);
-    hbox->addWidget(Video);
-    type->setLayout(hbox);
-
     layer->addLayout(descLayout);
     layer->addLayout(typeLayout);
     layer->addLayout(adresseLayout);
-
     layer->addLayout(boutonLayout);
 
     setLayout(layer);
 
-    QObject::connect(titre, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
-    QObject::connect(adresse, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer));
-    QObject::connect(desc, SIGNAL(textChanged()), this, SLOT(activerEnregistrer));
-    //QObject::connect(type, SIGNAL(clicked()), this, SLOT(activerEnregistrer));
-    QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
-    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
+
+    QObject::connect(adresse, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
+    QObject::connect(desc, SIGNAL(textChanged()), this, SLOT(activerEnregistrer()));
+    QObject::connect(Image, SIGNAL(clicked()), this, SLOT(activerEnregistrer()));
+    QObject::connect(Audio, SIGNAL(clicked()), this, SLOT(activerEnregistrer()));
+    QObject::connect(Video, SIGNAL(clicked()), this, SLOT(activerEnregistrer()));
 }
 
 void ArticleEditeur::enregistrerNote(){

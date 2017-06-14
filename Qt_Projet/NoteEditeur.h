@@ -27,33 +27,22 @@ class NoteEditeur : public QWidget
     Q_OBJECT
 protected:
     Note& note;
-    /** Edit */
-    QLineEdit* ID;
-    QLineEdit* titre;
-    QDateEdit* dateCrea;
-    QDateEdit* dateModif;
 
-    /** Bouton */
-    QPushButton* enregistrer;
-    QPushButton* annuler;
-
-
-    /** Layout H */
-    QHBoxLayout* IDLayout;
-    QHBoxLayout* titreLayout;
-    QHBoxLayout* datesLayout;
-    QHBoxLayout* boutonLayout;
-
-    /** Label */
-    QLabel* IDLab;
-    QLabel* titreLab;
-    QLabel* dateCreaLab;
-    QLabel* dateModifLab;
-
-    /** Layout V */
     QVBoxLayout* layer;
-
-    //bool isSaved;
+        QHBoxLayout* IDLayout;
+            QLabel* IDLab;
+            QLineEdit* ID;
+        QHBoxLayout* titreLayout;
+            QLabel* titreLab;
+            QLineEdit* titre;
+        QHBoxLayout* datesLayout;
+            QLabel* dateCreaLab;
+            QDateTimeEdit* dateCrea;
+            QLabel* dateModifLab;
+            QDateTimeEdit* dateModif;
+        QHBoxLayout* boutonLayout;
+            QPushButton* enregistrer;
+            QPushButton* annuler;
 
 public:
     NoteEditeur(Note &n, QWidget* parent = nullptr);
