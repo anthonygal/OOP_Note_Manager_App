@@ -17,6 +17,8 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
 
 
     leftDockWidget = new QDockWidget("Toutes les notes");
+
+    leftDockWidget->setStyleSheet("background-color: white");
     leftDockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
         QWidget *leftWidget = new QWidget;
         QVBoxLayout *leftLayout = new QVBoxLayout;

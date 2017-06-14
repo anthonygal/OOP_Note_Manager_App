@@ -45,6 +45,7 @@ int main(int argc, char* argv[])
 
     Manager& m=Manager::donneInstance();
     //QString fichier = QFileDialog::getOpenFileName();
+    //m.setFilename(fichier);
     m.setFilename("notes2.xml");
     m.load();
 
