@@ -1,6 +1,7 @@
 #include "NoteEditeur.h"
 #include "FenetrePrincipale.h"
 #include "Manager.h"
+#include "Notes.h"
 
 NoteEditeur::NoteEditeur(Note& n, QWidget* parent)
 {

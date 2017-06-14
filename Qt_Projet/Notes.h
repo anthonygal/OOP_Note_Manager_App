@@ -1,8 +1,7 @@
-#ifndef PluriNotes_h
-#define PluriNotes_h
+#ifndef Notes_h
+#define Notes_h
 
 #include "timing.h"
-#include "NoteEditeur.h"
 #include <string>
 #include <typeinfo>
 #include <sstream>
@@ -98,7 +97,7 @@ public:
     /**< Commandes setAttributs */
     void setTexte(const QString& t){texte=t;}
     /**< Methode d'edition */
-    void edit(){ArticleEditeur *editeur = new ArticleEditeur(*this);}
+    void edit();
     /**< Methode pour ajouter des references specifique */
     void addRefsSpecifique() const;
     /** Methode permettant de sauvegarder dans un fichier xml une note particuliere */
@@ -135,7 +134,7 @@ public:
     void setPriorite(int p){priorite=p;}
     void setEcheance(const QDate& d){echeance=d;}
     /**< Methode d'edition */
-    void edit(){new TacheEditeur(*this);}
+    void edit();
     /**< Methode pour ajouter des references specifique */
     void addRefsSpecifique() const;
     /** Methode permettant de sauvegarder dans un fichier xml une note particuliere */
@@ -168,7 +167,7 @@ public:
     void setDescription(const QString& desc){description=desc;}
     void setType(const TypeMultimedia ty){type=ty;}
     /**< Methode d'edition */
-    void edit(){new MultimediaEditeur(*this);}
+    void edit();
     /**< Methode pour ajouter des references specifique */
     void addRefsSpecifique() const;
     /** Methode permettant de sauvegarder dans un fichier xml une note particuliere */
@@ -179,4 +178,4 @@ public:
 long findRefID(const QString& s, int p);
 int getPosition(const QString& s, int p);
 
-#endif /* PluriNotes_h */
+#endif /* Notes_h */

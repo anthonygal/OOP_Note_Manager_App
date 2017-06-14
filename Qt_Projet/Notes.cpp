@@ -1,5 +1,6 @@
 #include "Notes.h"
 #include "Manager.h"
+#include "NoteEditeur.h"
 
 /**< CONSTRUCTEUR DE RECOPIE DE LA CLASS NOTE */
 
@@ -22,17 +23,20 @@ void Manager::editNote(Note& n){
 }
 */
 
-//void Article::edit(){
-//    ArticleEditeur *editeur = new ArticleEditeur(*this);
-//}
+void Article::edit(){
+    ArticleEditeur *editeur = new ArticleEditeur(*this);
+    editeur->show();
+}
 
-//void Tache::edit(){
-//    TacheEditeur *editeur = new TacheEditeur(*this);
-//}
+void Tache::edit(){
+    TacheEditeur *editeur = new TacheEditeur(*this);
+    editeur->show();
+}
 
-//void Multimedia::edit(){
-//    MultimediaEditeur *editeur = new MultimediaEditeur(*this);
-//}
+void Multimedia::edit(){
+    MultimediaEditeur *editeur = new MultimediaEditeur(*this);
+    editeur->show();
+}
 
 //changer la boucle for
 
