@@ -188,7 +188,7 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
 }
 
 void QNote::editer(){
-    //Manager::donneInstance().editNote(note);
+    note.edit();
 }
 
 void QNote::supprimer(){

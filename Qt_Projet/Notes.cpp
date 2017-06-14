@@ -20,70 +20,19 @@ void Manager::editNote(Note& n){
     Note& n2=n.edit();
     ajouterNote(n2);
 }
-
-Article& Article::edit(){
-    QString newTitle;
-    QString newText;
-    std::cout<<"\nAncien titre : "<<this->getTitre()<<"\tNouveau titre : ";
-    std::cin>>newTitle;
-    std::cout<<"\nAncien texte : "<<this->getTexte()<<"\tNouveau texte : ";
-    std::cin>>newText;
-    Article* a=new Article(*this);
-    a->setTitre(newTitle);
-    a->setTexte(newText);
-    return *a;
-}
 */
 
-/*
+//void Article::edit(){
+//    ArticleEditeur *editeur = new ArticleEditeur(*this);
+//}
 
-Tache& Tache::edit(){
-    QString newTitle;
-    std::string newAction;
-    int newPriorite;
-    TIME::Date newEcheance;
-    std::cout<<"\nAncien titre : "<<this->getTitre()<<"\tNouveau titre : ";
-    std::cin>>newTitle;
-    std::cout<<"\nAncienne action : "<<this->getAction()<<"\tNouvelle action : ";
-    std::cin>>newAction;
-    std::cout<<"\nAncienne priorite : "<<this->getPriorite()<<"\tNouvelle priorite : ";
-    std::cin>>newPriorite;
-    std::cout<<"\nAncienne date d'echeance : "<<this->getEcheance()<<"\tNouvelle date d'echeance : ";
-    std::cin>>newEcheance;
-    Tache* t=new Tache(*this);
-    t->setTitre(newTitle);
-    t->setAction(newAction);
-    t->setPriorite(newPriorite);
-    t->setEcheance(newEcheance);
-    return *t;
-}
+//void Tache::edit(){
+//    TacheEditeur *editeur = new TacheEditeur(*this);
+//}
 
-Multimedia& Multimedia::edit(){
-    QString newTitle;
-    std::string newAdresseFichier;
-    std::string newTypeString;
-    TypeMultimedia newType;
-    std::string newDescription;
-    std::cout<<"\nAncien titre : "<<this->getTitre()<<"\tNouveau titre : ";
-    std::cin>>newTitle;
-    std::cout<<"\nAncienne adresse fichier : "<<this->getAdresseFichier()<<"\tNouvelle adresse fichier : ";
-    std::cin>>newAdresseFichier;
-    do{
-        std::cout<<"\nAncienne type : "<<this->getType()<<"\tNouveau type (choisir entre image/video/audio) : ";
-        std::cin>>newTypeString;
-    }while(newTypeString!="image" && newTypeString!="video" && newTypeString!="audio");
-    if(newTypeString=="image") newType=image;
-    if(newTypeString=="video") newType=video;
-    if(newTypeString=="audio") newType=audio;
-    std::cout<<"\nAncienne description : "<<this->getDescription()<<"\tNouvelle description : ";
-    std::cin>>newDescription;
-    Multimedia* m=new Multimedia(*this);
-    m->setTitre(newTitle);
-    m->setAdresseFichier(newAdresseFichier);
-    m->setType(newType);
-    m->setDescription(newDescription);
-    return *m;
-*/
+//void Multimedia::edit(){
+//    MultimediaEditeur *editeur = new MultimediaEditeur(*this);
+//}
 
 //changer la boucle for
 

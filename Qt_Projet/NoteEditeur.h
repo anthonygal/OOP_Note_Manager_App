@@ -5,6 +5,11 @@
 #include <QtWidgets>
 #include <QItemSelectionModel>
 
+class Note;
+class Article;
+class Tache;
+class Multimedia;
+
 //class NewNote : public QWidget{
 //    Q_OBJECT
 //    Note& note;
@@ -20,7 +25,6 @@
 class NoteEditeur : public QWidget
 {
     Q_OBJECT
-    //friend class Manager;
 protected:
     /** Edit */
     QLineEdit* ID;
@@ -51,9 +55,9 @@ protected:
     //bool isSaved;
 
 public:
+    NoteEditeur(Note &n, QWidget* parent=0);
     virtual ~NoteEditeur(){}
-    NoteEditeur(Note& n, QWidget* parent=0);
-    virtual void activerEnregistrer();
+    void activerEnregistrer();
 
 signals:
 
@@ -63,27 +67,29 @@ public slots:
 
 
 class ArticleEditeur : public NoteEditeur {
-private:
     Q_OBJECT
-        Article& article;
+private:
+    Article& article;
 
-        QTextEdit* texte;
-        QLabel* texteLab;
-        QHBoxLayout* texteLayout;
+    QTextEdit* texte;
+    QLabel* texteLab;
+    QHBoxLayout* texteLayout;
 
 public:
-      explicit ArticleEditeur(Article& a, QWidget* parent=0);
+    explicit ArticleEditeur(Article& a, QWidget* parent=0);
+    ~ArticleEditeur(){}
+
 signals:
 
 public slots:
-        void enregistrerNote();
+    void enregistrerNote();
 
 
 };
 
 class TacheEditeur : public NoteEditeur {
-private:
     Q_OBJECT
+private:
     Tache& tache;
     QTextEdit* action;
     QLineEdit* statut;
@@ -102,6 +108,7 @@ private:
 
 public:
     explicit TacheEditeur(Tache& t, QWidget* parent=0);
+    ~TacheEditeur(){}
 signals:
 
 public slots:
@@ -110,8 +117,8 @@ public slots:
 };
 
 class MultimediaEditeur: public NoteEditeur {
-private:
     Q_OBJECT
+private:
     Multimedia& multimedia;
     QTextEdit* desc;
     QLineEdit* adresse;
@@ -133,6 +140,7 @@ private:
 
 public:
     explicit MultimediaEditeur(Multimedia& t, QWidget* parent=0);
+    ~MultimediaEditeur(){}
 signals:
 
 public slots:

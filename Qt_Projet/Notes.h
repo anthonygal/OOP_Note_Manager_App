@@ -2,6 +2,7 @@
 #define PluriNotes_h
 
 #include "timing.h"
+#include "NoteEditeur.h"
 #include <string>
 #include <typeinfo>
 #include <sstream>
@@ -24,6 +25,10 @@ class Relation;
 class Couple;
 class Reference;
 class Manager;
+class NoteEditeur;
+class ArticleEditeur;
+class TacheEditeur;
+class MultimediaEditeur;
 
 /**< CLASSE EXCEPTION */
 class NoteException{
@@ -69,7 +74,7 @@ public:
     void setActuelle(){actuelle=true;}
     void setAncienne(){actuelle=false;}
     /**< Methode d'edition */
-    //virtual Note& edit()=0;
+    virtual void edit() = 0;
     /**< Methodes pour ajouter des references */
     void addRefs() const;
     virtual void addRefsSpecifique() const=0;
@@ -93,7 +98,7 @@ public:
     /**< Commandes setAttributs */
     void setTexte(const QString& t){texte=t;}
     /**< Methode d'edition */
-    //Article& edit();
+    void edit(){ArticleEditeur *editeur = new ArticleEditeur(*this);}
     /**< Methode pour ajouter des references specifique */
     void addRefsSpecifique() const;
     /** Methode permettant de sauvegarder dans un fichier xml une note particuliere */
@@ -130,7 +135,7 @@ public:
     void setPriorite(int p){priorite=p;}
     void setEcheance(const QDate& d){echeance=d;}
     /**< Methode d'edition */
-    //Tache& edit();
+    void edit(){new TacheEditeur(*this);}
     /**< Methode pour ajouter des references specifique */
     void addRefsSpecifique() const;
     /** Methode permettant de sauvegarder dans un fichier xml une note particuliere */
@@ -163,7 +168,7 @@ public:
     void setDescription(const QString& desc){description=desc;}
     void setType(const TypeMultimedia ty){type=ty;}
     /**< Methode d'edition */
-    //Multimedia& edit();
+    void edit(){new MultimediaEditeur(*this);}
     /**< Methode pour ajouter des references specifique */
     void addRefsSpecifique() const;
     /** Methode permettant de sauvegarder dans un fichier xml une note particuliere */
