@@ -71,7 +71,6 @@ void RelationEditeur::addRelationNotOriented(){
 */
 
 RelationEditeur::RelationEditeur(QWidget* parent){
-
     QGridLayout *layout = new QGridLayout;
     
     ///Premier QlistWidget : listNotesLeft
