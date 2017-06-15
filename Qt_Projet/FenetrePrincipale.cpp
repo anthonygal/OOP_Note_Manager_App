@@ -9,6 +9,9 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
         menuAfficher->addAction(actionQuitter);
     QMenu *menuNotes = menuBar()->addMenu("&Notes");
         QMenu *newNote = menuNotes->addMenu("Nouvelle note");
+    QMenu *menuRelation = menuBar()->addMenu("&Relation");
+        QMenu *newRelation = menuRelation->addMenu("&Nouvelle Relation");
+
             QAction *newArticle = new QAction("Article");
             QAction *newTache = new QAction("Tache");
             QAction *newMultimedia = new QAction("Article");
@@ -16,6 +19,12 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
             newNote->addAction(newTache);
             newNote->addAction(newMultimedia);
 
+            QAction *newRel = new QAction("Creer Relation");
+            QAction *newCouple = new QAction("Ajouter Couple");
+            newRelation->addAction(newRel);
+            newRelation->addAction(newCouple);
+            QObject::connect(newCouple, SIGNAL(triggered()), this, SLOT(editRelation()));
+            
     //DOCK WIDGET GAUCHE
     leftDockWidget = new QDockWidget("Toutes les notes");
 
@@ -49,8 +58,8 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
     addDockWidget(Qt::LeftDockWidgetArea,leftDockWidget);
 
     //ZONE CENTRALE
-    QWidget *zoneCentrale = new QWidget;
-    QVBoxLayout *centralLayout = new QVBoxLayout;
+    zoneCentrale = new QWidget;
+    centralLayout = new QVBoxLayout;
 
         Manager::IteratorNotes it=manager.getIteratorNotes();
         while(!it.isDone() && it.current().getEtat() != active && !it.current().isActuelle())
@@ -282,3 +291,13 @@ void FenetrePrincipale::changerNotePrincipale(Note &n){
     updateScrollRelAsc(n);
     updateScrollRelDesc(n);
 }
+
+ void FenetrePrincipale::editRelation(){
+    RelationEditeur* re= new RelationEditeur(zoneCentrale);
+    //centralLayout->removeWidget(notePrincipale);
+    setCentralWidget(re);
+    leftDockWidget->hide();
+    rightDockWidget->hide();
+    //centralLayout->addWidget(re);
+
+ }

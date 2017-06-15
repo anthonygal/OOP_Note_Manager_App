@@ -3,6 +3,7 @@
 
 #include "Manager.h"
 #include "QNotes.h"
+#include "relationediteur.h"
 #include <QtWidgets>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -15,6 +16,8 @@ class FenetrePrincipale : public QMainWindow{
 
     QNote *notePrincipale;
     QScrollArea *autresVersions;
+    QWidget* zoneCentrale;
+    QVBoxLayout* centralLayout;
 
     QDockWidget* rightDockWidget;
         QScrollArea *scrollRelAsc;
@@ -31,6 +34,7 @@ signals:
 
 public slots:
     void changerNotePrincipale(Note& n);
+    void editRelation();
 
 };
 

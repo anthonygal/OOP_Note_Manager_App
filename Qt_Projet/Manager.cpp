@@ -705,3 +705,15 @@ void Manager::save()const{
         newfile.close();
 }
 
+int Manager::getIDNoteWithTitre(QString Titre){
+    for(unsigned int i=0; i<nbNotes; i++){
+        if(notes[i]->getTitre()== Titre){ return notes[i]->getID();}
+    }
+}
+
+Relation* Manager::getRelationWithTitre(QString Titre){
+    for(unsigned int i=0; i<nbRelations; i++){
+        if(relations[i]->getTitre()== Titre){ return relations[i];}
+    }
+}
+

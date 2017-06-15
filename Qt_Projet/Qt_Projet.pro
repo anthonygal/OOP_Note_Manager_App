@@ -12,7 +12,8 @@ HEADERS += \
     FenetrePrincipale.h \
     Notes.h \
     Manager.h \
-    QNotes.h
+    QNotes.h \
+    relationediteur.h
 
 SOURCES += \
     main.cpp \
@@ -22,4 +23,5 @@ SOURCES += \
     FenetrePrincipale.cpp \
     Notes.cpp \
     Manager.cpp \
-    QNotes.cpp
+    QNotes.cpp \
+    relationediteur.cpp
