@@ -11,6 +11,8 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
         QMenu *newNote = menuNotes->addMenu("Nouvelle note");
     QMenu *menuRelation = menuBar()->addMenu("&Relation");
         QMenu *newRelation = menuRelation->addMenu("&Nouvelle Relation");
+    QMenu *menufonction = menuBar()->addMenu("&Fonctions");
+        QMenu *newRelation = menuRelation->addMenu("&Nouvelle Relation");
 
             QAction *newArticle = new QAction("Article");
             QAction *newTache = new QAction("Tache");
