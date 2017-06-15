@@ -125,6 +125,8 @@ public:
     void setFilename(const QString& f) {filename=f;}
     void load();
     void save() const;
+    int getIDNoteWithTitre(QString Titre);
+   Relation* getRelationWithTitre(QString Titre);
 };
 
 

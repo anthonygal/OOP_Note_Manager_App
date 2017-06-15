@@ -1,7 +1,7 @@
 #ifndef Notes_h
 #define Notes_h
 
-#include "timing.h"
+//#include "timing.h"
 #include <string>
 #include <typeinfo>
 #include <sstream>

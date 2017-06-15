@@ -209,7 +209,6 @@ bool Manager::isReferenced(const Note& n) const{
 }
 
 /**< Methodes d'edition inutiles pour l'instant mais je prefere garder au cas ou */
-
 Article& Manager::editTexteArticle(Article& A, const QString& s) {
     Article* a= new Article(A);
     a->setTexte(s);
@@ -688,5 +687,17 @@ void Manager::save()const{
         stream.writeEndElement();
         stream.writeEndDocument();
         newfile.close();
+}
+
+int Manager::getIDNoteWithTitre(QString Titre){
+    for(unsigned int i=0; i<nbNotes; i++){
+        if(notes[i]->getTitre()== Titre){ return notes[i]->getID();}
+    }
+}
+
+Relation* Manager::getRelationWithTitre(QString Titre){
+    for(unsigned int i=0; i<nbRelations; i++){
+        if(relations[i]->getTitre()== Titre){ return relations[i];}
+    }
 }
 

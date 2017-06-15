@@ -3,6 +3,7 @@
 
 #include "Manager.h"
 #include "QNotes.h"
+#include "relationediteur.h"
 #include <QtWidgets>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -21,6 +22,8 @@ class FenetrePrincipale : public QMainWindow{
     //QNote *notePrincipale;
     QWidget *notePrincipale;
     QScrollArea *autresVersions;
+    QWidget* zoneCentrale;
+    QVBoxLayout* centralLayout;
 
     QDockWidget* rightDockWidget;
         QScrollArea *scrollRelAsc;
@@ -29,6 +32,12 @@ class FenetrePrincipale : public QMainWindow{
     explicit FenetrePrincipale(QWidget *parent = nullptr);
     ~FenetrePrincipale();
 public:
+     QDockWidget* getleftDockWidget(){return leftDockWidget;}
+     QNote* getnotePrincipale() {return notePrincipale;}
+     QDockWidget* getrightDockWidget(){return getrightDockWidget();}
+     QVBoxLayout* getcentralLayout(){return centralLayout;}
+     QScrollArea* getautresVersions() {return autresVersions;}
+     QWidget* getzoneCentrale() {return zoneCentrale;}
     /**< Template Method Singleton */
     static FenetrePrincipale& donneInstance();
     static void libereInstance();
@@ -44,14 +53,19 @@ public:
     void updateScrollRelAsc();
     void updateScrollRelDesc(Note& n);
     void updateScrollRelDesc();
-
+    
+    void reaffichageNote();
 signals:
 
 public slots:
+
+  //  void changerNotePrincipale(Note& n);
+    void editRelation();
+    void createRelation();
+
     void updateFenetre(Note& n);
     void updateFenetre();
     void viderCorbeille();
-    void restaurerCorbeille();
     void sauvegarder();
     void newArticle();
     void newTache();
