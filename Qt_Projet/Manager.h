@@ -7,7 +7,7 @@
 /**< CLASS MANAGER QUI GERE TOUT */
 class Manager{
 private:
-    static Manager* InstanceUnique; /**< L'unique Manager : Singleton */
+    static Manager* instanceUnique; /**< L'unique Manager : Singleton */
     static unsigned long nextNoteID; /**< La prochaine note qui sera crée se verra attribuer cet ID */
     unsigned int nbNotes; /**< Tableau de Notes */
     unsigned int nbNotesMax;
@@ -77,7 +77,7 @@ public:
     Note* getNoteID(unsigned long id);
     /**< Methode pour ajouter une Note, utilisee dans les methodes de creation et d'edition d'article/tache/multimedia */
     void ajouterNote(Note& n);
-    /**< Methodes pour ajouter un Article/Tache/Multimedia au tableau de notes*/
+    /**< Methodes pour ajouter un Article/Tache/Multimedia au tableau de notes */
     void newArticle(const QString& ti, const QString& te=""); /**< creation d'un article */
     void newTache(const QString& ti, const QString& act, int prio=0, const QDate& d=QDate()); /**< creation d'une tache */
     void newMultimedia(const QString& ti, const QString& adr, const QString& desc="", TypeMultimedia ty=image); /**< creation d'un multimedia */
@@ -101,6 +101,9 @@ public:
     //Methode pour supprimer ou archiver une Note
     void supprimerNote(Note& N);
     void viderCorbeille();
+    void restaurerCorbeille();
+    void restaurerVersion(Note& n);
+    void restaurerNote(Note& n);
 
     static QString booltoQString(bool o);
     static bool QStringtobool(const QString& str);

@@ -1,6 +1,6 @@
 #include "QNotes.h"
 
-QNoteReduite::QNoteReduite(Note& n, FenetrePrincipale* f, QWidget* parent) : QPushButton(parent), note(n), fenetre(f)
+QNoteReduite::QNoteReduite(Note& n, QWidget* parent) : QPushButton(parent), note(n)
 {
     setMinimumSize(150,40);
     QHBoxLayout *layout = new QHBoxLayout;
@@ -17,10 +17,10 @@ QNoteReduite::QNoteReduite(Note& n, FenetrePrincipale* f, QWidget* parent) : QPu
 }
 
 void QNoteReduite::onClicked(){
-    fenetre->changerNotePrincipale(note);
+    FenetrePrincipale::donneInstance().updateFenetre(note);
 }
 
-QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
+QNote::QNote(Note& n, QWidget *parent) : QFrame(parent), note(n)
 {
     QVBoxLayout *vlayout = new QVBoxLayout;
 
@@ -157,14 +157,14 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
     if(n.getEtat() == active){
         if(n.isActuelle()){
             QPushButton *boutonModifier = new QPushButton("Modifier");
-            boutonModifier->setToolTip("Editer une nouvelle version de la note");
-            boutonModifier->setFont(QFont("Comic Sans MS", 10));
-            boutonModifier->setCursor(Qt::PointingHandCursor);
+                boutonModifier->setToolTip("Editer une nouvelle version de la note");
+                boutonModifier->setFont(QFont("Comic Sans MS", 10));
+                boutonModifier->setCursor(Qt::PointingHandCursor);
             boutonsLayout->addWidget(boutonModifier);
             QPushButton *boutonSupprimer = new QPushButton("Supprimer");
-            boutonSupprimer->setToolTip("Mettre dans la corbeille");
-            boutonSupprimer->setFont(QFont("Comic Sans MS", 10));
-            boutonSupprimer->setCursor(Qt::PointingHandCursor);
+                boutonSupprimer->setToolTip("Mettre dans la corbeille");
+                boutonSupprimer->setFont(QFont("Comic Sans MS", 10));
+                boutonSupprimer->setCursor(Qt::PointingHandCursor);
             boutonsLayout->addWidget(boutonSupprimer);
             QObject::connect(boutonModifier,SIGNAL(clicked()),this,SLOT(editer()));
             QObject::connect(boutonSupprimer,SIGNAL(clicked()),this,SLOT(supprimer()));
@@ -174,17 +174,20 @@ QNote::QNote(Note& n, QWidget *parent) : QWidget(parent), note(n)
             boutonRestaurerVersion->setCursor(Qt::PointingHandCursor);
             boutonRestaurerVersion->setFont(QFont("Comic Sans MS", 10));
             boutonsLayout->addWidget(boutonRestaurerVersion);
+            QObject::connect(boutonRestaurerVersion,SIGNAL(clicked()),this,SLOT(restaurerVersion()));
         }
     }
     else{
         QPushButton *boutonRestaurer = new QPushButton("Restaurer");
-        boutonRestaurer->setCursor(Qt::PointingHandCursor);
+            boutonRestaurer->setCursor(Qt::PointingHandCursor);
+            boutonRestaurer->setFont(QFont("Comic Sans MS", 10));
         boutonsLayout->addWidget(boutonRestaurer);
-        boutonRestaurer->setFont(QFont("Comic Sans MS", 10));
+        QObject::connect(boutonRestaurer,SIGNAL(clicked()),this,SLOT(restaurerNote()));
     }
 
     vlayout->addLayout(boutonsLayout);
     setLayout(vlayout);
+    setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
 }
 
 void QNote::editer(){
@@ -193,4 +196,15 @@ void QNote::editer(){
 
 void QNote::supprimer(){
     Manager::donneInstance().supprimerNote(note);
+    FenetrePrincipale::donneInstance().updateFenetre(note);
+}
+
+void QNote::restaurerVersion(){
+    Manager::donneInstance().restaurerVersion(note);
+    FenetrePrincipale::donneInstance().updateFenetre(note);
+}
+
+void QNote::restaurerNote(){
+    Manager::donneInstance().restaurerNote(note);
+    FenetrePrincipale::donneInstance().updateFenetre(note);
 }

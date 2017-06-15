@@ -6,8 +6,6 @@
 #include <QFileDialog>
 #include <QApplication>
 
-using namespace TIME;
-
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
@@ -19,7 +17,7 @@ int main(int argc, char* argv[])
     m.setFilename("notes2.xml");
     m.load();
 
-    FenetrePrincipale fenetre;
+    FenetrePrincipale& fenetre = FenetrePrincipale::donneInstance();
     fenetre.show();
 
 //    Article a(1,"titre","texte");

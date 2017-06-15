@@ -107,15 +107,20 @@ RelationEditeur::RelationEditeur(QWidget* parent){
     
     ///Ajouts des boutons
     ajouter = new QPushButton("Ajouter un couple");
-    //addNotOriented = new QPushButton("Ajouter une relation (NO)");
     Bquit = new QPushButton("Quitter");
     
     ///Connexion des boutons aux slots
-    QObject::connect(ajouter, SIGNAL(clicked()), this, SLOT(addRelation()));
-    QObject::connect(ajouter, SIGNAL(clicked()), this, SLOT(updateRelationManager()));
-    //QObject::connect(addNotOriented, SIGNAL(clicked()), this, SLOT(addRelationNotOriented()));
-    //QObject::connect(addNotOriented, SIGNAL(clicked()), this, SLOT(updateRelationManager()));
-    QObject::connect(Bquit, SIGNAL(clicked()), this, SLOT(setEmptyCentralWidget()));
+    listNotesDroite->setEnabled(false);
+    listNotesGauche->setEnabled(false);
+    LineCouple->setEnabled(false);
+    ajouter->setEnabled(false);//LineCouple->textEdited(QString)&&
+
+    QObject::connect(listRelation, SIGNAL(itemSelectionChanged()),this , SLOT(activerlistNotesGauche()));
+    QObject::connect(listNotesGauche, SIGNAL(itemSelectionChanged()), this, SLOT(activerlistNotesDroite()));
+    QObject::connect(listNotesDroite, SIGNAL(itemSelectionChanged()), this, SLOT(activerLineCouple()));
+    QObject::connect(LineCouple, SIGNAL(textChanged(QString)), this, SLOT(activerajouter()));
+    QObject::connect(ajouter, SIGNAL(clicked()), this, SLOT(addCouple()));
+    QObject::connect(ajouter, SIGNAL(clicked()), this, SLOT(returnToAffichageNote()));
     QObject::connect(Bquit, SIGNAL(clicked()), this, SLOT(returnToAffichageNote()));
     
     ///Ajout des boutons
@@ -133,8 +138,6 @@ RelationEditeur::RelationEditeur(QWidget* parent){
 
     layout->addWidget(ajouter, 1, 1);
 
-    //layout->addWidget(addNotOriented, 2, 1);
-
     layout->addWidget(Bquit, 1, 2);
 
 
@@ -149,17 +152,32 @@ RelationEditeur::RelationEditeur(QWidget* parent){
 /*void RelationEditeur::updateRelationManager(){
     MainWindow::getInstance().updateRelationManager();
 }*/
-
+/*
 ///Slot permettant de mettre le Widget dans la partie centrale de l'application
 void RelationEditeur::setEmptyCentralWidget(){
     QWidget* empty = new QWidget;
     MainWindow::getInstance().setCentralWidget(empty);
 }
-
+*/
 
 void RelationEditeur::returnToAffichageNote(){
-MainWindow::getInstance().setCentralWidget(empty);
+    FenetrePrincipale& fp= FenetrePrincipale::donneInstance();
+    fp.reaffichageNote();
 
+}
 
+void RelationEditeur::activerlistNotesDroite(){
+    listNotesDroite->setEnabled(true);
+}
 
+void RelationEditeur::activerlistNotesGauche(){
+    listNotesGauche->setEnabled(true);
+}
+
+void RelationEditeur::activerLineCouple(){
+    LineCouple->setEnabled(true);
+}
+
+void RelationEditeur::activerajouter(){
+    ajouter->setEnabled(true);
 }

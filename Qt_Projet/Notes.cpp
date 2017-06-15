@@ -16,13 +16,6 @@ Note::Note(Note& n){
 
 /**< DEMANDES D'EDITION DES DIFFERENTS NOTES */
 
-/*
-void Manager::editNote(Note& n){
-    Note& n2=n.edit();
-    ajouterNote(n2);
-}
-*/
-
 void Article::edit(){
     ArticleEditeur *editeur = new ArticleEditeur(*this);
     editeur->show();

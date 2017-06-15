@@ -37,10 +37,14 @@ public:
 public slots :
     void addCouple();
     void returnToAffichageNote();
+    void activerlistNotesDroite();
+    void activerlistNotesGauche();
+    void activerLineCouple();
+    void activerajouter();
     //void addRelationNotOriented();
     //void updateRelationManager();
     //void enablePushButons();
-   void setEmptyCentralWidget();
+   //void setEmptyCentralWidget();
 };
 
 

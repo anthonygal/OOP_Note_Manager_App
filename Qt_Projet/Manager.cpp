@@ -1,4 +1,5 @@
 #include "Manager.h"
+#include "FenetrePrincipale.h"
 
 /*
 void Manager::afficherTout()const{
@@ -8,17 +9,17 @@ void Manager::afficherTout()const{
 
 /**< TEMPLATE METHOD SINGLETON POUR LA CLASS MANAGER */
 
-Manager* Manager::InstanceUnique=nullptr;
+Manager* Manager::instanceUnique=nullptr;
 
 Manager& Manager::donneInstance(){
-    if (InstanceUnique==nullptr) InstanceUnique = new Manager;
-    return *InstanceUnique;
+    if (instanceUnique==nullptr) instanceUnique = new Manager;
+    return *instanceUnique;
 }
 
 void Manager::libereInstance(){
-    if (InstanceUnique!=nullptr)
-        delete InstanceUnique;
-    InstanceUnique=nullptr;
+    if (instanceUnique!=nullptr)
+        delete instanceUnique;
+    instanceUnique=nullptr;
 }
 
 Manager::~Manager(){
@@ -32,155 +33,6 @@ Manager::~Manager(){
         delete relations[i];
     }
     delete[] relations;
-}
-
-/**< TEMPLATE METHOD ITERATOR DANS LA CLASSE MANAGER POUR LES NOTES */
-
-/**< Iterator de notes */
-
-void Manager::IteratorNotes::next(){
-    if(isDone()) throw NoteException("\nnext() sur un IteratorNotes fini !\n");
-    remain--;
-    currentN++;
-}
-
-Note& Manager::IteratorNotes::current() const{
-    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
-    return **currentN;
-}
-
-///**< Iterator de notes actives */
-
-//Manager::IteratorNotesActive::IteratorNotesActive(Note** t, int n): currentN(t), remain(n){
-//    while(remain>0 && (*currentN)->getEtat()!=active){
-//        currentN++;
-//        remain--;
-//    }
-//}
-
-//void Manager::IteratorNotesActive::next(){
-//    while(!isDone() && (*currentN)->getEtat()!=active){
-//        remain--;
-//        currentN++;
-//    }
-//}
-
-//Note& Manager::IteratorNotesActive::current() const{
-//    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
-//    return **currentN;
-//}
-
-///**< Iterator de notes archivees */
-
-//Manager::IteratorNotesArchivee::IteratorNotesArchivee(Note** t, int n): currentN(t), remain(n){
-//    while(remain>0 && (*currentN)->getEtat()!=archivee){
-//        currentN++;
-//        remain--;
-//    }
-//}
-
-//void Manager::IteratorNotesArchivee::next(){
-//    while(!isDone() && (*currentN)->getEtat()!=archivee){
-//        remain--;
-//        currentN++;
-//    }
-//}
-
-//Note& Manager::IteratorNotesArchivee::current() const{
-//    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
-//    return **currentN;
-//}
-
-///**< Iterator de notes dans l'etat corbeille */
-
-//Manager::IteratorNotesCorbeille::IteratorNotesCorbeille(Note** t, int n): currentN(t), remain(n){
-//    while(remain>0 && (*currentN)->getEtat()!=corbeille){
-//        currentN++;
-//        remain--;
-//    }
-//}
-
-//void Manager::IteratorNotesCorbeille::next(){
-//    while(!isDone() && (*currentN)->getEtat()!=corbeille){
-//        remain--;
-//        currentN++;
-//    }
-//}
-
-//Note& Manager::IteratorNotesCorbeille::current() const{
-//    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
-//    return **currentN;
-//}
-
-/**< TEMPLATE METHOD ITERATOR DANS LA CLASSE MANAGER POUR LES RELATIONS */
-
-void Manager::IteratorRelations::next(){
-    if(isDone()) throw NoteException("\nnext() sur un IteratorRelation fini !\n");
-    remain--;
-    currentR++;
-}
-
-Relation& Manager::IteratorRelations::current() const{
-    if(isDone()) throw NoteException("\ncurrent() sur un IteratorRelation fini !\n");
-    return **currentR;
-}
-
-void Manager::ConstIteratorRelations::next(){
-    if(isDone()) throw NoteException("\nnext() sur un ConstIteratorRelation fini !\n");
-    remain--;
-    currentR++;
-}
-
-const Relation& Manager::ConstIteratorRelations::current() const{
-    if(isDone()) throw NoteException("\ncurrent() sur un ConstIteratorRelation fini !\n");
-    return **currentR;
-}
-
-/**< METHODES DE CREATION DES DIFFERENTS NOTES */
-
-unsigned long Manager::nextNoteID = 0;
-
-void Manager::newArticle(const QString& ti, const QString& te){
-    Article* a=new Article(nextNoteID++,ti,te);
-    ajouterNote(*a);
-}
-
-void Manager::newTache(const QString& ti, const QString& act, int prio, const QDate& d){
-    Tache* a=new Tache(nextNoteID++,ti,act,prio,d);
-    ajouterNote(*a);
-}
-
-void Manager::newMultimedia(const QString& ti, const QString& adr, const QString& desc, TypeMultimedia ty){
-    Multimedia* a=new Multimedia(nextNoteID++,ti,adr,ty,desc);
-    ajouterNote(*a);
-}
-
-void Manager::ajouterNote(Note &n){
-    if(nbNotes == nbNotesMax){
-        Note** newtab = new Note* [Manager::nbNotesMax+5];
-        for(unsigned int i=0;i<nbNotes;i++) newtab[i] = notes[i];
-        Note** oldtab = notes;
-        notes = newtab;
-        nbNotesMax += 5;
-        delete[] oldtab;
-    }
-    notes[nbNotes++] = &n;
-    addRefsFromNote(n);
-}
-
-void Manager::addArticle(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& te ){
-    Article* a=new Article(id,ti,dc,dm,act,e,te);
-    Manager::ajouterNote(*a);
-}
-
-void Manager::addTache(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& acti, const int prio, const QDate& eche, const TacheStatut ts ){
-    Tache* a=new Tache(id,ti,dc,dm,act,e,acti,prio,eche,ts);
-    Manager::ajouterNote(*a);
-}
-
-void Manager::addMultimedia(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec){
-    Multimedia* a=new Multimedia(id,ti,dc,dm,act,e,af,ty,dec);
-    Manager::ajouterNote(*a);
 }
 
 /**< Methode permettant de rechercher une note à partir d'un ID */
@@ -199,6 +51,92 @@ Relation& Manager::getRelation(const QString& t){
         if(it.current().getTitre() == t) return it.current();
     }
     throw NoteException("Aucune relation avec ce titre");
+}
+
+/**< Iterator de notes */
+
+void Manager::IteratorNotes::next(){
+    if(isDone()) throw NoteException("\nnext() sur un IteratorNotes fini !\n");
+    remain--;
+    currentN++;
+}
+
+Note& Manager::IteratorNotes::current() const{
+    if(isDone()) throw NoteException("\ncurrent() sur un IteratorNotes fini !\n");
+    return **currentN;
+}
+
+/**< Iterator de relations */
+
+void Manager::IteratorRelations::next(){
+    if(isDone()) throw NoteException("\nnext() sur un IteratorRelation fini !\n");
+    remain--;
+    currentR++;
+}
+
+Relation& Manager::IteratorRelations::current() const{
+    if(isDone()) throw NoteException("\ncurrent() sur un IteratorRelation fini !\n");
+    return **currentR;
+}
+
+/**< ConstIterator de relations */
+
+void Manager::ConstIteratorRelations::next(){
+    if(isDone()) throw NoteException("\nnext() sur un ConstIteratorRelation fini !\n");
+    remain--;
+    currentR++;
+}
+
+const Relation& Manager::ConstIteratorRelations::current() const{
+    if(isDone()) throw NoteException("\ncurrent() sur un ConstIteratorRelation fini !\n");
+    return **currentR;
+}
+
+/**< METHODES DE CREATION DES DIFFERENTS NOTES */
+
+unsigned long Manager::nextNoteID = 0;
+
+void Manager::ajouterNote(Note &n){
+    if(nbNotes == nbNotesMax){
+        Note** newtab = new Note* [Manager::nbNotesMax+5];
+        for(unsigned int i=0;i<nbNotes;i++) newtab[i] = notes[i];
+        Note** oldtab = notes;
+        notes = newtab;
+        nbNotesMax += 5;
+        delete[] oldtab;
+    }
+    notes[nbNotes++] = &n;
+    addRefsFromNote(n);
+}
+
+void Manager::newArticle(const QString& ti, const QString& te){
+    Article* a=new Article(nextNoteID++,ti,te);
+    ajouterNote(*a);
+}
+
+void Manager::newTache(const QString& ti, const QString& act, int prio, const QDate& d){
+    Tache* a=new Tache(nextNoteID++,ti,act,prio,d);
+    ajouterNote(*a);
+}
+
+void Manager::newMultimedia(const QString& ti, const QString& adr, const QString& desc, TypeMultimedia ty){
+    Multimedia* a=new Multimedia(nextNoteID++,ti,adr,ty,desc);
+    ajouterNote(*a);
+}
+
+void Manager::addArticle(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& te ){
+    Article* a=new Article(id,ti,dc,dm,act,e,te);
+    Manager::ajouterNote(*a);
+}
+
+void Manager::addTache(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& acti, const int prio, const QDate& eche, const TacheStatut ts ){
+    Tache* a=new Tache(id,ti,dc,dm,act,e,acti,prio,eche,ts);
+    Manager::ajouterNote(*a);
+}
+
+void Manager::addMultimedia(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec){
+    Multimedia* a=new Multimedia(id,ti,dc,dm,act,e,af,ty,dec);
+    Manager::ajouterNote(*a);
 }
 
 /**< METHODES D'AJOUT DE RELATIONS */
@@ -241,9 +179,9 @@ void Manager::suppRefsFromNote(const Note &n){
     for(Relation::IteratorCouples itc=reference.getIteratorCouples();!itc.isDone();itc.next())
         if(itc.current().getID1()==n.getID())
             reference.supprimerCouple(itc.current());
-    for(IteratorNotes itn=getIteratorNotes();!itn.isDone();itn.isDone())
-            if(itn.current().getEtat() == archivee)
-                if(!isReferenced(itn.current())) itn.current().setEtat(corbeille);
+    for(IteratorNotes itn=getIteratorNotes();!itn.isDone();itn.next())
+        if(itn.current().getEtat() == archivee && !isReferenced(itn.current()))
+            itn.current().setEtat(corbeille);
 }
 
 //On parcourt tous les couples de reference et si l'ID de la note passée en argument correspond à l'ID2 d'un couple on renvoie vraie sinon faux.
@@ -288,7 +226,7 @@ Tache& Manager::editPrioriteTache(Tache& T, int p){
     t->setActuelle();
     T.setAncienne();
     ajouterNote(*t);
-    return *t;};
+    return *t;}
 
 Tache& Manager::editEcheanceTache(Tache& T, const QDate& d){
     Tache* t= new Tache(T);
@@ -350,6 +288,25 @@ void Manager::viderCorbeille(){ // detruit les notes a la corbeille et couples a
         }
         else i++;
     }
+}
+
+void Manager::restaurerCorbeille(){
+    for(IteratorNotes it=getIteratorNotes();!it.isDone();it.next())
+        if(it.current().getEtat() == corbeille)
+            it.current().setEtat(active);
+}
+
+void Manager::restaurerVersion(Note& n){
+    for(IteratorNotes it=getIteratorNotes();!it.isDone();it.next())
+        if(it.current().getID() == n.getID() && it.current().isActuelle())
+            it.current().setAncienne();
+    n.setActuelle();
+}
+
+void Manager::restaurerNote(Note& n){
+    for(IteratorNotes it=getIteratorNotes();!it.isDone();it.next())
+        if(it.current().getID() == n.getID())
+            it.current().setEtat(active);
 }
 
 void Manager::load() {
