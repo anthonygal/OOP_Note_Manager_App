@@ -1,15 +1,16 @@
 INPUT(
 ./debug\main.o
 ./debug\Relations.o
-./debug\timing.o
 ./debug\NoteEditeur.o
 ./debug\FenetrePrincipale.o
 ./debug\Notes.o
 ./debug\Manager.o
 ./debug\QNotes.o
+./debug\RelationEditeur.o
 ./debug\NewNote.o
 ./debug\moc_NoteEditeur.o
 ./debug\moc_FenetrePrincipale.o
 ./debug\moc_QNotes.o
+./debug\moc_RelationEditeur.o
 ./debug\moc_NewNote.o
 );

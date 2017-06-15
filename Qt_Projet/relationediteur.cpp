@@ -14,20 +14,20 @@ void RelationEditeur::addCouple(){
     ///On récupère la note n1 dans le QlistWidget listNotesLeft
     QListWidgetItem* selectedItem1 = listNotesGauche->currentItem();
     QString titre1 = selectedItem1->text();
-    int n1 = Manager::donneInstance().getIDNoteWithTitre(titre1);
+    unsigned long n1 = Manager::donneInstance().getIDNoteWithTitre(titre1);
     
     ///On récupère la note n2 dans le QlistWidget listNotesRight
     QListWidgetItem* selectedItem2 = listNotesDroite->currentItem();
     QString titre2 = selectedItem2->text();
-    int n2= Manager::donneInstance().getIDNoteWithTitre(titre2);
+    unsigned long n2= Manager::donneInstance().getIDNoteWithTitre(titre2);
     
      QListWidgetItem* selectedItem3 = listRelation->currentItem();
      QString titre3 = selectedItem3->text();
-     Relation* r=Manager::donneInstance().getRelationWithTitre(titre3);
+     Relation& r=Manager::donneInstance().getRelation(titre3);
 
      QString Label = LineCouple->text();
 
-     r->addCouple(n1, n2, Label);
+     r.addCouple(n1, n2, Label);
     
     
     ///MessageBox attestant du succès de l'ajout de la relation

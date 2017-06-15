@@ -1,15 +1,16 @@
 INPUT(
 ./release\main.o
 ./release\Relations.o
-./release\timing.o
 ./release\NoteEditeur.o
 ./release\FenetrePrincipale.o
 ./release\Notes.o
 ./release\Manager.o
 ./release\QNotes.o
+./release\RelationEditeur.o
 ./release\NewNote.o
 ./release\moc_NoteEditeur.o
 ./release\moc_FenetrePrincipale.o
 ./release\moc_QNotes.o
+./release\moc_RelationEditeur.o
 ./release\moc_NewNote.o
 );

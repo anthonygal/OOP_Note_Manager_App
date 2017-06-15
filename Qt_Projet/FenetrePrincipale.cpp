@@ -13,17 +13,23 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
 
     QMenu *menuNotes = menuBar()->addMenu("&Notes");
         QMenu *newNote = menuNotes->addMenu("Nouvelle note");
-    QMenu *menuRelation = menuBar()->addMenu("&Relation");
-        QMenu *newRelation = menuRelation->addMenu("&Nouvelle Relation");
-    QMenu *menufonction = menuBar()->addMenu("&Fonctions");
-        QMenu *newRelation = menuRelation->addMenu("&Nouvelle Relation");
-
             QAction *newArticle = new QAction("Article");
             QAction *newTache = new QAction("Tache");
             QAction *newMultimedia = new QAction("Multimedia");
             newNote->addAction(newArticle);
             newNote->addAction(newTache);
             newNote->addAction(newMultimedia);
+
+    QMenu *menuRelation = menuBar()->addMenu("&Relation");
+        QAction *voirRelations = new QAction("Voir toutes les relations");
+        QAction *newRel = new QAction("Creer Relation");
+        QAction *newCouple = new QAction("Ajouter Couple");
+        menuRelation->addAction(newRel);
+        menuRelation->addAction(newCouple);
+
+    QMenu *menufonction = menuBar()->addMenu("&Fonctions");
+
+
     QMenu *menuCorbeille = menuBar()->addMenu("&Corbeille");
         QAction *actionViderCorbeille = new QAction("Vider la Corbeille");
         QAction *actionRestaurerCorbeille = new QAction("Restaurer la corbeille");
@@ -39,10 +45,7 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
     QObject::connect(actionRestaurerCorbeille,SIGNAL(triggered()),this,SLOT(restaurerCorbeille()));
 
 
-            QAction *newRel = new QAction("Creer Relation");
-            QAction *newCouple = new QAction("Ajouter Couple");
-            newRelation->addAction(newRel);
-            newRelation->addAction(newCouple);
+
             QObject::connect(newCouple, SIGNAL(triggered()), this, SLOT(editRelation()));
             QObject::connect(newRel,SIGNAL(triggered()), this, SLOT(createRelation()) );
             

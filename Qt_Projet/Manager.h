@@ -21,7 +21,7 @@ private:
     void operator=(const Manager&); /**< Surcharge de l'operateur = pour affecter un Manager */
     ~Manager(); /**< Destructeur Manager */
     mutable QString filename;
-    /**< Methodes d'ajout de Note utilisées dans la methode load() */
+    /* Methodes d'ajout de Note utilisées dans la methode load() */
     void addArticle(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& te);
     void addTache(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& acti, const int prio, const QDate& eche, const TacheStatut ts);
     void addMultimedia(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec);
@@ -83,12 +83,13 @@ public:
         const Relation& current() const;
     };
     ConstIteratorRelations getConstIteratorRelations() const {return ConstIteratorRelations(relations, nbRelations);}
-    /**< Requetes getAttributs */
+    /** Requetes getAttributs */
     int getNbNotes()const {return nbNotes;}
     int getNbRelations() const {return nbRelations;}
     Relation& getRelation(const QString& t);
     Reference& getReference() const {return reference;}
     Note* getNoteID(unsigned long id);
+    unsigned long getIDNoteWithTitre(QString Titre);
     /**< Methode pour ajouter une Note, utilisee dans les methodes de creation et d'edition d'article/tache/multimedia */
     void ajouterNote(Note& n);
     /**< Methodes pour ajouter un Article/Tache/Multimedia au tableau de notes */
@@ -125,8 +126,6 @@ public:
     void setFilename(const QString& f) {filename=f;}
     void load();
     void save() const;
-    int getIDNoteWithTitre(QString Titre);
-   Relation* getRelationWithTitre(QString Titre);
 };
 
 

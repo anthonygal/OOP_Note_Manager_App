@@ -8,8 +8,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-class QNote;
-
 class FenetrePrincipale : public QMainWindow{
     Q_OBJECT
     static FenetrePrincipale* instanceUnique;
@@ -32,12 +30,6 @@ class FenetrePrincipale : public QMainWindow{
     explicit FenetrePrincipale(QWidget *parent = nullptr);
     ~FenetrePrincipale();
 public:
-     QDockWidget* getleftDockWidget(){return leftDockWidget;}
-     QNote* getnotePrincipale() {return notePrincipale;}
-     QDockWidget* getrightDockWidget(){return getrightDockWidget();}
-     QVBoxLayout* getcentralLayout(){return centralLayout;}
-     QScrollArea* getautresVersions() {return autresVersions;}
-     QWidget* getzoneCentrale() {return zoneCentrale;}
     /**< Template Method Singleton */
     static FenetrePrincipale& donneInstance();
     static void libereInstance();
@@ -66,6 +58,7 @@ public slots:
     void updateFenetre(Note& n);
     void updateFenetre();
     void viderCorbeille();
+    void restaurerCorbeille();
     void sauvegarder();
     void newArticle();
     void newTache();

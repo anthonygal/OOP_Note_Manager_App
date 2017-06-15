@@ -29,13 +29,20 @@ Manager::~Manager(){
     delete[] relations;
 }
 
-/**< Methode permettant de rechercher une note à partir d'un ID */
-
+/** Methode permettant de rechercher une note à partir d'un ID */
 Note* Manager::getNoteID(unsigned long id){
     for(IteratorNotes it=getIteratorNotes(); !it.isDone();it.next())
         if (it.current().getID()==id && it.current().isActuelle())
             return &(it.current());
     return nullptr;
+}
+
+/** Methode permettant d'obtenir l'ID d'une note à partir d'un titre */
+unsigned long Manager::getIDNoteWithTitre(QString Titre){
+    for(unsigned int i=0; i<nbNotes; i++)
+        if(notes[i]->getTitre()== Titre)
+            return notes[i]->getID();
+    throw NoteException("Aucune note avec ce titre");
 }
 
 /**< Methode permettant de rechercher une relation à partir d'un titre */
@@ -688,16 +695,3 @@ void Manager::save()const{
         stream.writeEndDocument();
         newfile.close();
 }
-
-int Manager::getIDNoteWithTitre(QString Titre){
-    for(unsigned int i=0; i<nbNotes; i++){
-        if(notes[i]->getTitre()== Titre){ return notes[i]->getID();}
-    }
-}
-
-Relation* Manager::getRelationWithTitre(QString Titre){
-    for(unsigned int i=0; i<nbRelations; i++){
-        if(relations[i]->getTitre()== Titre){ return relations[i];}
-    }
-}
-
