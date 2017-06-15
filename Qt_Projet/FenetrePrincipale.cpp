@@ -32,6 +32,7 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
             newRelation->addAction(newRel);
             newRelation->addAction(newCouple);
             QObject::connect(newCouple, SIGNAL(triggered()), this, SLOT(editRelation()));
+            QObject::connect(newRel,SIGNAL(triggered()), this, SLOT(createRelation()) );
             
     //DOCK WIDGET GAUCHE
     leftDockWidget = new QDockWidget("Toutes les notes");
@@ -480,6 +481,11 @@ void FenetrePrincipale::updateFenetre(Note &n){
     delete rightDockWidget;
     //centralLayout->addWidget(re);
 
+ }
+
+ void FenetrePrincipale::createRelation(){
+     RelationCreateur* cr= new RelationCreateur();
+     cr->show();
  }
 
 void FenetrePrincipale::updateFenetre(){

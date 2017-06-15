@@ -192,7 +192,6 @@ bool Manager::isReferenced(const Note& n) const{
 }
 
 /**< Methodes d'edition inutiles pour l'instant mais je prefere garder au cas ou */
-
 Article& Manager::editTexteArticle(Article& A, const QString& s) {
     Article* a= new Article(A);
     a->setTexte(s);

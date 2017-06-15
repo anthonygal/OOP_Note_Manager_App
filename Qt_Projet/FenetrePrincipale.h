@@ -60,6 +60,7 @@ public slots:
 
   //  void changerNotePrincipale(Note& n);
     void editRelation();
+    void createRelation();
 
     void updateFenetre(Note& n);
     void updateFenetre();

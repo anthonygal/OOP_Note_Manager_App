@@ -1,4 +1,4 @@
-#include "timing.h"
+//#include "timing.h"
 #include "Notes.h"
 #include "NoteEditeur.h"
 #include "FenetrePrincipale.h"

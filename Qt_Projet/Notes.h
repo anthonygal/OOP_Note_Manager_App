@@ -1,7 +1,7 @@
 #ifndef Notes_h
 #define Notes_h
 
-#include "timing.h"
+//#include "timing.h"
 #include <string>
 #include <typeinfo>
 #include <sstream>
@@ -11,7 +11,7 @@
 #include <QtWidgets>
 #include <QFile>
 
-using namespace TIME;
+//using namespace TIME;
 
 const QString formatDate = "dd/MM/yyyy";
 const QString formatDateTime = "dd/MM/yyyy HH:mm:ss";

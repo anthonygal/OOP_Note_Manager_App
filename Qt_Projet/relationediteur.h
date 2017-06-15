@@ -48,4 +48,24 @@ public slots :
 };
 
 
+
+class RelationCreateur : public QWidget{
+    Q_OBJECT
+    private:
+    QLineEdit* titre;
+    QLabel* Labtitre;
+    QLabel* Labdescription;
+    QTextEdit* description;
+    QCheckBox* orientee;
+    QPushButton* add;
+    QPushButton* quit;
+    QVBoxLayout* layout3;
+
+    public:
+    RelationCreateur(QWidget* parent=0);
+    public slots :
+    void activerAdd();
+    void addRelation();
+};
+
 #endif // RELATIONEDITEUR_H

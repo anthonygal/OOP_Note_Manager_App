@@ -3,7 +3,7 @@
 
 #include "Notes.h"
 
-using namespace TIME;
+//using namespace TIME;
 
  /**< RELATIONS ENTRE NOTES */
 

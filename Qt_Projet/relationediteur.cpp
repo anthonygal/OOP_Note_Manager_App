@@ -181,3 +181,56 @@ void RelationEditeur::activerLineCouple(){
 void RelationEditeur::activerajouter(){
     ajouter->setEnabled(true);
 }
+
+RelationCreateur::RelationCreateur(QWidget* parent){
+    titre=new QLineEdit();
+    Labtitre= new QLabel("Titre : ");
+    Labdescription= new QLabel("Description : ");
+    description= new QTextEdit();
+    orientee= new QCheckBox("Orientee");
+    add = new QPushButton("Ajouter une relation");
+    quit = new QPushButton("Quitter");
+
+    QHBoxLayout* layout1 = new QHBoxLayout();
+
+    QHBoxLayout* layout2 = new QHBoxLayout();
+
+    layout1->addWidget(Labtitre);
+    layout1->addWidget(titre);
+
+    layout2->addWidget(Labdescription);
+    layout2->addWidget(description);
+
+    layout3 = new QVBoxLayout();
+
+    layout3->addLayout(layout1);
+    layout3->addLayout(layout2);
+    layout3->addWidget(orientee);
+    layout3->addWidget(add);
+    layout3->addWidget(quit);
+
+     add->setEnabled(false);
+     QObject::connect(titre, SIGNAL(textEdited(QString)),this , SLOT(activerAdd()));
+     QObject::connect(add, SIGNAL(clicked()), this, SLOT(addRelation()));
+     QObject::connect(quit, SIGNAL(clicked()), this, SLOT(close()));
+     setLayout(layout3);
+
+}
+
+void RelationCreateur::activerAdd(){
+    add->setEnabled(true);
+}
+
+void RelationCreateur::addRelation(){
+    Manager& m= Manager::donneInstance();
+    QString tit = titre->text();
+    QString de = description->toPlainText();
+    bool o;
+    if(orientee->isChecked())
+    {o=true;}
+    else  {o=false;}
+    m.addRelation(tit, de, o);
+    QMessageBox::information(this, "Succès", "Le relation a bien été créée");
+    this->close();
+
+}
