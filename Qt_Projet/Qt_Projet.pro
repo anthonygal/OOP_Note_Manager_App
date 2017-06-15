@@ -7,7 +7,6 @@ QMAKE_LFLAGS = -std=c++11
 
 HEADERS += \
     Relations.h \
-    timing.h \
     NoteEditeur.h \
     FenetrePrincipale.h \
     Notes.h \
@@ -18,7 +17,6 @@ HEADERS += \
 SOURCES += \
     main.cpp \
     Relations.cpp \
-    timing.cpp \
     NoteEditeur.cpp \
     FenetrePrincipale.cpp \
     Notes.cpp \
