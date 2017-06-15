@@ -28,7 +28,7 @@ class FenetrePrincipale : public QMainWindow{
 
     explicit FenetrePrincipale(QWidget *parent = nullptr);
 public:
-    /**< Template Method Singleton */
+    /* Template Method Singleton */
     static FenetrePrincipale& donneInstance();
     static void libereInstance();
 

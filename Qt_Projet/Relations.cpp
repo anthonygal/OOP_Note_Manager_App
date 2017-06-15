@@ -3,7 +3,7 @@
 
 // RELATIONS ENTRE NOTES
 
-/**< Iterator de couples */
+/* Iterator de couples */
 
 void Relation::IteratorCouples::next(){
     if(isDone()) throw NoteException("\nnext() sur un IteratorCouple fini !\n");
@@ -16,7 +16,7 @@ Couple& Relation::IteratorCouples::current() const{
     return **currentC;
 }
 
-/**< ConstIterator de couples */
+/* ConstIterator de couples */
 
 void Relation::ConstIteratorCouples::next(){
     if(isDone()) throw NoteException("\nnext() sur un ConstIteratorCouple fini !\n");

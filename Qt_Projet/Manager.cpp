@@ -1,7 +1,7 @@
 #include "Manager.h"
 #include "FenetrePrincipale.h"
 
-/**< TEMPLATE METHOD SINGLETON POUR LA CLASS MANAGER */
+/* TEMPLATE METHOD SINGLETON POUR LA CLASS MANAGER */
 
 Manager* Manager::instanceUnique=nullptr;
 
@@ -29,7 +29,7 @@ Manager::~Manager(){
     delete[] relations;
 }
 
-/** Methode permettant de rechercher une note à partir d'un ID */
+/* Methode permettant de rechercher une note à partir d'un ID */
 Note* Manager::getNoteID(unsigned long id){
     for(IteratorNotes it=getIteratorNotes(); !it.isDone();it.next())
         if (it.current().getID()==id && it.current().isActuelle())
@@ -37,7 +37,7 @@ Note* Manager::getNoteID(unsigned long id){
     return nullptr;
 }
 
-/** Methode permettant d'obtenir l'ID d'une note à partir d'un titre */
+/* Methode permettant d'obtenir l'ID d'une note à partir d'un titre */
 unsigned long Manager::getIDNoteWithTitre(QString Titre){
     for(unsigned int i=0; i<nbNotes; i++)
         if(notes[i]->getTitre()== Titre)
@@ -45,7 +45,7 @@ unsigned long Manager::getIDNoteWithTitre(QString Titre){
     throw NoteException("Aucune note avec ce titre");
 }
 
-/**< Methode permettant de rechercher une relation à partir d'un titre */
+/* Methode permettant de rechercher une relation à partir d'un titre */
 
 Relation& Manager::getRelation(const QString& t){
     for(IteratorRelations it=getIteratorRelations();!it.isDone();it.next()){
@@ -54,7 +54,7 @@ Relation& Manager::getRelation(const QString& t){
     throw NoteException("Aucune relation avec ce titre");
 }
 
-/**< Iterator de notes */
+/* Iterator de notes */
 
 void Manager::IteratorNotes::next(){
     if(isDone()) throw NoteException("\nnext() sur un IteratorNotes fini !\n");
@@ -67,7 +67,7 @@ Note& Manager::IteratorNotes::current() const{
     return **currentN;
 }
 
-/**< ConstIterator de notes */
+/* ConstIterator de notes */
 
 void Manager::ConstIteratorNotes::next(){
     if(isDone()) throw NoteException("\nnext() sur un ConstIteratorNotes fini !\n");
@@ -80,7 +80,7 @@ const Note& Manager::ConstIteratorNotes::current() const{
     return **currentN;
 }
 
-/**< Iterator de relations */
+/* Iterator de relations */
 
 void Manager::IteratorRelations::next(){
     if(isDone()) throw NoteException("\nnext() sur un IteratorRelation fini !\n");
@@ -93,7 +93,7 @@ Relation& Manager::IteratorRelations::current() const{
     return **currentR;
 }
 
-/**< ConstIterator de relations */
+/* ConstIterator de relations */
 
 void Manager::ConstIteratorRelations::next(){
     if(isDone()) throw NoteException("\nnext() sur un ConstIteratorRelation fini !\n");
@@ -106,7 +106,7 @@ const Relation& Manager::ConstIteratorRelations::current() const{
     return **currentR;
 }
 
-/**< METHODES DE CREATION DES DIFFERENTS NOTES */
+/* METHODES DE CREATION DES DIFFERENTS NOTES */
 
 unsigned long Manager::nextNoteID = 0;
 
@@ -123,7 +123,7 @@ void Manager::ajouterNote(Note &n){
     //addRefsFromNote(n);
 }
 
-/**< Methodes d'ajout des differentes notes utilisées dans le load */
+/* Methodes d'ajout des differentes notes utilisées dans le load */
 
 void Manager::addArticle(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& te ){
     Article* a=new Article(id,ti,dc,dm,act,e,te);
@@ -140,7 +140,7 @@ void Manager::addMultimedia(const int id, const QString& ti, const QDateTime& dc
     Manager::ajouterNote(*a);
 }
 
-/**< Methodes d'ajout de nouvelles notes */
+/* Methodes d'ajout de nouvelles notes */
 
 Article& Manager::newArticle(const QString& ti, const QString& te){
     if(ti.isEmpty() || te.isEmpty()) throw NoteException("Titre et Texte ne peuvent être vide !");
@@ -163,7 +163,7 @@ Multimedia& Manager::newMultimedia(const QString& ti, const QString& adr, const 
     return *m;
 }
 
-/**< METHODES D'AJOUT DE RELATIONS */
+/* METHODES D'AJOUT DE RELATIONS */
 
 void Manager::addRelation(const QString& t, const QString& d, bool o){
     for(IteratorRelations it=getIteratorRelations();!it.isDone();it.next())
@@ -296,13 +296,13 @@ void Manager::supprimerNote(Note& n){
     }
 }
 
-void Manager::viderCorbeille(){ // detruit les notes a la corbeille et couples associes
+void Manager::viderCorbeille(){ // detruit les notes a la corbeille et couples associes 
     unsigned int i=0;
     while (i<nbNotes){
         if(notes[i]->getEtat()==corbeille){
             Note* temp=notes[i];
             for(unsigned int j=i; j<nbNotes-1;j++)
-                notes[j]=notes[j+1]; //La note est sortie du tableau
+                notes[j]=notes[j+1]; // La note est sortie du tableau
             for (IteratorRelations itr=getIteratorRelations();!itr.isDone();itr.next())   //On recherche les couples dans toutes les relation pour lesquelles la note est engagee.
                 for(Relation::IteratorCouples itc=itr.current().getIteratorCouples();!itc.isDone();itc.next())
                     if(itc.current().getID1()==temp->getID() || itc.current().getID2()==temp->getID()) itr.current().supprimerCouple(itc.current());
@@ -334,25 +334,15 @@ void Manager::restaurerNote(Note& n){
 
 void Manager::load() {
     QFile fin(filename);
-    // If we can't open it, let's show an error message.
     if (!fin.open(QIODevice::ReadOnly | QIODevice::Text)) {
         throw NoteException("Erreur ouverture fichier notes");
     }
-    // QXmlStreamReader takes any QIODevice.
     QXmlStreamReader xml(&fin);
-    // qDebug()<<"debut fichier\n";
-    // We'll parse the XML until we reach end of it.
     while(!xml.atEnd() && !xml.hasError()) {
-        // Read next element.
         QXmlStreamReader::TokenType token = xml.readNext();
-        // If token is just StartDocument, we'll go to next.
         if(token == QXmlStreamReader::StartDocument) continue;
-        // If token is StartElement, we'll see if we can read it.
         if(token == QXmlStreamReader::StartElement){
-            // If it's named notes, we'll go to the next.
             if(xml.name() == "Manager") continue;
-
-            // If it's named tache, we'll dig the information from there.
             if(xml.name() == "Article") {
                 qDebug()<<"new article\n";
                 QString identificateur;
@@ -364,11 +354,8 @@ void Manager::load() {
                 QString etat;
                 QXmlStreamAttributes attributes = xml.attributes();
                 xml.readNext();
-                //We're going to loop over the things because the order might change.
-                //We'll continue the loop until we hit an EndElement named article.
                 while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "Article")) {
                     if(xml.tokenType() == QXmlStreamReader::StartElement) {
-                        // We've found identificteur.
                         if(xml.name() == "id") {
                             xml.readNext(); identificateur=xml.text().toString();
                             qDebug()<<"id="<<identificateur<<"\n";
@@ -389,19 +376,18 @@ void Manager::load() {
                             xml.readNext(); actuelle=xml.text().toString();
                             qDebug()<<"actuelle="<<actuelle<<"\n";
                         }
-                        // We've found titre.
+
                         if(xml.name() == "titre") {
                             xml.readNext(); titre=xml.text().toString();
                             qDebug()<<"titre="<<titre<<"\n";
                         }
-                        // We've found text
+
                         if(xml.name() == "texte") {
                             xml.readNext();
                             texte=xml.text().toString();
                             qDebug()<<"text="<<texte<<"\n";
                         }
                     }
-                    // ...and next...
                     xml.readNext();
                 }
                 qDebug()<<"ajout note "<<identificateur<<"\n";
@@ -422,11 +408,8 @@ void Manager::load() {
                 QString etat;
                 QXmlStreamAttributes attributes = xml.attributes();
                 xml.readNext();
-                //We're going to loop over the things because the order might change.
-                //We'll continue the loop until we hit an EndElement named article.
                 while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "Tache")) {
                     if(xml.tokenType() == QXmlStreamReader::StartElement) {
-                        // We've found identificteur.
                         if(xml.name() == "id") {
                             xml.readNext(); identificateur=xml.text().toString();
                             qDebug()<<"id="<<identificateur<<"\n";
@@ -472,7 +455,7 @@ void Manager::load() {
                         }
 
                     }
-                    // ...and next...
+
                     xml.readNext();
                 }
                 qDebug()<<"ajout note "<<identificateur<<"\n";
@@ -492,11 +475,8 @@ void Manager::load() {
                 QString etat;
                 QXmlStreamAttributes attributes = xml.attributes();
                 xml.readNext();
-                //We're going to loop over the things because the order might change.
-                //We'll continue the loop until we hit an EndElement named article.
                 while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "Multimedia")) {
                     if(xml.tokenType() == QXmlStreamReader::StartElement) {
-                        // We've found identificteur.
                         if(xml.name() == "id") {
                             xml.readNext(); identificateur=xml.text().toString();
                             qDebug()<<"id="<<identificateur<<"\n";
@@ -539,7 +519,6 @@ void Manager::load() {
                         }
 
                     }
-                    // ...and next...
                     xml.readNext();
                 }
                 qDebug()<<"ajout note "<<identificateur<<"\n";
@@ -553,8 +532,6 @@ void Manager::load() {
                 QString orientee;
                 QXmlStreamAttributes attributes = xml.attributes();
                 xml.readNext();
-                //We're going to loop over the things because the order might change.
-                //We'll continue the loop until we hit an EndElement named article.
                 while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "Relation")) {
                     if(xml.tokenType() == QXmlStreamReader::StartElement) {
                         
@@ -579,8 +556,7 @@ void Manager::load() {
                             QString ID2;
                             QXmlStreamAttributes attributes = xml.attributes();
                             xml.readNext();
-                            //We're going to loop over the things because the order might change.
-                            //We'll continue the loop until we hit an EndElement named article.
+
                             while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "couple")) {
                                 if(xml.tokenType() == QXmlStreamReader::StartElement) {
                                     if(xml.name() == "label") {
@@ -613,7 +589,6 @@ void Manager::load() {
                 xml.readNext(); strNextNoteID=xml.text().toString();
                 nextNoteID = strNextNoteID.toInt();
                 qDebug()<<"nextNoteID="<<nextNoteID<<"\n";
-                //We'll continue the loop until we hit an EndElement named nextNoteID.
                 while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "NextNoteID"))
                     xml.readNext();
                 qDebug()<<"fin ajout nextNoteID\n";
