@@ -4,9 +4,13 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
     Manager& manager = Manager::donneInstance();
 
     //MENU
-    QMenu *menuAfficher = menuBar()->addMenu("&Fichier");
+    QMenu *menuFichier = menuBar()->addMenu("&Fichier");
+        QAction *actionSauvegarder = new QAction("&Sauvegarder");
         QAction *actionQuitter = new QAction("&Quitter");
-        menuAfficher->addAction(actionQuitter);
+        menuFichier->addAction(actionSauvegarder);
+        menuFichier->addAction(actionQuitter);
+        QObject::connect(actionSauvegarder,SIGNAL(triggered()),this,SLOT(sauvegarder()));
+        QObject::connect(actionQuitter,SIGNAL(triggered()),this,SLOT(close()));
     QMenu *menuNotes = menuBar()->addMenu("&Notes");
         QMenu *newNote = menuNotes->addMenu("Nouvelle note");
             QAction *newArticle = new QAction("Article");
@@ -483,4 +487,11 @@ void FenetrePrincipale::restaurerCorbeille(){
     Manager::donneInstance().restaurerCorbeille();
     updateFenetre(notePrincipale->getNote());
     QMessageBox::information(this,"Corbeille","La corbeille a été restaurée");
+}
+
+void FenetrePrincipale::sauvegarder(){
+    try{
+        Manager::donneInstance().save();
+        QMessageBox::information(this,"Sauvegarde","Les changements ont bien été sauvegardés");
+    }catch(NoteException e){QMessageBox::critical(this,"Erreur",e.getInfo());}
 }

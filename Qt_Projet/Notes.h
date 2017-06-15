@@ -63,10 +63,10 @@ public:
     virtual QString getTypeNote() const = 0;
     /** Methodes permettant de passer des attributs en QString */
     QString NoteEtattoQString()const;
-    QString ActueltoQString()const;
+    //QString ActuelletoQString()const;
     /** Methodes permettant de passer des QString en attributs */
     static NoteEtat QStringtoNoteEtat(const QString& str);
-    static bool QStringtoActuel(const QString & str);
+    //static bool QStringtoActuel(const QString & str);
     /**< Commandes setAttributs */
     void setTitre(const QString ti){titre=ti;}
     void setEtat(NoteEtat e){etat=e;}
@@ -78,7 +78,8 @@ public:
     void addRefs() const;
     virtual void addRefsSpecifique() const=0;
     /** Methode virtuelle pure permettant de sauvegarder dans un fichier xml une note particuliere */
-    virtual void saveNote(QXmlStreamWriter& stream)const=0;
+    void saveNote(QXmlStreamWriter& stream)const;
+    virtual void saveNoteSpecifique(QXmlStreamWriter& stream)const=0;
 };
 
 /**< CLASSE ARTICLE FILLE DE NOTE */
@@ -101,7 +102,7 @@ public:
     /**< Methode pour ajouter des references specifique */
     void addRefsSpecifique() const;
     /** Methode permettant de sauvegarder dans un fichier xml une note particuliere */
-    void saveNote(QXmlStreamWriter& stream)const;
+    void saveNoteSpecifique(QXmlStreamWriter& stream)const;
 };
 
 /**< CLASSE TACHE FILLE DE NOTE */
@@ -138,7 +139,7 @@ public:
     /**< Methode pour ajouter des references specifique */
     void addRefsSpecifique() const;
     /** Methode permettant de sauvegarder dans un fichier xml une note particuliere */
-    void saveNote(QXmlStreamWriter& stream)const;
+    void saveNoteSpecifique(QXmlStreamWriter& stream)const;
 };
 
 /**< CLASSE MULTIMEDIA FILLE DE NOTE */
@@ -171,7 +172,7 @@ public:
     /**< Methode pour ajouter des references specifique */
     void addRefsSpecifique() const;
     /** Methode permettant de sauvegarder dans un fichier xml une note particuliere */
-    void saveNote(QXmlStreamWriter& stream)const;
+    void saveNoteSpecifique(QXmlStreamWriter& stream)const;
 };
 
 /**< Je te laisse Anthony ^^ */

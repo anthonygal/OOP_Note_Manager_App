@@ -51,6 +51,7 @@ public slots:
     void updateFenetre();
     void viderCorbeille();
     void restaurerCorbeille();
+    void sauvegarder();
 };
 
 #endif // FENETREPRINCIPALE_H

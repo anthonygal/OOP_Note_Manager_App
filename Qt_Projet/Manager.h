@@ -29,7 +29,7 @@ public:
     /**< Template Method Singleton */
     static Manager& donneInstance();
     static void libereInstance();
-    /**< Iterateur de notes */
+    /**< Iterator de notes */
     class IteratorNotes{
     private:
         friend class Manager;
@@ -43,7 +43,21 @@ public:
         Note& current() const;
     };
     IteratorNotes getIteratorNotes() const{return IteratorNotes(notes, nbNotes);}
-    /**< Iterateur pour relations */
+    /**< ConstIterator de notes */
+    class ConstIteratorNotes{
+    private:
+        friend class Manager;
+        Note** currentN;
+        int remain;
+        ConstIteratorNotes(Note** t, int n):currentN(t),remain(n){}
+    public:
+        int getRemain() const {return remain;}
+        bool isDone() const {return !remain;}
+        void next();
+        const Note& current() const;
+    };
+    ConstIteratorNotes getConstIteratorNotes() const{return ConstIteratorNotes(notes, nbNotes);}
+    /**< Iterator de relations */
     class IteratorRelations{
     private:
         friend class Manager;
@@ -56,7 +70,7 @@ public:
         Relation& current() const;
     };
     IteratorRelations getIteratorRelations() const {return IteratorRelations(relations, nbRelations);}
-    /**< Iterateur constant pour relations  */
+    /**< ConstIterator de relations  */
     class ConstIteratorRelations{
     private:
         friend class Manager;

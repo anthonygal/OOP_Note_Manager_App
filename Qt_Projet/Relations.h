@@ -52,7 +52,7 @@ public:
     /**< Commandes setAttributs */
     void setOrientee(){orientee=true;}
     void setNonOrientee(){orientee=false;}
-    /**< Iterateur de couples */
+    /**< Iterator de couples */
     class IteratorCouples{
     private:
         friend class Relation;
@@ -65,6 +65,19 @@ public:
         Couple& current() const;
     };
     IteratorCouples getIteratorCouples() const {return IteratorCouples(couples, nbCouples);}
+    /**< ConstIterator de couples */
+    class ConstIteratorCouples{
+    private:
+        friend class Relation;
+        Couple** currentC;
+        int remain;
+        ConstIteratorCouples(Couple** t, int n): currentC(t), remain(n){}
+    public:
+        bool isDone() const {return !remain;}
+        void next();
+        const Couple& current() const;
+    };
+    ConstIteratorCouples getConstIteratorCouples() const {return ConstIteratorCouples(couples, nbCouples);}
     /**< Methode pour ajouter un couple a la relation */
     void addCouple(unsigned int id1, unsigned int id2, const QString& lab);
     void supprimerCouple(Couple& c);

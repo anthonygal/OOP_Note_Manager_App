@@ -3,7 +3,7 @@
 
 // RELATIONS ENTRE NOTES
 
-/**< TEMPLATE METHOD ITERATOR DANS LA CLASSE RELATION POUR LES COUPLES */
+/**< Iterator de couples */
 
 void Relation::IteratorCouples::next(){
     if(isDone()) throw NoteException("\nnext() sur un IteratorCouple fini !\n");
@@ -12,6 +12,19 @@ void Relation::IteratorCouples::next(){
 }
 
 Couple& Relation::IteratorCouples::current() const{
+    if(isDone()) throw NoteException("\ncurrent() sur un IteratorCouple fini !\n");
+    return **currentC;
+}
+
+/**< ConstIterator de couples */
+
+void Relation::ConstIteratorCouples::next(){
+    if(isDone()) throw NoteException("\nnext() sur un ConstIteratorCouple fini !\n");
+    remain--;
+    currentC++;
+}
+
+const Couple& Relation::ConstIteratorCouples::current() const{
     if(isDone()) throw NoteException("\ncurrent() sur un IteratorCouple fini !\n");
     return **currentC;
 }
@@ -65,13 +78,13 @@ void Reference::libereInstance(){
     instanceUnique=nullptr;
 }
 
-void Relation::saveRelation(QXmlStreamWriter& stream)const{
-    stream.writeStartElement("relations");
+void Relation::saveRelation(QXmlStreamWriter& stream) const {
+    stream.writeStartElement("Relation");
     stream.writeTextElement("titre", titre);
     stream.writeTextElement("description",description);
     stream.writeTextElement("orientee", Manager::booltoQString(orientee));
-    for(unsigned int j=0; j<nbCouples;j++){
-        couples[j]->saveCouple(stream);
+    for(ConstIteratorCouples it=getConstIteratorCouples(); !it.isDone(); it.next()){
+        it.current().saveCouple(stream);
     }
     stream.writeEndElement();
 }

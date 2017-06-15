@@ -15,7 +15,10 @@ int main(int argc, char* argv[])
     //m.setFilename(fichier);
 
     m.setFilename("notes2.xml");
-    m.load();
+    try{
+        m.load();
+    }catch(NoteException e){qDebug()<<e.getInfo()<<"\n";}
+
 
     FenetrePrincipale& fenetre = FenetrePrincipale::donneInstance();
     fenetre.show();
