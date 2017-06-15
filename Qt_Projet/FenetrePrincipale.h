@@ -11,7 +11,12 @@ class QNote;
 
 class FenetrePrincipale : public QMainWindow{
     Q_OBJECT
+    static FenetrePrincipale* instanceUnique;
+
     QDockWidget* leftDockWidget;
+        QScrollArea *scrollAreaActives;
+        QScrollArea *scrollTachesTriees;
+        QScrollArea *scrollAreaArchivees;
 
     QNote *notePrincipale;
     QScrollArea *autresVersions;
@@ -20,18 +25,32 @@ class FenetrePrincipale : public QMainWindow{
         QScrollArea *scrollRelAsc;
         QScrollArea *scrollRelDesc;
 
-public:
     explicit FenetrePrincipale(QWidget *parent = nullptr);
+    ~FenetrePrincipale();
+public:
+    /**< Template Method Singleton */
+    static FenetrePrincipale& donneInstance();
+    static void libereInstance();
+
+    void updateScrollAreaActives();
+    void updateTachesTriees();
+    void updateScrollAreaArchivees();
     void updateNotePrincipale(Note& n);
+    void updateNotePrincipale();
     void updateAutresVersions(Note& n);
+    void updateAutresVersions();
     void updateScrollRelAsc(Note& n);
+    void updateScrollRelAsc();
     void updateScrollRelDesc(Note& n);
+    void updateScrollRelDesc();
 
 signals:
 
 public slots:
-    void changerNotePrincipale(Note& n);
-
+    void updateFenetre(Note& n);
+    void updateFenetre();
+    void viderCorbeille();
+    void restaurerCorbeille();
 };
 
 #endif // FENETREPRINCIPALE_H

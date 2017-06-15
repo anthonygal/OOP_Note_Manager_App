@@ -57,9 +57,6 @@ ArticleEditeur::ArticleEditeur(Article& a, QWidget* parent) : NoteEditeur(a,pare
     setLayout(layer);
 
     QObject::connect(texte, SIGNAL(textChanged()), this, SLOT(activerEnregistrer()));
-//    QObject::connect(titre, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
-//    QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
-//    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 
@@ -97,13 +94,10 @@ TacheEditeur::TacheEditeur(Tache& t, QWidget* parent) : NoteEditeur(t,parent), t
 
     setLayout(layer);
 
-//    QObject::connect(titre, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
     QObject::connect(statut, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
     QObject::connect(priorite, SIGNAL(valueChanged(int)), this, SLOT(activerEnregistrer()));
     QObject::connect(action, SIGNAL(textChanged()), this, SLOT(activerEnregistrer()));
     QObject::connect(echeance, SIGNAL(selectionChanged()), this, SLOT(activerEnregistrer()));
-//    QObject::connect(enregistrer,SIGNAL(clicked()),this, SLOT(enregistrerNote()));
-//    QObject::connect(annuler, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 
@@ -112,7 +106,6 @@ MultimediaEditeur::MultimediaEditeur(Multimedia& m, QWidget* parent) : NoteEdite
     descLab =new QLabel ("Description",this);
     desc= new QTextEdit(this); desc->setText(multimedia.getDescription());
 
-    //typeLab = new QLabel ("Type",this);
     type = new QGroupBox("Type de Multimedia", this);
         Image = new QRadioButton("Image");
         Audio = new QRadioButton("Audio");
@@ -167,6 +160,7 @@ void ArticleEditeur::enregistrerNote(){
     m.ajouterNote(*a);
     QMessageBox::information(this,"Sauvegarde","Votre Article a bien été enregistré");
     close();
+    FenetrePrincipale::donneInstance().updateFenetre(*a);
 }
 
 void TacheEditeur::enregistrerNote(){
@@ -182,6 +176,7 @@ void TacheEditeur::enregistrerNote(){
     m.ajouterNote(*t);
     QMessageBox::information(this,"Sauvegarde","Votre Tache a bien été enregistrée");
     close();
+    FenetrePrincipale::donneInstance().updateFenetre(*t);
 }
 
 void MultimediaEditeur::enregistrerNote(){
@@ -199,9 +194,9 @@ void MultimediaEditeur::enregistrerNote(){
     ma.ajouterNote(*m);
     QMessageBox::information(this,"Sauvegarde","Votre Multimedia a bien été enregistré");
     close();
+    FenetrePrincipale::donneInstance().updateFenetre(*m);
 }
 
 void NoteEditeur::activerEnregistrer() {
     enregistrer->setEnabled(true);
-    //isSaved=false;
 }

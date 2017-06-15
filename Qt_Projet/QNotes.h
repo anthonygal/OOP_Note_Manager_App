@@ -10,9 +10,8 @@ class FenetrePrincipale;
 class QNoteReduite : public QPushButton{
     Q_OBJECT
     Note& note;
-    FenetrePrincipale* fenetre;
 public:
-    explicit QNoteReduite(Note& n, FenetrePrincipale* f, QWidget* parent = nullptr);
+    explicit QNoteReduite(Note& n, QWidget* parent = nullptr);
     Note& getNote() const {return note;}
     unsigned long getID() const {return note.getID();}
     QString getTitre() const {return note.getTitre();}
@@ -24,7 +23,7 @@ public slots:
 };
 
 
-class QNote : public QWidget{
+class QNote : public QFrame{
     Q_OBJECT
     Note& note;
 public:
@@ -42,6 +41,8 @@ signals:
 public slots:
    void editer();
    void supprimer();
+   void restaurerVersion();
+   void restaurerNote();
 };
 
 #endif // QNOTES_H
