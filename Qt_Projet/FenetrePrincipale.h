@@ -8,8 +8,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-class QNote;
-
 class FenetrePrincipale : public QMainWindow{
     Q_OBJECT
     static FenetrePrincipale* instanceUnique;
@@ -19,25 +17,18 @@ class FenetrePrincipale : public QMainWindow{
         QScrollArea *scrollTachesTriees;
         QScrollArea *scrollAreaArchivees;
 
-    QNote *notePrincipale;
+    QWidget *notePrincipale;
     QScrollArea *autresVersions;
-    QWidget* zoneCentrale;
-    QVBoxLayout* centralLayout;
+    //QWidget* zoneCentrale;
+    //QVBoxLayout* centralLayout;
 
     QDockWidget* rightDockWidget;
         QScrollArea *scrollRelAsc;
         QScrollArea *scrollRelDesc;
 
     explicit FenetrePrincipale(QWidget *parent = nullptr);
-    ~FenetrePrincipale();
 public:
-     QDockWidget* getleftDockWidget(){return leftDockWidget;}
-     QNote* getnotePrincipale() {return notePrincipale;}
-     QDockWidget* getrightDockWidget(){return getrightDockWidget();}
-     QVBoxLayout* getcentralLayout(){return centralLayout;}
-     QScrollArea* getautresVersions() {return autresVersions;}
-     QWidget* getzoneCentrale() {return zoneCentrale;}
-    /**< Template Method Singleton */
+    /* Template Method Singleton */
     static FenetrePrincipale& donneInstance();
     static void libereInstance();
 
@@ -52,21 +43,21 @@ public:
     void updateScrollRelAsc();
     void updateScrollRelDesc(Note& n);
     void updateScrollRelDesc();
-    
-    void reaffichageNote();
 signals:
 
 public slots:
-
-  //  void changerNotePrincipale(Note& n);
-    void editRelation();
-    void createRelation();
-
+    void reaffichageNote();
     void updateFenetre(Note& n);
     void updateFenetre();
+    void sauvegarder();
+    void newArticle();
+    void newTache();
+    void newMultimedia();
+    void voirRelations();
+    void editRelation();
+    void createRelation();
     void viderCorbeille();
     void restaurerCorbeille();
-
 };
 
 #endif // FENETREPRINCIPALE_H

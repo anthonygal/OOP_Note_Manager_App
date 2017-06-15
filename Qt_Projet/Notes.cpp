@@ -2,7 +2,7 @@
 #include "Manager.h"
 #include "NoteEditeur.h"
 
-/**< CONSTRUCTEUR DE RECOPIE DE LA CLASS NOTE */
+/* CONSTRUCTEUR DE RECOPIE DE LA CLASS NOTE */
 
 Note::Note(Note& n){
     ID = n.ID;
@@ -14,7 +14,7 @@ Note::Note(Note& n){
     n.setAncienne();
 }
 
-/**< DEMANDES D'EDITION DES DIFFERENTS NOTES */
+/* DEMANDES D'EDITION DES DIFFERENTS NOTES */
 
 void Article::edit(){
     ArticleEditeur *editeur = new ArticleEditeur(*this);
@@ -33,26 +33,23 @@ void Multimedia::edit(){
 
 //changer la boucle for
 
-void Article::saveNote(QXmlStreamWriter& stream)const{
-    stream.writeStartElement("article");
+void Note::saveNote(QXmlStreamWriter& stream) const {
+    stream.writeStartElement(getTypeNote());
     stream.writeTextElement("id",QString::number(getID()));
     stream.writeTextElement("datecrea",getDateCrea().toString(formatDateTime));
     stream.writeTextElement("datemodif",getDateModif().toString(formatDateTime));
     stream.writeTextElement("etat",NoteEtattoQString());
-    stream.writeTextElement("actuel",ActueltoQString());
+    stream.writeTextElement("actuelle",Manager::booltoQString(actuelle));
     stream.writeTextElement("titre",getTitre());
+    saveNoteSpecifique(stream);
+}
+
+void Article::saveNoteSpecifique(QXmlStreamWriter& stream)const{
     stream.writeTextElement("texte",getTexte());
     stream.writeEndElement();
 }
 
-void Tache::saveNote(QXmlStreamWriter& stream)const{
-    stream.writeStartElement("tache");
-    stream.writeTextElement("id",QString::number(getID()));
-    stream.writeTextElement("datecrea",getDateCrea().toString(formatDateTime));
-    stream.writeTextElement("datemodif",getDateModif().toString(formatDateTime));
-    stream.writeTextElement("etat",NoteEtattoQString());
-    stream.writeTextElement("actuel",ActueltoQString());
-    stream.writeTextElement("titre",getTitre());
+void Tache::saveNoteSpecifique(QXmlStreamWriter& stream)const{
     stream.writeTextElement("action",getAction());
     stream.writeTextElement("priorite",QString::number(getPriorite()));
     stream.writeTextElement("echeance",getEcheance().toString(formatDate));
@@ -60,14 +57,7 @@ void Tache::saveNote(QXmlStreamWriter& stream)const{
     stream.writeEndElement();
 }
 
-void Multimedia::saveNote(QXmlStreamWriter& stream)const{
-    stream.writeStartElement("multimedia");
-    stream.writeTextElement("id",QString::number(getID()));
-    stream.writeTextElement("datecrea",getDateCrea().toString(formatDateTime));
-    stream.writeTextElement("datemodif",getDateModif().toString(formatDateTime));
-    stream.writeTextElement("etat",NoteEtattoQString());
-    stream.writeTextElement("actuel",ActueltoQString());
-    stream.writeTextElement("titre",getTitre());
+void Multimedia::saveNoteSpecifique(QXmlStreamWriter& stream)const{
     stream.writeTextElement("adressefichier",getAdresseFichier());
     stream.writeTextElement("type",TypeMultimediatoQString());
     stream.writeTextElement("description",getDescription());
@@ -101,13 +91,6 @@ QString Multimedia::TypeMultimediatoQString() const{
         return str;
 }
 
-QString Note::ActueltoQString()const{
-    QString str="";
-    if (actuelle==true){str="Actuelle";}
-    else{str="Ancienne";}
-    return str;
-}
-
 NoteEtat Note::QStringtoNoteEtat(const QString& str){
     if (str=="active") return active;
     else if (str=="archivee") return archivee;
@@ -118,18 +101,12 @@ TacheStatut Tache::QStringtoTacheStatut(const QString & str){
     if (str=="attente") return attente;
     else if (str=="terminee") return terminee;
     else return encours;
-
  }
 
 TypeMultimedia Multimedia::QStringtoTypeMultimedia(const QString & str){
     if (str=="video") return video;
     if (str=="audio") return audio;
     else return image;
-  }
-
-bool Note::QStringtoActuel(const QString & str){
-    if (str=="true") return true;
-    else return false;
 }
 
 // Ajout de toutes les references contenues dans les champs de texte d'une notes avec Template Method
@@ -246,24 +223,3 @@ int getPosition(const QString& s, int p){
     }
     else return -1;
 }
-
-/*
-int getPosition(const std::string s, int p){
-    int i=s.find("ref{", p);
-    if (i==p) return 0;
-    else {
-        i+=4;
-        char c=s[i];
-        if (!isdigit(c)) {return 0;}
-        else{
-            while (isdigit(c)){
-                i++;
-                c=s[i];
-            }
-            if (c=='}') return i;
-            else return 0;
-        }
-    }
-
-}
-*/

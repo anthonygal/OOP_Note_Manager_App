@@ -7,7 +7,7 @@ NoteEditeur::NoteEditeur(Note& n, QWidget* parent):QWidget(parent), note(n)
 {
     layer = new QVBoxLayout;
         IDLayout = new QHBoxLayout;
-            IDLab= new QLabel("ID :");
+            IDLab = new QLabel("ID :");
             ID = new QLineEdit(QString::number(n.getID())); ID->setDisabled(true);
         titreLayout = new QHBoxLayout;
             titreLab = new  QLabel("Titre :");
@@ -46,11 +46,10 @@ NoteEditeur::NoteEditeur(Note& n, QWidget* parent):QWidget(parent), note(n)
 ArticleEditeur::ArticleEditeur(Article& a, QWidget* parent) : NoteEditeur(a,parent), article(a)
 {
     texteLayout = new QHBoxLayout;
-        texteLab = new QLabel("Texte", this);
-        texte = new QTextEdit(this);
-            texte->setText(article.getTexte());
-        texteLayout->addWidget(texteLab);
-        texteLayout->addWidget(texte);
+        texteLab = new QLabel("Texte");
+        texte = new QTextEdit; texte->setText(article.getTexte());
+    texteLayout->addWidget(texteLab);
+    texteLayout->addWidget(texte);
 
     layer->addLayout(texteLayout);
     layer->addLayout(boutonLayout);
@@ -63,26 +62,26 @@ ArticleEditeur::ArticleEditeur(Article& a, QWidget* parent) : NoteEditeur(a,pare
 TacheEditeur::TacheEditeur(Tache& t, QWidget* parent) : NoteEditeur(t,parent), tache(t)
 {
     actionLayout = new QHBoxLayout;
-        actionLab =new QLabel ("Action",this);
-        action= new QTextEdit(this);  action->setText(tache.getAction());
+        actionLab = new QLabel ("Action");
+        action = new QTextEdit;  action->setText(tache.getAction());
     actionLayout->addWidget(actionLab);
     actionLayout->addWidget(action);
 
     statutLayout = new QHBoxLayout;
-        statutLab = new QLabel ("Statut",this);
-        statut = new QLineEdit(this); statut->setText(tache.TacheStatuttoQString());
+        statutLab = new QLabel ("Statut");
+        statut = new QLineEdit; statut->setText(tache.TacheStatuttoQString());
     statutLayout->addWidget(statutLab);
     statutLayout->addWidget(statut);
 
     prioriteLayout = new QHBoxLayout;
-        prioriteLab = new QLabel ("Priorite", this);
-        priorite = new QSpinBox(this); priorite->setValue(tache.getPriorite()); priorite->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+        prioriteLab = new QLabel ("Priorite");
+        priorite = new QSpinBox; priorite->setValue(tache.getPriorite()); priorite->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     prioriteLayout->addWidget(prioriteLab);
     prioriteLayout->addWidget(priorite);
 
     echeanceLayout = new QHBoxLayout;
-        echeanceLab = new QLabel ("Echeance", this);
-        echeance =new QCalendarWidget(this); echeance->setSelectedDate(tache.getEcheance());
+        echeanceLab = new QLabel ("Echeance");
+        echeance = new QCalendarWidget; echeance->setSelectedDate(tache.getEcheance());
     echeanceLayout->addWidget(echeanceLab);
     echeanceLayout->addWidget(echeance);
 
@@ -101,12 +100,16 @@ TacheEditeur::TacheEditeur(Tache& t, QWidget* parent) : NoteEditeur(t,parent), t
 }
 
 
-MultimediaEditeur::MultimediaEditeur(Multimedia& m, QWidget* parent) : NoteEditeur(m,parent), multimedia(m) {
+MultimediaEditeur::MultimediaEditeur(Multimedia& m, QWidget* parent) : NoteEditeur(m,parent), multimedia(m)
+{
+    descLayout = new QHBoxLayout;
+        descLab = new QLabel ("Description");
+        desc = new QTextEdit; desc->setText(multimedia.getDescription());
+    descLayout->addWidget(descLab);
+    descLayout->addWidget(desc);
 
-    descLab =new QLabel ("Description",this);
-    desc= new QTextEdit(this); desc->setText(multimedia.getDescription());
-
-    type = new QGroupBox("Type de Multimedia", this);
+    type = new QGroupBox("Type de Multimedia");
+    hbox = new QHBoxLayout;
         Image = new QRadioButton("Image");
         Audio = new QRadioButton("Audio");
         Video = new QRadioButton("Video");
@@ -115,32 +118,23 @@ MultimediaEditeur::MultimediaEditeur(Multimedia& m, QWidget* parent) : NoteEdite
         else if (multimedia.getType()==audio) Audio->setChecked(true);
         else Video->setChecked(true);
 
-        hbox = new QHBoxLayout;
-        hbox->addWidget(Image);
-        hbox->addWidget(Audio);
-        hbox->addWidget(Video);
+    hbox->addWidget(Image);
+    hbox->addWidget(Audio);
+    hbox->addWidget(Video);
     type->setLayout(hbox);
 
-    adresseLab = new QLabel ("Adresse Fichier",this);
-    adresse= new QLineEdit(this); adresse->setText(multimedia.getAdresseFichier());
-
-    descLayout = new QHBoxLayout;
-    typeLayout = new QHBoxLayout;
     adresseLayout = new QHBoxLayout;
-
-    descLayout->addWidget(descLab);
-    descLayout->addWidget(desc);
-    typeLayout->addWidget(type);
+        adresseLab = new QLabel ("Adresse Fichier");
+        adresse = new QLineEdit; adresse->setText(multimedia.getAdresseFichier());
     adresseLayout->addWidget(adresseLab);
     adresseLayout->addWidget(adresse);
 
     layer->addLayout(descLayout);
-    layer->addLayout(typeLayout);
+    layer->addWidget(type);
     layer->addLayout(adresseLayout);
     layer->addLayout(boutonLayout);
 
     setLayout(layer);
-
 
     QObject::connect(adresse, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
     QObject::connect(desc, SIGNAL(textChanged()), this, SLOT(activerEnregistrer()));
@@ -158,9 +152,9 @@ void ArticleEditeur::enregistrerNote(){
     a->setTitre(titre->text());
     a->setTexte(texte->toPlainText());   
     m.ajouterNote(*a);
-    QMessageBox::information(this,"Sauvegarde","Votre Article a bien été enregistré");
     close();
     FenetrePrincipale::donneInstance().updateFenetre(*a);
+    QMessageBox::information(this,"Sauvegarde","Votre Article a bien été enregistré");
 }
 
 void TacheEditeur::enregistrerNote(){
@@ -174,9 +168,9 @@ void TacheEditeur::enregistrerNote(){
     t->setEcheance(echeance->selectedDate());
     t->setPriorite(priorite->value());
     m.ajouterNote(*t);
-    QMessageBox::information(this,"Sauvegarde","Votre Tache a bien été enregistrée");
     close();
     FenetrePrincipale::donneInstance().updateFenetre(*t);
+    QMessageBox::information(this,"Sauvegarde","Votre Tache a bien été enregistrée");
 }
 
 void MultimediaEditeur::enregistrerNote(){
@@ -192,9 +186,9 @@ void MultimediaEditeur::enregistrerNote(){
     else if(Audio->isChecked()) m->setType(audio);
     else m->setType(video);
     ma.ajouterNote(*m);
-    QMessageBox::information(this,"Sauvegarde","Votre Multimedia a bien été enregistré");
     close();
     FenetrePrincipale::donneInstance().updateFenetre(*m);
+    QMessageBox::information(this,"Sauvegarde","Votre Multimedia a bien été enregistré");
 }
 
 void NoteEditeur::activerEnregistrer() {

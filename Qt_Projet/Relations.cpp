@@ -3,7 +3,7 @@
 
 // RELATIONS ENTRE NOTES
 
-/**< TEMPLATE METHOD ITERATOR DANS LA CLASSE RELATION POUR LES COUPLES */
+/* Iterator de couples */
 
 void Relation::IteratorCouples::next(){
     if(isDone()) throw NoteException("\nnext() sur un IteratorCouple fini !\n");
@@ -12,6 +12,19 @@ void Relation::IteratorCouples::next(){
 }
 
 Couple& Relation::IteratorCouples::current() const{
+    if(isDone()) throw NoteException("\ncurrent() sur un IteratorCouple fini !\n");
+    return **currentC;
+}
+
+/* ConstIterator de couples */
+
+void Relation::ConstIteratorCouples::next(){
+    if(isDone()) throw NoteException("\nnext() sur un ConstIteratorCouple fini !\n");
+    remain--;
+    currentC++;
+}
+
+const Couple& Relation::ConstIteratorCouples::current() const{
     if(isDone()) throw NoteException("\ncurrent() sur un IteratorCouple fini !\n");
     return **currentC;
 }
@@ -36,7 +49,6 @@ void Relation::addCouple(unsigned int id1, unsigned int id2, const QString &lab)
     couples[nbCouples++]= new Couple(id1,id2,lab);
 }
 
-//Passer en iterateur?
 void Relation::supprimerCouple(Couple& c){
     for(unsigned int i=0; i<nbCouples; i++){
         if(couples[i]==&c){     //On cherche si le couple existe bien dans la relation
@@ -65,13 +77,13 @@ void Reference::libereInstance(){
     instanceUnique=nullptr;
 }
 
-void Relation::saveRelation(QXmlStreamWriter& stream)const{
-    stream.writeStartElement("relations");
+void Relation::saveRelation(QXmlStreamWriter& stream) const {
+    stream.writeStartElement("Relation");
     stream.writeTextElement("titre", titre);
     stream.writeTextElement("description",description);
     stream.writeTextElement("orientee", Manager::booltoQString(orientee));
-    for(unsigned int j=0; j<nbCouples;j++){
-        couples[j]->saveCouple(stream);
+    for(ConstIteratorCouples it=getConstIteratorCouples(); !it.isDone(); it.next()){
+        it.current().saveCouple(stream);
     }
     stream.writeEndElement();
 }
@@ -83,14 +95,4 @@ void Couple::saveCouple(QXmlStreamWriter& stream) const{
     stream.writeTextElement("ID2",QString::number(ID2));
     stream.writeEndElement();
 }
-
-//void Reference::saveReference(QXmlStreamWriter& stream){
-//    stream.writeStartElement("references");
-//    stream.writeTextElement("titre", getTitre());
-//    stream.writeTextElement("description",getDescription());
-//    stream.writeTextElement("orientee",orienteetoQString());
-//    for(unsigned int j=0; j<nbCouples;j++){
-//        couples[j]->savecouple(stream);
-//    }
-//}
 
