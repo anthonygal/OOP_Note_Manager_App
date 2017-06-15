@@ -138,12 +138,13 @@ void Note::addRefs() const {
     Manager& m = Manager::donneInstance();
     long ID=findRefID(this->getTitre(), 0);
     int pos=0;
-    while(ID!=-1){
-        Note* n=m.getNoteID(ID);
-        if (n!=nullptr) m.addCoupleReference(this->getID(),n->getID(),"ref");
-        else throw NoteException("reference à une ID qui ne correspond à aucune Note");
-        pos+=getPosition(this->getTitre(), pos);
-        ID=findRefID(this->getTitre(), pos);
+   while(ID!=-1){
+     Note* n=m.getNoteID(ID);
+     if (n!=nullptr) m.addCoupleReference(this->getID(),n->getID(),"ref");
+     else throw NoteException("reference à une ID qui ne correspond à aucune Note");
+     pos=getPosition(this->getTitre(), pos);
+     ID=findRefID(this->getTitre(), pos);
+
     }
     addRefsSpecifique();
 }
@@ -194,62 +195,41 @@ void Multimedia::addRefsSpecifique() const {
 long findRefID(const QString& s, int p){
     int l=s.length();
     QStringRef r=QStringRef(&s,p,l-p);
-    int i=s.indexOf("\ref{")+4;
+    int i=r.indexOf("\ref{");
+    if (i!=-1) i+=4;
     int j=i;
     if (i!=-1){
         QChar c;
         c=r.at(i);
         if (!c.isDigit()) return -1;
         int idlength=0;
-        while (c!='}' && i<l-p) {
+        while (c!='}' ) {
             idlength++;
+
             if (!c.isDigit()) return -1;
             i++;
             c=r.at(i);
         }
-        if(i==l-p) return -1;
-        else{
+        //if(i==l-p) return -1;
+        //else{
             QString f=r.toString();
             QStringRef x=QStringRef(&f,j,idlength);
             int id=x.toInt();
             return id;
-        }
+        //}
     }
-    return -1;
+    else return -1;
 }
 
 
-/*
-unsigned long findRefID(const std::string& s, int p){
-
-    unsigned long i=s.find("ref{", p);
-
-    if(i==p) return 0;
-    else {
-        i+=4;
-        char c=s[i];
-        if (!isdigit(c)) {return 0;}
-        else{
-            std::stringstream t;
-            while (isdigit(c)){
-                t<<c;
-                i++;
-                c=s[i];
-            }
-            unsigned long id;
-            t>>id;
-            if (c=='}') return id;
-            else return 0;
-        }
-    }
-}*/
 
 //Fonction qui renvoie la position du "}" fermant la reference à partir de la position p passé en argument si une reference existe dans le string s, sinon renvoie 0
 
 int getPosition(const QString& s, int p){
     int l=s.length();
     QStringRef r=QStringRef(&s,p,l-p);
-    int i=s.indexOf("\ref{")+4;
+    int i=r.indexOf("\ref{");
+    if(i!=-1)i+=5;
     int j=i;
     if (i!=-1){
         QChar c=r.at(i);
@@ -261,10 +241,10 @@ int getPosition(const QString& s, int p){
             i++;
             c=r.at(i);
         }
-        if(i==l-p) return -1;
-        else return p+j+idlength+3;
+        //if(i==l-p) return -1;
+        return p+j+idlength;
     }
-    return -1;
+    else return -1;
 }
 
 /*

@@ -6,6 +6,18 @@
 #include <QFileDialog>
 #include <QApplication>
 
+#include <QString>
+#include <string>
+#include <iostream>
+
+int main()
+{
+        std::cout << "Hello world!" << std::endl;
+        return 0;
+}
+
+
+
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
@@ -20,9 +32,12 @@ int main(int argc, char* argv[])
     FenetrePrincipale& fenetre = FenetrePrincipale::donneInstance();
     fenetre.show();
 
-//    Article a(1,"titre","texte");
-//    ArticleEditeur* editeur = new ArticleEditeur(a);
-//    editeur->show();
+
+
+
+
+
+
 
     return app.exec();
 }

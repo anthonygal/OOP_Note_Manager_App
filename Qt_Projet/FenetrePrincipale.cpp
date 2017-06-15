@@ -11,8 +11,7 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
         QMenu *newNote = menuNotes->addMenu("Nouvelle note");
     QMenu *menuRelation = menuBar()->addMenu("&Relation");
         QMenu *newRelation = menuRelation->addMenu("&Nouvelle Relation");
-    QMenu *menufonction = menuBar()->addMenu("&Fonctions");
-        QMenu *newRelation = menuRelation->addMenu("&Nouvelle Relation");
+
 
             QAction *newArticle = new QAction("Article");
             QAction *newTache = new QAction("Tache");
@@ -35,6 +34,12 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
             newRelation->addAction(newCouple);
             QObject::connect(newCouple, SIGNAL(triggered()), this, SLOT(editRelation()));
             QObject::connect(newRel,SIGNAL(triggered()), this, SLOT(createRelation()) );
+
+      QMenu *menufonction = menuBar()->addMenu("&Fonctionnalités");
+        QMenu *newfonction = menufonction->addMenu("&Fonctions");
+        QAction *annuler = new QAction("Annuler");
+        QAction *retablir = new QAction("Rétablir");
+
             
     //DOCK WIDGET GAUCHE
     leftDockWidget = new QDockWidget("Toutes les notes");
