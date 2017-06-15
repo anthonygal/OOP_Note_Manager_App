@@ -18,7 +18,8 @@ class FenetrePrincipale : public QMainWindow{
         QScrollArea *scrollTachesTriees;
         QScrollArea *scrollAreaArchivees;
 
-    QNote *notePrincipale;
+    //QNote *notePrincipale;
+    QWidget *notePrincipale;
     QScrollArea *autresVersions;
 
     QDockWidget* rightDockWidget;
@@ -52,6 +53,9 @@ public slots:
     void viderCorbeille();
     void restaurerCorbeille();
     void sauvegarder();
+    void newArticle();
+    void newTache();
+    void newMultimedia();
 };
 
 #endif // FENETREPRINCIPALE_H

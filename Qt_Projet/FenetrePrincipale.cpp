@@ -91,28 +91,31 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
         QLabel *notePrincipaleLab = new QLabel("Note Principale :");
     centralLayout->addWidget(notePrincipaleLab);
 
-        Manager::IteratorNotes it=manager.getIteratorNotes();
-        while(!it.isDone() && it.current().getEtat() != active && !it.current().isActuelle())
-            it.next();
-        notePrincipale = new QNote(it.current());
+//        Manager::IteratorNotes it=manager.getIteratorNotes();
+//        while(!it.isDone() && it.current().getEtat() != active && !it.current().isActuelle())
+//            it.next();
+//        notePrincipale = new QNote(it.current());
+        notePrincipale = new QLabel("Aucune note selectionnée");
     centralLayout->addWidget(notePrincipale);
 
         QLabel *autresVersionsLab = new QLabel("Les autres versions de la note :");
     centralLayout->addWidget(autresVersionsLab);
 
         autresVersions = new QScrollArea;
-            QWidget *autresVerWidget = new QWidget;
-            QVBoxLayout *autresVerLayout = new QVBoxLayout;
-                for(Manager::IteratorNotes it2=manager.getIteratorNotes();!it2.isDone();it2.next()){
-                    if(it2.current().getID() == it.current().getID() && it2.current().getDateModif() != it.current().getDateModif()){
-                        QHBoxLayout *hlayout = new QHBoxLayout;
-                            hlayout->addWidget(new QLabel(it2.current().getDateModif().toString(formatDateTime)));
-                            hlayout->addWidget(new QNoteReduite(it2.current()));
-                        autresVerLayout->addLayout(hlayout);
-                    }
-                }
-            autresVerWidget->setLayout(autresVerLayout);
-        autresVersions->setWidget(autresVerWidget);
+//            QWidget *autresVerWidget = new QWidget;
+//            QVBoxLayout *autresVerLayout = new QVBoxLayout;
+//                for(Manager::IteratorNotes it2=manager.getIteratorNotes();!it2.isDone();it2.next()){
+//                    if(it2.current().getID() == it.current().getID() && it2.current().getDateModif() != it.current().getDateModif()){
+//                        QHBoxLayout *hlayout = new QHBoxLayout;
+//                            hlayout->addWidget(new QLabel(it2.current().getDateModif().toString(formatDateTime)));
+//                            hlayout->addWidget(new QNoteReduite(it2.current()));
+//                        autresVerLayout->addLayout(hlayout);
+//                    }
+//                }
+//            autresVerWidget->setLayout(autresVerLayout);
+//        autresVersions->setWidget(autresVerWidget);
+            QLabel *autresVerWidget = new QLabel("Aucune note selectionnée");
+            autresVersions->setWidget(autresVerWidget);
         autresVersions->setWidgetResizable(true);
     centralLayout->addWidget(autresVersions);
 
@@ -129,7 +132,7 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
         rightLayout->addWidget(labRelAsc);
 
             scrollRelAsc = new QScrollArea;
-                QLabel *relAscWidget = new QLabel("Aucune Relation");
+                QLabel *relAscWidget = new QLabel("Aucune note selectionnée");
 //                QVBoxLayout *relAscLayout = new QVBoxLayout;
 //                //Affiche les references ascendantes
 //                //Donc l' ID de la note principale doit correspondre à l'id2 des couples
@@ -166,7 +169,7 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
     rightLayout->addWidget(labRelDesc);
 
             scrollRelDesc = new QScrollArea;
-                QLabel *relDescWidget = new QLabel("Aucune relation");
+                QLabel *relDescWidget = new QLabel("Aucune note selectionnée");
 //                QVBoxLayout *relDescLayout = new QVBoxLayout;
                 //Affiche les references descendantes
                 //Donc l' ID de la note principale doit correspondre à l'id1 des couples
@@ -283,16 +286,20 @@ void FenetrePrincipale::updateScrollAreaArchivees(){
 }
 
 void FenetrePrincipale::updateNotePrincipale(Note& n){
-    QNote *oldNotePrincipale = notePrincipale;
-    QNote *newNotePrincipale = new QNote(n);
+//    QNote *oldNotePrincipale = notePrincipale;
+//    QNote *newNotePrincipale = new QNote(n);
+    QWidget *oldNotePrincipale = notePrincipale;
+    QWidget *newNotePrincipale = new QNote(n);
     centralWidget()->layout()->replaceWidget(notePrincipale, newNotePrincipale);
     notePrincipale = newNotePrincipale;
     delete oldNotePrincipale;
 }
 
 void FenetrePrincipale::updateNotePrincipale(){
-    QNote *oldNotePrincipale = notePrincipale;
-    QNote *newNotePrincipale = nullptr;
+//    QNote *oldNotePrincipale = notePrincipale;
+//    QNote *newNotePrincipale = nullptr;
+    QWidget *oldNotePrincipale = notePrincipale;
+    QWidget *newNotePrincipale = new QLabel("Aucune note selectionnée");
     centralWidget()->layout()->replaceWidget(notePrincipale, newNotePrincipale);
     notePrincipale = newNotePrincipale;
     delete oldNotePrincipale;
@@ -325,7 +332,7 @@ void FenetrePrincipale::updateAutresVersions(){
     QScrollArea *oldAutreVersions = autresVersions;
 
     QScrollArea *newAutresVersions = new QScrollArea;
-        QLabel *autresVerWidget = new QLabel("Aucune autre version pour cette note");
+        QLabel *autresVerWidget = new QLabel("Aucune note selectionnée");
     newAutresVersions->setWidget(autresVerWidget);
     newAutresVersions->setWidgetResizable(true);
 
@@ -377,15 +384,16 @@ void FenetrePrincipale::updateScrollRelAsc(Note& n){
 }
 
 void FenetrePrincipale::updateScrollRelAsc(){
-    Manager& manager = Manager::donneInstance();
+//    Manager& manager = Manager::donneInstance();
 
     QScrollArea *newScrollRelAsc = new QScrollArea;
-        QWidget *relAscWidget = new QWidget;
-        QVBoxLayout *relAscLayout = new QVBoxLayout;
-        relAscLayout->addWidget(new QLabel(manager.getReference().getTitre()));
-        for(Manager::IteratorRelations itr=manager.getIteratorRelations();!itr.isDone();itr.next())
-            relAscLayout->addWidget(new QLabel(itr.current().getTitre()));
-        relAscWidget->setLayout(relAscLayout);
+        QLabel *relAscWidget = new QLabel("Aucune note selectionnée");
+//        QWidget *relAscWidget = new QWidget;
+//        QVBoxLayout *relAscLayout = new QVBoxLayout;
+//        relAscLayout->addWidget(new QLabel(manager.getReference().getTitre()));
+//        for(Manager::IteratorRelations itr=manager.getIteratorRelations();!itr.isDone();itr.next())
+//            relAscLayout->addWidget(new QLabel(itr.current().getTitre()));
+//        relAscWidget->setLayout(relAscLayout);
     newScrollRelAsc->setWidget(relAscWidget);
     newScrollRelAsc->setWidgetResizable(true);
 
@@ -438,15 +446,16 @@ void FenetrePrincipale::updateScrollRelDesc(Note& n){
 }
 
 void FenetrePrincipale::updateScrollRelDesc(){
-    Manager& manager = Manager::donneInstance();
+//    Manager& manager = Manager::donneInstance();
 
     QScrollArea *newScrollRelDesc = new QScrollArea;
-        QWidget *relDescWidget = new QWidget;
-        QVBoxLayout *relDescLayout = new QVBoxLayout;
-        relDescLayout->addWidget(new QLabel(manager.getReference().getTitre()));
-        for(Manager::IteratorRelations itr=manager.getIteratorRelations();!itr.isDone();itr.next())
-            relDescLayout->addWidget(new QLabel(itr.current().getTitre()));
-        relDescWidget->setLayout(relDescLayout);
+        QLabel *relDescWidget = new QLabel("Aucune note selectionnée");
+//        QWidget *relDescWidget = new QWidget;
+//        QVBoxLayout *relDescLayout = new QVBoxLayout;
+//        relDescLayout->addWidget(new QLabel(manager.getReference().getTitre()));
+//        for(Manager::IteratorRelations itr=manager.getIteratorRelations();!itr.isDone();itr.next())
+//            relDescLayout->addWidget(new QLabel(itr.current().getTitre()));
+//        relDescWidget->setLayout(relDescLayout);
     newScrollRelDesc->setWidget(relDescWidget);
     newScrollRelDesc->setWidgetResizable(true);
 
@@ -485,7 +494,8 @@ void FenetrePrincipale::viderCorbeille(){
 
 void FenetrePrincipale::restaurerCorbeille(){
     Manager::donneInstance().restaurerCorbeille();
-    updateFenetre(notePrincipale->getNote());
+    if(Manager::donneInstance().getNbNotes() == 0) updateFenetre();
+    else updateFenetre(Manager::donneInstance().getIteratorNotes().current());
     QMessageBox::information(this,"Corbeille","La corbeille a été restaurée");
 }
 
