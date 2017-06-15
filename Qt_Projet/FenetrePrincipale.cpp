@@ -1,4 +1,5 @@
 #include "FenetrePrincipale.h"
+#include "NewNote.h"
 
 FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
     Manager& manager = Manager::donneInstance();
@@ -9,8 +10,7 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
         QAction *actionQuitter = new QAction("&Quitter");
         menuFichier->addAction(actionSauvegarder);
         menuFichier->addAction(actionQuitter);
-        QObject::connect(actionSauvegarder,SIGNAL(triggered()),this,SLOT(sauvegarder()));
-        QObject::connect(actionQuitter,SIGNAL(triggered()),this,SLOT(close()));
+
     QMenu *menuNotes = menuBar()->addMenu("&Notes");
         QMenu *newNote = menuNotes->addMenu("Nouvelle note");
             QAction *newArticle = new QAction("Article");
@@ -24,8 +24,14 @@ FenetrePrincipale::FenetrePrincipale(QWidget *parent) : QMainWindow(parent){
         QAction *actionRestaurerCorbeille = new QAction("Restaurer la corbeille");
         menuCorbeille->addAction(actionViderCorbeille);
         menuCorbeille->addAction(actionRestaurerCorbeille);
-        QObject::connect(actionViderCorbeille,SIGNAL(triggered()),this,SLOT(viderCorbeille()));
-        QObject::connect(actionRestaurerCorbeille,SIGNAL(triggered()),this,SLOT(restaurerCorbeille()));
+
+    QObject::connect(actionSauvegarder,SIGNAL(triggered()),this,SLOT(sauvegarder()));
+    QObject::connect(actionQuitter,SIGNAL(triggered()),this,SLOT(close()));
+    QObject::connect(newArticle,SIGNAL(triggered()),this,SLOT(newArticle()));
+    QObject::connect(newTache,SIGNAL(triggered()),this,SLOT(newTache()));
+    QObject::connect(newMultimedia,SIGNAL(triggered()),this,SLOT(newMultimedia()));
+    QObject::connect(actionViderCorbeille,SIGNAL(triggered()),this,SLOT(viderCorbeille()));
+    QObject::connect(actionRestaurerCorbeille,SIGNAL(triggered()),this,SLOT(restaurerCorbeille()));
 
 
     //DOCK WIDGET GAUCHE
@@ -504,4 +510,19 @@ void FenetrePrincipale::sauvegarder(){
         Manager::donneInstance().save();
         QMessageBox::information(this,"Sauvegarde","Les changements ont bien été sauvegardés");
     }catch(NoteException e){QMessageBox::critical(this,"Erreur",e.getInfo());}
+}
+
+void FenetrePrincipale::newArticle(){
+    NewArticle *nouvelleNote = new NewArticle;
+    nouvelleNote->show();
+}
+
+void FenetrePrincipale::newTache(){
+    NewTache *nouvelleNote = new NewTache;
+    nouvelleNote->show();
+}
+
+void FenetrePrincipale::newMultimedia(){
+    NewMultimedia *nouvelleNote = new NewMultimedia;
+    nouvelleNote->show();
 }

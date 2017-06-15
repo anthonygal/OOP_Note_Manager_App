@@ -7,7 +7,9 @@ INPUT(
 ./debug\Notes.o
 ./debug\Manager.o
 ./debug\QNotes.o
+./debug\NewNote.o
 ./debug\moc_NoteEditeur.o
 ./debug\moc_FenetrePrincipale.o
 ./debug\moc_QNotes.o
+./debug\moc_NewNote.o
 );

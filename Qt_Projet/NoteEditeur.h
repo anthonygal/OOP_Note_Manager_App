@@ -10,18 +10,6 @@ class Article;
 class Tache;
 class Multimedia;
 
-//class NewNote : public QWidget{
-//    Q_OBJECT
-//    Note& note;
-//public:
-//    explicit NewNote(Note& n, QWidget *parent = nullptr);
-//signals:
-
-//public slots:
-//   void editNote();
-//   void supprimerNote();
-//};
-
 class NoteEditeur : public QWidget
 {
     Q_OBJECT
@@ -50,7 +38,7 @@ public:
 signals:
 
 public slots:
-    virtual void activerEnregistrer();
+    void activerEnregistrer();
     virtual void enregistrerNote()=0;
 };
 
@@ -60,14 +48,13 @@ class ArticleEditeur : public NoteEditeur {
 private:
     Article& article;
 
-    QTextEdit* texte;
-    QLabel* texteLab;
     QHBoxLayout* texteLayout;
+        QLabel* texteLab;
+        QTextEdit* texte;
 
 public:
     explicit ArticleEditeur(Article& a, QWidget* parent=0);
     ~ArticleEditeur(){}
-
 signals:
 
 public slots:
@@ -80,20 +67,22 @@ class TacheEditeur : public NoteEditeur {
     Q_OBJECT
 private:
     Tache& tache;
-    QTextEdit* action;
-    QLineEdit* statut;
-    QCalendarWidget* echeance;
-    QSpinBox* priorite;
 
     QHBoxLayout* actionLayout;
-    QHBoxLayout* statutLayout;
-    QHBoxLayout* echeanceLayout;
-    QHBoxLayout* prioriteLayout;
+        QLabel* actionLab;
+        QTextEdit* action;
 
-    QLabel* actionLab;
-    QLabel* statutLab;
-    QLabel* echeanceLab;
-    QLabel* prioriteLab;
+    QHBoxLayout* statutLayout;
+        QLabel* statutLab;
+        QLineEdit* statut;
+
+    QHBoxLayout* echeanceLayout;
+        QLabel* echeanceLab;
+        QCalendarWidget* echeance;
+
+    QHBoxLayout* prioriteLayout;
+        QLabel* prioriteLab;
+        QSpinBox* priorite;
 
 public:
     explicit TacheEditeur(Tache& t, QWidget* parent=0);
@@ -102,30 +91,27 @@ signals:
 
 public slots:
     void enregistrerNote();
-
 };
 
 class MultimediaEditeur: public NoteEditeur {
     Q_OBJECT
 private:
     Multimedia& multimedia;
-    QTextEdit* desc;
-    QLineEdit* adresse;
-    QGroupBox* type;
-    QRadioButton* Image;
-    QRadioButton* Audio;
-    QRadioButton* Video;
-
-
-    QLabel* descLab;
-    QLabel* adresseLab;
-    QLabel* typeLab;
-
 
     QHBoxLayout* descLayout;
+        QLabel* descLab;
+        QTextEdit* desc;
+
     QHBoxLayout* adresseLayout;
-    QHBoxLayout* typeLayout;
-    QHBoxLayout *hbox ;
+        QLabel* adresseLab;
+        QLineEdit* adresse;
+
+    QGroupBox* type;
+        QHBoxLayout *hbox ;
+            QLabel* typeLab;
+            QRadioButton* Image;
+            QRadioButton* Audio;
+            QRadioButton* Video;
 
 public:
     explicit MultimediaEditeur(Multimedia& t, QWidget* parent=0);

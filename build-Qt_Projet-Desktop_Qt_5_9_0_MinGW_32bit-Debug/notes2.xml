@@ -65,6 +65,21 @@
         <titre>Avant Propos</titre>
         <texte>Faut toujours bien lire un sujet avant de mmencer.</texte>
     </Article>
+    <Tache>
+        <id>5</id>
+        <datecrea>15/06/2017 19:41:27</datecrea>
+        <datemodif>15/06/2017 19:41:27</datemodif>
+        <etat>active</etat>
+        <actuelle>true</actuelle>
+        <titre>Courses</titre>
+        <action>Acheter :
+-Pates
+-Pesto
+-Parmesan</action>
+        <priorite>0</priorite>
+        <echeance>15/06/2017</echeance>
+        <statut>encours</statut>
+    </Tache>
     <Relation>
         <titre>rel1</titre>
         <description>Description de la rel1</description>
@@ -100,5 +115,5 @@
             <ID2>2</ID2>
         </couple>
     </Relation>
-    <NextNoteID>0</NextNoteID>
+    <NextNoteID>6</NextNoteID>
 </Manager>

@@ -11,8 +11,6 @@
 #include <QtWidgets>
 #include <QFile>
 
-using namespace TIME;
-
 const QString formatDate = "dd/MM/yyyy";
 const QString formatDateTime = "dd/MM/yyyy HH:mm:ss";
 

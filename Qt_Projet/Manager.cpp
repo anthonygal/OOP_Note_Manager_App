@@ -1,12 +1,6 @@
 #include "Manager.h"
 #include "FenetrePrincipale.h"
 
-/*
-void Manager::afficherTout()const{
-    for(ConstIteratorNotes it=getConstIteratorNotes();!it.isDone();it.next()) std::cout<<it.current()<<std::endl;
-}
-*/
-
 /**< TEMPLATE METHOD SINGLETON POUR LA CLASS MANAGER */
 
 Manager* Manager::instanceUnique=nullptr;
@@ -111,31 +105,18 @@ unsigned long Manager::nextNoteID = 0;
 
 void Manager::ajouterNote(Note &n){
     if(nbNotes == nbNotesMax){
-        Note** newtab = new Note* [Manager::nbNotesMax+5];
+        Note** newtab = new Note*[nbNotesMax+5];
         for(unsigned int i=0;i<nbNotes;i++) newtab[i] = notes[i];
         Note** oldtab = notes;
         notes = newtab;
         nbNotesMax += 5;
         delete[] oldtab;
     }
-    notes[nbNotes++] = &n;
-    addRefsFromNote(n);
+    notes[nbNotes++]= &n;
+    //addRefsFromNote(n);
 }
 
-void Manager::newArticle(const QString& ti, const QString& te){
-    Article* a=new Article(nextNoteID++,ti,te);
-    ajouterNote(*a);
-}
-
-void Manager::newTache(const QString& ti, const QString& act, int prio, const QDate& d){
-    Tache* a=new Tache(nextNoteID++,ti,act,prio,d);
-    ajouterNote(*a);
-}
-
-void Manager::newMultimedia(const QString& ti, const QString& adr, const QString& desc, TypeMultimedia ty){
-    Multimedia* a=new Multimedia(nextNoteID++,ti,adr,ty,desc);
-    ajouterNote(*a);
-}
+/**< Methodes d'ajout des differentes notes utilisées dans le load */
 
 void Manager::addArticle(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& te ){
     Article* a=new Article(id,ti,dc,dm,act,e,te);
@@ -150,6 +131,29 @@ void Manager::addTache(const int id, const QString& ti, const QDateTime& dc, con
 void Manager::addMultimedia(const int id, const QString& ti, const QDateTime& dc, const QDateTime& dm, bool act, NoteEtat e,const QString& af, const TypeMultimedia ty,const QString& dec){
     Multimedia* a=new Multimedia(id,ti,dc,dm,act,e,af,ty,dec);
     Manager::ajouterNote(*a);
+}
+
+/**< Methodes d'ajout de nouvelles notes */
+
+Article& Manager::newArticle(const QString& ti, const QString& te){
+    if(ti.isEmpty() || te.isEmpty()) throw NoteException("Titre et Texte ne peuvent être vide !");
+    Article* a=new Article(nextNoteID++,ti,te);
+    ajouterNote(*a);
+    return *a;
+}
+
+Tache& Manager::newTache(const QString& ti, const QString& act, int prio, const QDate& d){
+    if(ti.isEmpty() || act.isEmpty()) throw NoteException("Titre et Action ne peuvent être vide !");
+    Tache* t=new Tache(nextNoteID++,ti,act,prio,d);
+    ajouterNote(*t);
+    return *t;
+}
+
+Multimedia& Manager::newMultimedia(const QString& ti, const QString& adr, const QString& desc, TypeMultimedia ty){
+    if(ti.isEmpty() || adr.isEmpty() || desc.isEmpty()) throw NoteException("Titre, Adresse et Description ne peuvent être vide !");
+    Multimedia* m=new Multimedia(nextNoteID++,ti,adr,ty,desc);
+    ajouterNote(*m);
+    return *m;
 }
 
 /**< METHODES D'AJOUT DE RELATIONS */
@@ -596,6 +600,19 @@ void Manager::load() {
                 }
                 qDebug()<<"fin ajout relation "<<titre<<"\n";
             }
+            if(xml.name() == "NextNoteID") {
+                qDebug()<<"ajout nextNoteID\n";
+                QString strNextNoteID;
+                QXmlStreamAttributes attributes = xml.attributes();
+                xml.readNext(); strNextNoteID=xml.text().toString();
+                nextNoteID = strNextNoteID.toInt();
+                qDebug()<<"nextNoteID="<<nextNoteID<<"\n";
+                //We'll continue the loop until we hit an EndElement named nextNoteID.
+                while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "NextNoteID"))
+                    xml.readNext();
+                qDebug()<<"fin ajout nextNoteID\n";
+            }
+
 //            if(xml.name() == "references") {
 //                qDebug()<<"new relation\n";
 //                QString titre;

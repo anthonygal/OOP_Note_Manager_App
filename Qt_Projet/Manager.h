@@ -92,9 +92,9 @@ public:
     /**< Methode pour ajouter une Note, utilisee dans les methodes de creation et d'edition d'article/tache/multimedia */
     void ajouterNote(Note& n);
     /**< Methodes pour ajouter un Article/Tache/Multimedia au tableau de notes */
-    void newArticle(const QString& ti, const QString& te=""); /**< creation d'un article */
-    void newTache(const QString& ti, const QString& act, int prio=0, const QDate& d=QDate()); /**< creation d'une tache */
-    void newMultimedia(const QString& ti, const QString& adr, const QString& desc="", TypeMultimedia ty=image); /**< creation d'un multimedia */
+    Article& newArticle(const QString& ti, const QString& te=""); /**< creation d'un article */
+    Tache& newTache(const QString& ti, const QString& act, int prio=0, const QDate& d=QDate()); /**< creation d'une tache */
+    Multimedia &newMultimedia(const QString& ti, const QString& adr, const QString& desc="", TypeMultimedia ty=image); /**< creation d'un multimedia */
     /**< Methode pour editer une note */
     void editNote(Note& n);
     /**< Methodes d'edition inutiles pour l'instant mais je prefere garder au cas ou */
