@@ -2,7 +2,7 @@
 #include "Manager.h"
 #include "NoteEditeur.h"
 
-/**< CONSTRUCTEUR DE RECOPIE DE LA CLASS NOTE */
+/* CONSTRUCTEUR DE RECOPIE DE LA CLASS NOTE */
 
 Note::Note(Note& n){
     ID = n.ID;
@@ -14,7 +14,7 @@ Note::Note(Note& n){
     n.setAncienne();
 }
 
-/**< DEMANDES D'EDITION DES DIFFERENTS NOTES */
+/* DEMANDES D'EDITION DES DIFFERENTS NOTES */
 
 void Article::edit(){
     ArticleEditeur *editeur = new ArticleEditeur(*this);
