@@ -67,11 +67,6 @@ TacheEditeur::TacheEditeur(Tache& t, QWidget* parent) : NoteEditeur(t,parent), t
     actionLayout->addWidget(actionLab);
     actionLayout->addWidget(action);
 
-    statutLayout = new QHBoxLayout;
-        statutLab = new QLabel ("Statut");
-        statut = new QLineEdit; statut->setText(tache.TacheStatuttoQString());
-    statutLayout->addWidget(statutLab);
-    statutLayout->addWidget(statut);
 
     prioriteLayout = new QHBoxLayout;
         prioriteLab = new QLabel ("Priorite");
@@ -86,14 +81,12 @@ TacheEditeur::TacheEditeur(Tache& t, QWidget* parent) : NoteEditeur(t,parent), t
     echeanceLayout->addWidget(echeance);
 
     layer->addLayout(actionLayout);
-    layer->addLayout(statutLayout);
     layer->addLayout(prioriteLayout);
     layer->addLayout(echeanceLayout);
     layer->addLayout(boutonLayout);
 
     setLayout(layer);
 
-    QObject::connect(statut, SIGNAL(textEdited(QString)), this, SLOT(activerEnregistrer()));
     QObject::connect(priorite, SIGNAL(valueChanged(int)), this, SLOT(activerEnregistrer()));
     QObject::connect(action, SIGNAL(textChanged()), this, SLOT(activerEnregistrer()));
     QObject::connect(echeance, SIGNAL(selectionChanged()), this, SLOT(activerEnregistrer()));

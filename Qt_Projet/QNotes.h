@@ -43,6 +43,9 @@ public slots:
    void supprimer();
    void restaurerVersion();
    void restaurerNote();
+   void tacheEnAttente();
+   void tacheTerminee();
+   void tacheReprise();
 };
 
 #endif // QNOTES_H

@@ -114,7 +114,6 @@ QNote::QNote(Note& n, QWidget *parent) : QFrame(parent), note(n)
                 hlayout8->addWidget(Priorite);
             vlayout->addLayout(hlayout8);
         }
-
         if(!t.getEcheance().isNull()){
             QHBoxLayout *hlayout9 = new QHBoxLayout;
                 QLabel *lEcheance = new QLabel("Date d'echeance : ");
@@ -123,6 +122,21 @@ QNote::QNote(Note& n, QWidget *parent) : QFrame(parent), note(n)
                 hlayout9->addWidget(lEcheance);
                 hlayout9->addWidget(Echeance);
             vlayout->addLayout(hlayout9);
+        }
+        if(t.isActuelle()){
+            if(t.getStatut() == encours){
+                QPushButton *enAttente = new QPushButton("Mettre en attente");
+                QPushButton *terminer = new QPushButton("Terminée");
+                boutonsLayout->addWidget(enAttente);
+                boutonsLayout->addWidget(terminer);
+                QObject::connect(enAttente,SIGNAL(clicked()),this,SLOT(tacheEnAttente()));
+                QObject::connect(terminer,SIGNAL(clicked()),this,SLOT(tacheTerminee()));
+            }
+            else if(t.getStatut() == attente){
+                QPushButton *reprise = new QPushButton("Reprise");
+                boutonsLayout->addWidget(reprise);
+                QObject::connect(reprise,SIGNAL(clicked()),this,SLOT(tacheReprise()));
+            }
         }
     }
 
@@ -207,4 +221,22 @@ void QNote::restaurerVersion(){
 void QNote::restaurerNote(){
     Manager::donneInstance().restaurerNote(note);
     FenetrePrincipale::donneInstance().updateFenetre(note);
+}
+
+void QNote::tacheEnAttente(){
+    Tache& t = dynamic_cast<Tache&>(note);
+    t.setStatut(attente);
+    FenetrePrincipale::donneInstance().updateFenetre(t);
+}
+
+void QNote::tacheTerminee(){
+    Tache& t = dynamic_cast<Tache&>(note);
+    t.setStatut(terminee);
+    FenetrePrincipale::donneInstance().updateFenetre(t);
+}
+
+void QNote::tacheReprise(){
+    Tache& t = dynamic_cast<Tache&>(note);
+    t.setStatut(encours);
+    FenetrePrincipale::donneInstance().updateFenetre(t);
 }

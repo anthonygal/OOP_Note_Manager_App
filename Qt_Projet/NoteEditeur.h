@@ -72,10 +72,6 @@ private:
         QLabel* actionLab;
         QTextEdit* action;
 
-    QHBoxLayout* statutLayout;
-        QLabel* statutLab;
-        QLineEdit* statut;
-
     QHBoxLayout* echeanceLayout;
         QLabel* echeanceLab;
         QCalendarWidget* echeance;
